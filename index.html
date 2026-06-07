@@ -124,6 +124,61 @@ body{font-family:'Mulish',sans-serif;background:#F0F0F0;color:#111;-webkit-font-
 .wk-bar-fill{position:absolute;bottom:0;left:0;right:0;background:#111;border-radius:4px;transition:height 0.5s;}
 .wk-day{font-size:9px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:0.5px;}
 .wk-pts{font-size:10px;font-weight:900;color:#111;}
+
+/* ── MEETINGS SECTION ── */
+.meetings-section{background:#fff;border:2px solid #e8e8e8;border-radius:16px;padding:16px;margin-bottom:12px;}
+.ms-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.ms-title{font-size:14px;font-weight:900;color:#111;letter-spacing:0.3px;}
+.ms-sync-btn{background:#111;color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:12px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;display:flex;align-items:center;gap:5px;}
+.ms-sync-btn:active{background:#333;}
+.meeting-card{background:#f8f8f8;border:1.5px solid #eee;border-radius:12px;padding:12px 13px;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px;position:relative;}
+.meeting-card.zoom{border-left:4px solid #2D8CFF;}
+.meeting-card.meet{border-left:4px solid #34A853;}
+.meeting-card.teams{border-left:4px solid #5B5EA6;}
+.meeting-card.general{border-left:4px solid #888;}
+.mc-icon{font-size:20px;flex-shrink:0;margin-top:1px;}
+.mc-body{flex:1;min-width:0;}
+.mc-title{font-size:14px;font-weight:800;color:#111;margin-bottom:3px;line-height:1.3;}
+.mc-time{font-size:12px;font-weight:700;color:#555;margin-bottom:2px;}
+.mc-link{font-size:11px;font-weight:600;color:#2563EB;text-decoration:none;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.mc-actions{display:flex;gap:6px;margin-top:8px;}
+.mc-btn{flex:1;padding:7px;border:1.5px solid #eee;border-radius:8px;font-size:11px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;text-align:center;background:#fff;}
+.mc-btn.join{background:#111;color:#fff;border-color:#111;}
+.mc-btn.cal{background:#fff;color:#111;}
+.mc-btn:active{opacity:0.8;}
+.mc-delete{position:absolute;top:8px;right:8px;background:none;border:none;font-size:14px;color:#ccc;cursor:pointer;padding:2px;}
+.no-meetings{text-align:center;padding:20px;color:#aaa;font-size:13px;font-weight:600;}
+.add-meeting-btn{width:100%;padding:11px;background:#f5f5f5;border:2px dashed #ddd;border-radius:12px;font-size:13px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;color:#888;margin-top:4px;}
+.add-meeting-btn:active{background:#eee;}
+
+/* ── MEETING POPUP ── */
+.popup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:999;align-items:flex-end;justify-content:center;}
+.popup-overlay.on{display:flex;}
+.popup-box{background:#fff;border-radius:24px 24px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;animation:slideUp 0.3s ease;}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.popup-handle{width:40px;height:4px;background:#eee;border-radius:2px;margin:0 auto 20px;}
+.popup-title{font-size:18px;font-weight:900;color:#111;margin-bottom:6px;}
+.popup-sub{font-size:13px;font-weight:500;color:#888;margin-bottom:18px;}
+.popup-field{margin-bottom:14px;}
+.popup-field label{font-size:12px;font-weight:800;color:#555;display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px;}
+.popup-field input,.popup-field select,.popup-field textarea{width:100%;padding:11px 13px;border:1.5px solid #eee;border-radius:10px;font-size:14px;font-family:'Mulish',sans-serif;font-weight:600;color:#111;background:#f8f8f8;outline:none;}
+.popup-field input:focus,.popup-field select:focus,.popup-field textarea:focus{border-color:#111;background:#fff;}
+.popup-field textarea{height:70px;resize:none;}
+.popup-actions{display:flex;gap:10px;margin-top:6px;}
+.popup-cancel{flex:1;padding:13px;background:#f5f5f5;border:none;border-radius:12px;font-size:14px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;color:#111;}
+.popup-save{flex:2;padding:13px;background:#111;border:none;border-radius:12px;font-size:14px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;color:#fff;}
+
+/* ── CAL SYNC POPUP ── */
+.cal-popup{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:998;align-items:flex-end;justify-content:center;}
+.cal-popup.on{display:flex;}
+.cal-popup-box{background:#fff;border-radius:24px 24px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;animation:slideUp 0.3s ease;}
+.cal-event-item{background:#f8f8f8;border:1.5px solid #eee;border-radius:12px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
+.cei-dot{width:10px;height:10px;border-radius:50%;background:#2563EB;flex-shrink:0;}
+.cei-body{flex:1;}
+.cei-title{font-size:13px;font-weight:800;color:#111;}
+.cei-time{font-size:11px;font-weight:600;color:#888;margin-top:1px;}
+.cei-add{background:#111;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;}
+.cei-added{background:#22c55e;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:800;font-family:'Mulish',sans-serif;}
 </style>
 </head>
 <body>
@@ -222,6 +277,78 @@ body{font-family:'Mulish',sans-serif;background:#F0F0F0;color:#111;-webkit-font-
 <div class="task-card" data-task="mon-review"><span class="ci">📋</span><div class="cb"><div class="ct">Day Review & Plan Tomorrow</div><div class="cs">Count units · wind down</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
 
 <!-- DAY SUMMARY -->
+
+<!-- MEETINGS & EVENTS SECTION -->
+<div class="meetings-section" id="meetings-section">
+  <div class="ms-header">
+    <div class="ms-title">📅 Today's Meetings & Events</div>
+    <button class="ms-sync-btn" onclick="openCalSync()">🔄 Sync Cal</button>
+  </div>
+  <div id="meetings-list">
+    <div class="no-meetings" id="no-meetings-msg">No meetings yet. Tap + to add or sync from calendar.</div>
+  </div>
+  <button class="add-meeting-btn" onclick="openAddMeeting()">+ Add Meeting / Event</button>
+</div>
+
+<!-- ADD MEETING POPUP -->
+<div class="popup-overlay" id="meeting-popup" onclick="closePopupOut(event)">
+  <div class="popup-box">
+    <div class="popup-handle"></div>
+    <div class="popup-title">Add Meeting / Event</div>
+    <div class="popup-sub">Paste your invite link — Zoom, Meet, Teams or any event</div>
+    <div class="popup-field">
+      <label>Meeting Title</label>
+      <input type="text" id="pm-title" placeholder="e.g. Risers Club Call, Interview, Sprint Review">
+    </div>
+    <div class="popup-field">
+      <label>Date & Time</label>
+      <input type="datetime-local" id="pm-datetime">
+    </div>
+    <div class="popup-field">
+      <label>Platform</label>
+      <select id="pm-platform">
+        <option value="zoom">📹 Zoom</option>
+        <option value="meet">🟢 Google Meet</option>
+        <option value="teams">💜 Microsoft Teams</option>
+        <option value="general">📅 General / Other</option>
+      </select>
+    </div>
+    <div class="popup-field">
+      <label>Join Link</label>
+      <input type="url" id="pm-link" placeholder="https://zoom.us/j/... or meet.google.com/...">
+    </div>
+    <div class="popup-field">
+      <label>Notes (optional)</label>
+      <textarea id="pm-notes" placeholder="Agenda, password, or any notes..."></textarea>
+    </div>
+    <div class="popup-actions">
+      <button class="popup-cancel" onclick="closeAddMeeting()">Cancel</button>
+      <button class="popup-save" onclick="saveMeeting()">✅ Save & Add to Calendar</button>
+    </div>
+  </div>
+</div>
+
+<!-- CAL SYNC POPUP -->
+<div class="cal-popup" id="cal-popup" onclick="closeCalOut(event)">
+  <div class="cal-popup-box">
+    <div class="popup-handle"></div>
+    <div class="popup-title">📅 Sync from Google Calendar</div>
+    <div class="popup-sub">Your upcoming events — tap Add to show on dashboard</div>
+    <div id="cal-events-list">
+      <div style="text-align:center;padding:20px;color:#aaa;font-size:13px;">
+        <div style="font-size:24px;margin-bottom:8px;">🔄</div>
+        <div style="font-weight:700;">Opening Google Calendar...</div>
+        <div style="margin-top:6px;font-size:12px;">Copy meeting links from your calendar and paste them here using the + Add button</div>
+      </div>
+    </div>
+    <div style="margin-top:14px;">
+      <button onclick="window.open('https://calendar.google.com','_blank')" style="width:100%;padding:13px;background:#4285F4;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;margin-bottom:8px;">📅 Open Google Calendar</button>
+      <button onclick="openAddMeeting();closeCalPopup();" style="width:100%;padding:13px;background:#111;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;margin-bottom:8px;">+ Paste Meeting Link Here</button>
+      <button onclick="closeCalPopup()" style="width:100%;padding:13px;background:#f5f5f5;color:#111;border:none;border-radius:12px;font-size:14px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">Close</button>
+    </div>
+  </div>
+</div>
+
 <div class="day-summary">
   <div class="ds-title">📊 Monday Summary</div>
   <div class="ds-row">
@@ -642,6 +769,163 @@ function confirmReset(){
     updateAll();
   }
 }
+
+
+// ══════════════════════════════
+// MEETINGS SYSTEM
+// ══════════════════════════════
+const MEET_KEY='nayana_meetings_v1';
+let meetings=[];
+try{ const m=localStorage.getItem(MEET_KEY); if(m) meetings=JSON.parse(m); }catch(e){}
+function saveMeetings(){ try{localStorage.setItem(MEET_KEY,JSON.stringify(meetings));}catch(e){} }
+
+const PLATFORM_ICONS={zoom:'📹',meet:'🟢',teams:'💜',general:'📅'};
+const PLATFORM_LABELS={zoom:'Zoom',meet:'Google Meet',teams:'Teams',general:'Event'};
+
+function renderMeetings(){
+  const list=document.getElementById('meetings-list');
+  const noMsg=document.getElementById('no-meetings-msg');
+  if(!list) return;
+  
+  // Sort by datetime
+  const sorted=[...meetings].sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
+  
+  if(sorted.length===0){
+    list.innerHTML='<div class="no-meetings" id="no-meetings-msg">No meetings yet. Tap + to add or sync from calendar.</div>';
+    return;
+  }
+  
+  list.innerHTML=sorted.map((m,i)=>{
+    const dt=m.datetime?new Date(m.datetime):null;
+    const timeStr=dt?dt.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'})+' · '+dt.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true}):'Time not set';
+    const isToday=dt?dt.toDateString()===new Date().toDateString():false;
+    const isPast=dt?dt<new Date():false;
+    return \`<div class="meeting-card \${m.platform}" style="\${isPast?'opacity:0.6':''}">
+      <div class="mc-icon">\${PLATFORM_ICONS[m.platform]||'📅'}</div>
+      <div class="mc-body">
+        <div class="mc-title">\${m.title}\${isToday?'<span style="background:#22c55e;color:#fff;font-size:9px;font-weight:900;padding:2px 6px;border-radius:6px;margin-left:6px;">TODAY</span>':''}</div>
+        <div class="mc-time">⏰ \${timeStr}</div>
+        \${m.link?'<a class="mc-link" href="'+m.link+'" target="_blank">🔗 '+m.link+'</a>':''}
+        \${m.notes?'<div style="font-size:11px;color:#888;margin-top:4px;">📝 '+m.notes+'</div>':''}
+        <div class="mc-actions">
+          \${m.link?'<button class="mc-btn join" onclick="joinMeeting(\''+m.link+'\')">▶ Join Now</button>':''}
+          <button class="mc-btn cal" onclick="addToGCal(\${i})">📅 Add to Cal</button>
+          <button class="mc-btn cal" style="flex:0;padding:7px 10px;" onclick="deleteMeeting(\${i})">🗑</button>
+        </div>
+      </div>
+    </div>\`;
+  }).join('');
+}
+
+function openAddMeeting(){
+  document.getElementById('meeting-popup').classList.add('on');
+  // Set default datetime to next hour
+  const d=new Date(); d.setHours(d.getHours()+1,0,0,0);
+  const dtStr=d.toISOString().slice(0,16);
+  document.getElementById('pm-datetime').value=dtStr;
+}
+function closeAddMeeting(){ document.getElementById('meeting-popup').classList.remove('on'); }
+function closePopupOut(e){ if(e.target.id==='meeting-popup') closeAddMeeting(); }
+
+function saveMeeting(){
+  const title=document.getElementById('pm-title').value.trim();
+  if(!title){ alert('Please enter a meeting title'); return; }
+  const meeting={
+    id:Date.now(),
+    title,
+    datetime:document.getElementById('pm-datetime').value,
+    platform:document.getElementById('pm-platform').value,
+    link:document.getElementById('pm-link').value.trim(),
+    notes:document.getElementById('pm-notes').value.trim()
+  };
+  meetings.push(meeting);
+  saveMeetings();
+  renderMeetings();
+  closeAddMeeting();
+  // Clear fields
+  ['pm-title','pm-datetime','pm-link','pm-notes'].forEach(id=>document.getElementById(id).value='');
+  // Show success toast
+  showToast('✅ Meeting saved! Tap "Add to Cal" to add to Google Calendar.');
+  // Auto-prompt calendar add
+  setTimeout(()=>addToGCal(meetings.length-1),800);
+}
+
+function deleteMeeting(idx){
+  const sorted=[...meetings].sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
+  const meeting=sorted[idx];
+  if(confirm('Delete "'+meeting.title+'"?')){
+    meetings=meetings.filter(m=>m.id!==meeting.id);
+    saveMeetings(); renderMeetings();
+  }
+}
+
+function joinMeeting(link){
+  if(link) window.open(link,'_blank');
+}
+
+function addToGCal(idx){
+  const sorted=[...meetings].sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
+  const m=sorted[idx];
+  if(!m) return;
+  const dt=m.datetime?new Date(m.datetime):new Date();
+  const end=new Date(dt.getTime()+60*60*1000); // +1hr default
+  const fmt=d=>d.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+  const title=encodeURIComponent(m.title+(m.platform!=='general'?' ('+PLATFORM_LABELS[m.platform]+')':''));
+  const details=encodeURIComponent((m.link?'Join: '+m.link+'\n\n':'')+(m.notes||''));
+  const url='https://calendar.google.com/calendar/render?action=TEMPLATE&text='+title+'&dates='+fmt(dt)+'/'+fmt(end)+'&details='+details+'&sf=true&output=xml';
+  window.open(url,'_blank');
+  showToast('📅 Opening Google Calendar to add event...');
+}
+
+function openCalSync(){ document.getElementById('cal-popup').classList.add('on'); }
+function closeCalPopup(){ document.getElementById('cal-popup').classList.remove('on'); }
+function closeCalOut(e){ if(e.target.id==='cal-popup') closeCalPopup(); }
+
+// TOAST NOTIFICATION
+function showToast(msg){
+  let t=document.getElementById('toast');
+  if(!t){ t=document.createElement('div'); t.id='toast'; t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;font-weight:700;font-family:Mulish,sans-serif;z-index:9999;opacity:0;transition:opacity 0.3s;white-space:nowrap;max-width:90%;'; document.body.appendChild(t); }
+  t.textContent=msg; t.style.opacity='1';
+  setTimeout(()=>t.style.opacity='0',3000);
+}
+
+// CHECK GMAIL NOTE - show info banner
+function checkGmailNote(){
+  const banner=document.createElement('div');
+  banner.style.cssText='background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:12px;padding:12px 14px;margin-bottom:10px;font-size:12px;font-weight:600;color:#1D4ED8;line-height:1.6;';
+  banner.innerHTML='💡 <strong>Auto-sync tip:</strong> Set up Pabbly Connect to watch your Gmail for Zoom/Meet invites → auto-creates events here. <span style="text-decoration:underline;cursor:pointer;" onclick="this.parentElement.remove()">Got it ✕</span>';
+  const ms=document.getElementById('meetings-section');
+  if(ms && !localStorage.getItem('nayana_gmail_note_dismissed')){
+    ms.insertBefore(banner,ms.firstChild);
+    banner.querySelector('span').addEventListener('click',()=>{ localStorage.setItem('nayana_gmail_note_dismissed','1'); });
+  }
+}
+
+// DETECT ZOOM/MEET LINKS FROM CLIPBOARD (when user taps add)
+async function checkClipboard(){
+  try{
+    const text=await navigator.clipboard.readText();
+    if(text && (text.includes('zoom.us') || text.includes('meet.google.com') || text.includes('teams.microsoft.com'))){
+      document.getElementById('pm-link').value=text;
+      // Auto-detect platform
+      if(text.includes('zoom.us')) document.getElementById('pm-platform').value='zoom';
+      else if(text.includes('meet.google.com')) document.getElementById('pm-platform').value='meet';
+      else if(text.includes('teams.microsoft.com')) document.getElementById('pm-platform').value='teams';
+      showToast('✅ Meeting link detected from clipboard!');
+    }
+  }catch(e){} // clipboard access may be denied
+}
+
+// Override openAddMeeting to also check clipboard
+const _origOpen=openAddMeeting;
+window.openAddMeeting=function(){
+  _origOpen();
+  setTimeout(checkClipboard,300);
+};
+
+// Init
+renderMeetings();
+checkGmailNote();
 
 // start on today
 goTo(todayIdx);
