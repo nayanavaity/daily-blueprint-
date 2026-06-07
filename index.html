@@ -249,6 +249,21 @@ body{font-family:'Mulish',sans-serif;background:#F0F0F0;color:#111;-webkit-font-
     <div style="height:7px;background:#333;border-radius:4px;overflow:hidden;margin-bottom:5px;"><div id="wt-bar" style="height:100%;background:#22c55e;border-radius:4px;width:0%;transition:width 0.5s;"></div></div>
     <div style="font-size:11px;font-weight:700;color:#555;text-align:right;" id="wt-sub">0 / 12,800 units</div>
   </div>
+  <!-- 2-MONTH HISTORY HEATMAP -->
+  <div style="background:#fff;border-radius:14px;padding:14px;margin-top:10px;border:1.5px solid #e8e8e8;">
+    <div style="font-size:12px;font-weight:900;color:#111;margin-bottom:10px;">&#128197; 2-Month Daily History</div>
+    <div id="history-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;"></div>
+    <div style="display:flex;justify-content:space-between;margin-top:8px;">
+      <span style="font-size:9px;color:#aaa;font-weight:700;">MON</span>
+      <span style="font-size:9px;color:#aaa;font-weight:700;">TUE</span>
+      <span style="font-size:9px;color:#aaa;font-weight:700;">WED</span>
+      <span style="font-size:9px;color:#aaa;font-weight:700;">THU</span>
+      <span style="font-size:9px;color:#aaa;font-weight:700;">FRI</span>
+      <span style="font-size:9px;color:#aaa;font-weight:700;">SAT</span>
+      <span style="font-size:9px;color:#aaa;font-weight:700;">SUN</span>
+    </div>
+    <div style="font-size:10px;color:#aaa;margin-top:6px;text-align:center;" id="history-total-lbl">Loading history...</div>
+  </div>
 </div>
 
 <!-- SWIPEABLE DAYS -->
@@ -620,31 +635,103 @@ body{font-family:'Mulish',sans-serif;background:#F0F0F0;color:#111;-webkit-font-
 <div class="toast" id="toast"></div>
 
 <script>
-var UNITS=20, MAX2M=12800, SK='nv3', MK='nm2', SYNCK='ngcal_sync_url_v1';
+// ══════════════════════════════════════════════════
+// DASHBOARD TASK KEYWORDS — filter duplicates from GCal
+// ══════════════════════════════════════════════════
+var DASHBOARD_KEYWORDS=[
+  'treadmill','workout','meditation','book reading','pmp','mcq',
+  'content review','speaking mastery','speaking','job application','linkedin',
+  'coursera','automation','pabbly','saleshandy','evening meditation',
+  'call near','dear ones','day review','plan tomorrow','agentic ai',
+  'live class','content shoot','edit','schedule content','social joy',
+  'week review','freshen up','travelling','travel','lunch','dinner',
+  'wind down','morning ritual','gratitude','job apply'
+];
+
+function isAlreadyInDashboard(title){
+  if(!title) return false;
+  var t=title.toLowerCase();
+  return DASHBOARD_KEYWORDS.some(function(kw){ return t.indexOf(kw)>-1; });
+}
+
+// Override renderAllMeetings to stay clean
+var _origRenderAll=renderAllMeetings;
+renderAllMeetings=function(){
+  _origRenderAll();
+};
+
+
+var UNITS=20, MAX2M=12800, SK='nv4_dated', MK='nm2', SYNCK='ngcal_sync_url_v1';
 var cur=0, showWeek=false;
 var dayDone=[0,0,0,0,0,0,0], dayTotal=[0,0,0,0,0,0,0];
-var state={}, meetings=[];
+var meetings=[];
 
-// Load state
+// ── DATE-AWARE STATE STORAGE ──
+// state key format: "YYYY-MM-DD_taskkey"
+// This means each day's ticks are stored separately
+// Persists across browser close, across 2 months
+var state={};
 try{ var s=localStorage.getItem(SK); if(s) state=JSON.parse(s); }catch(e){}
 try{ var m=localStorage.getItem(MK); if(m) meetings=JSON.parse(m); }catch(e){}
 var syncUrl=''; try{ syncUrl=localStorage.getItem(SYNCK)||''; }catch(e){}
+
 function saveState(){ try{localStorage.setItem(SK,JSON.stringify(state));}catch(e){} }
 function saveMeetings(){ try{localStorage.setItem(MK,JSON.stringify(meetings));}catch(e){} }
 
-// Init task cards
+// Get date string for a given day panel index (0=Mon, 1=Tue ... 6=Sun)
+function getDateKey(dayIdx){
+  var now=new Date();
+  var todayJs=now.getDay(); // 0=Sun
+  var map=[6,0,1,2,3,4,5]; // panel 0=Mon
+  var todayPanel=map[todayJs];
+  var diff=dayIdx-todayPanel;
+  var dt=new Date(now);
+  dt.setDate(now.getDate()+diff);
+  var y=dt.getFullYear();
+  var mo=String(dt.getMonth()+1).padStart(2,'0');
+  var d=String(dt.getDate()).padStart(2,'0');
+  return y+'-'+mo+'-'+d;
+}
+
+// Build full state key: "YYYY-MM-DD_taskkey"
+function stateKey(dayIdx, taskKey){
+  return getDateKey(dayIdx)+'_'+taskKey;
+}
+
+// Count total units across entire 2-month state
+function getTotalUnitsAllTime(){
+  return Object.keys(state).filter(function(k){ return state[k]; }).length * UNITS;
+}
+
+// Prune state older than 65 days to avoid bloat
+function pruneOldState(){
+  var cutoff=new Date();
+  cutoff.setDate(cutoff.getDate()-65);
+  Object.keys(state).forEach(function(k){
+    var datePart=k.split('_')[0];
+    if(datePart && datePart.match(/^\d{4}-\d{2}-\d{2}$/)){
+      if(new Date(datePart)<cutoff) delete state[k];
+    }
+  });
+}
+pruneOldState();
+
+// Init task cards with DATE-AWARE state
 document.querySelectorAll('.task-card[data-task]').forEach(function(card){
-  var key=card.dataset.task;
+  var taskKey=card.dataset.task;
   var panelId=card.closest('.day-panel').id;
   var d=parseInt(panelId.replace('p',''));
   dayTotal[d]++;
-  if(state[key]){ card.classList.add('done'); dayDone[d]++; }
+  // Use date-aware key to restore state
+  var sk=stateKey(d, taskKey);
+  if(state[sk]){ card.classList.add('done'); dayDone[d]++; }
   card.addEventListener('click', function(){
     if(card.classList.contains('travel')) return;
+    var sk=stateKey(d, taskKey);
     if(card.classList.contains('done')){
-      card.classList.remove('done'); dayDone[d]--; delete state[key];
+      card.classList.remove('done'); dayDone[d]--; delete state[sk];
     } else {
-      card.classList.add('done'); dayDone[d]++; state[key]=true;
+      card.classList.add('done'); dayDone[d]++; state[sk]=true;
     }
     saveState(); updateAll();
   });
@@ -671,9 +758,10 @@ function setW(id,v){ var e=document.getElementById(id); if(e) e.style.width=v; }
 function setH(id,v){ var e=document.getElementById(id); if(e) e.style.height=v; }
 
 function updateAll(){
-  var totalDone=Object.keys(state).length;
+  // Date-aware total: count all ticked tasks across 2 months
+  var totalDone=Object.keys(state).filter(function(k){return state[k];}).length;
   var totalUnits=totalDone*UNITS;
-  var totalPct=Math.round(totalUnits/MAX2M*100);
+  var totalPct=Math.min(100,Math.round(totalUnits/MAX2M*100));
   for(var d=0;d<7;d++){
     var done=dayDone[d], tot=dayTotal[d];
     var units=done*UNITS, maxU=tot*UNITS;
@@ -717,14 +805,23 @@ function toggleWeek(){
   var btn=document.querySelector('.hbtn');
   if(btn) btn.textContent=showWeek?'Day':'Week';
   updateAll();
+  if(showWeek) renderHistory();
 }
 
 function confirmReset(){
-  if(confirm('Reset ALL task progress? Cannot be undone.')){
-    localStorage.removeItem(SK); state={};
+  if(confirm('Reset ALL task progress for this week only? Cannot be undone.')){
+    // Only clear current week's state, keep historical
+    for(var d=0;d<7;d++){
+      var dt=getDateKey(d);
+      Object.keys(state).forEach(function(k){
+        if(k.indexOf(dt+'_')===0) delete state[k];
+      });
+      dayDone[d]=0;
+    }
+    saveState();
     document.querySelectorAll('.task-card.done').forEach(function(c){ c.classList.remove('done'); });
-    for(var d=0;d<7;d++) dayDone[d]=0;
     updateAll();
+    showToast('This week reset. Historical data preserved.');
   }
 }
 
@@ -738,41 +835,48 @@ function renderMeetingsForDay(d){
   var diff=d-todayIdx;
   var targetDate=new Date(now2); targetDate.setDate(now2.getDate()+diff);
   var targetStr=targetDate.toDateString();
+
+  // Only show events that are NOT already dashboard tasks
   var dayMeetings=meetings.filter(function(m){
-    if(!m.dt) return (m.day===d);
-    return new Date(m.dt).toDateString()===targetStr || m.day===d;
+    if(!m.dt && m.day!==d) return false;
+    if(m.dt && new Date(m.dt).toDateString()!==targetStr && m.day!==d) return false;
+    return !isAlreadyInDashboard(m.title);
   });
+
   var header='<div class="mb-header">';
-  header+='<div class="mb-title">Meetings &amp; Events</div>';
+  header+='<div class="mb-title">&#128197; Meetings &amp; Events</div>';
   header+='<div class="mb-btns">';
-  header+='<button class="mb-btn sync" onclick="openSyncPopup()">Sync Cal</button>';
+  header+='<button class="mb-btn sync" onclick="openSyncPopup()">&#8635; Sync Cal</button>';
   header+='<button class="mb-btn add" onclick="openAddPopup('+d+')">+ Add</button>';
   header+='</div></div>';
+
   if(dayMeetings.length===0){
-    box.innerHTML=header+'<div class="no-meet">No meetings. Tap + Add or Sync Cal.</div>';
+    box.innerHTML=header+'<div class="no-meet">No new meetings. Tap + Add or Sync Cal.</div>';
   } else {
-    var cards=dayMeetings.map(function(m,i){
-      var idx=meetings.indexOf(m);
+    var cards=dayMeetings.map(function(m){
+      var mid=m.id||'id_'+meetings.indexOf(m);
       var dt2=m.dt?new Date(m.dt):null;
-      var isToday=dt2?dt2.toDateString()===now2.toDateString():false;
+      var now3=new Date();
+      var isToday=dt2?dt2.toDateString()===now3.toDateString():false;
+      var isLive=dt2&&dt2<=now3&&(dt2.getTime()+3600000)>=now3.getTime();
       var timeStr=dt2?dt2.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true}):'';
-      var badge=isToday?'<span class="today-badge">TODAY</span>':'';
+      var badge=isLive?'<span style="background:#ef4444;color:#fff;font-size:8px;font-weight:900;padding:2px 5px;border-radius:4px;margin-left:5px;">LIVE</span>':isToday?'<span class="today-badge">TODAY</span>':'';
+      var src=m.fromGCal?'<span style="background:#4285F4;color:#fff;font-size:8px;font-weight:900;padding:2px 5px;border-radius:4px;margin-left:4px;">GCAL</span>':'';
       var h='<div class="meet-card '+(m.plat||'general')+'">';
-      h+='<div class="mc-title">'+esc(m.title)+badge+'</div>';
+      h+='<div class="mc-title">'+esc(m.title)+badge+src+'</div>';
       if(timeStr) h+='<div class="mc-time">'+timeStr+'</div>';
       if(m.link) h+='<a class="mc-link" href="'+esc(m.link)+'" target="_blank">'+esc(m.link)+'</a>';
-      if(m.notes) h+='<div style="font-size:11px;color:#888;margin-top:3px;">'+esc(m.notes)+'</div>';
+      if(m.notes&&m.notes!=='From Google Calendar') h+='<div style="font-size:10px;color:#888;margin-top:3px;">'+esc(m.notes)+'</div>';
       h+='<div class="mc-actions">';
-      if(m.link) h+='<button class="mc-action mc-join" onclick="joinM('+idx+')">Join Now</button>';
-      h+='<button class="mc-action mc-cal" onclick="addToGCal('+idx+')">Add to Cal</button>';
-      h+='<button class="mc-del" onclick="delMeeting('+idx+')">Delete</button>';
+      if(m.link) h+='<button class="mc-action mc-join mbtn-join" data-mid="'+mid+'">Join Now</button>';
+      h+='<button class="mc-action mc-cal mbtn-cal" data-mid="'+mid+'">Add to Cal</button>';
+      h+='<button class="mc-del mbtn-del" data-mid="'+mid+'">Delete</button>';
       h+='</div></div>';
       return h;
     }).join('');
     box.innerHTML=header+cards;
   }
 }
-
 function renderAllMeetings(){
   for(var d=0;d<7;d++) renderMeetingsForDay(d);
 }
@@ -881,17 +985,20 @@ function pullLatest(){
     items.forEach(function(m){
       var dt=new Date(m.dt);
       if(dt<now2||dt>end) return;
+      // Skip events that are already fixed dashboard tasks
+      if(isAlreadyInDashboard(m.title)) return;
       var jsDay=dt.getDay();
       var map=[6,0,1,2,3,4,5];
       m.day=map[jsDay];
       m.fromGCal=true;
+      if(!m.id) m.id='gcal_'+Date.now()+'_'+added;
       meetings.push(m);
       added++;
     });
     saveMeetings(); renderAllMeetings();
     var ts=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});
     updateSyncStatus('Synced at '+ts+' · '+added+' event(s) from Google Calendar');
-    showToast(added+' Google Calendar event(s) loaded!');
+    showToast(added>0?added+' new event(s) from Google Calendar added!':'No new events found (dashboard tasks filtered out).');
     if(!window._gcalTimer) window._gcalTimer=setInterval(pullLatest,5*60*1000);
   }
   tryFetch(P1+encodeURIComponent(ICAL+'?nocache='+Date.now()))
@@ -926,6 +1033,21 @@ function saveMeeting(){
   setTimeout(function(){ addToGCal(meetings.length-1); }, 600);
 }
 
+function findById(id){
+  return meetings.find(function(m){ return String(m.id)===String(id); });
+}
+
+function delById(id){
+  var m=findById(id);
+  if(!m){ showToast('Event not found.'); return; }
+  if(confirm('Delete "'+m.title+'"?')){
+    meetings=meetings.filter(function(x){ return String(x.id)!==String(id); });
+    saveMeetings(); renderAllMeetings();
+    showToast('Event deleted.');
+  }
+}
+
+// Keep old delMeeting for backward compat
 function delMeeting(idx){
   var m=meetings[idx];
   if(m && confirm('Delete "'+m.title+'"?')){
@@ -933,14 +1055,27 @@ function delMeeting(idx){
   }
 }
 
+function joinById(id){
+  var m=findById(id);
+  if(m && m.link) window.open(m.link,'_blank');
+}
 function joinM(idx){
   var m=meetings[idx];
   if(m && m.link) window.open(m.link,'_blank');
 }
 
+function calById(id){
+  var m=findById(id);
+  if(m) addToGCalObj(m);
+}
+
 function addToGCal(idx){
   var m=meetings[idx];
   if(!m){ showToast('Meeting not found.'); return; }
+  addToGCalObj(m);
+}
+
+function addToGCalObj(m){
   var dt=m.dt?new Date(m.dt):new Date();
   var end=new Date(dt.getTime()+60*60*1000);
   var fmt=function(d){ return d.toISOString().replace(/[-:.]/g,'').slice(0,15)+'Z'; };
@@ -962,6 +1097,17 @@ function showToast(msg){
 renderAllMeetings();
 goTo(todayIdx);
 updateAll();
+
+// Meeting button event delegation - handles all meeting action buttons
+document.addEventListener('click', function(e){
+  var t = e.target;
+  var mid = t.getAttribute ? t.getAttribute('data-mid') : null;
+  if(!mid) return;
+  if(t.classList.contains('mbtn-join')){ joinById(mid); }
+  else if(t.classList.contains('mbtn-cal')){ calById(mid); }
+  else if(t.classList.contains('mbtn-del')){ delById(mid); }
+});
+
 // Auto-pull Google Calendar on load
 setTimeout(function(){ pullLatest(); }, 2000);
 
@@ -976,86 +1122,67 @@ document.getElementById('track').addEventListener('touchend',function(e){
 
 function joinCalEvt(btn){ var link=btn.getAttribute('data-link'); if(link) window.open(link,'_blank'); }
 
-// ══════════════════════════════════════════════
-// INJECT GOOGLE CALENDAR EVENTS INTO TIMESLOTS
-// ══════════════════════════════════════════════
 
-function injectCalendarEventsIntoSlots(){
-  // Remove any existing calendar overlays first
-  document.querySelectorAll('.cal-overlay-row').forEach(function(el){ el.remove(); });
 
-  if(!meetings || meetings.length === 0) return;
+// ── 2-MONTH HISTORY HEATMAP ──
+function renderHistory(){
+  var grid=document.getElementById('history-grid');
+  var lbl=document.getElementById('history-total-lbl');
+  if(!grid) return;
 
-  var now = new Date();
-  var dayMap = [6,0,1,2,3,4,5];
+  // Build 8 weeks x 7 days grid
+  // Find Monday of 8 weeks ago
+  var today=new Date();
+  var todayJs=today.getDay(); // 0=Sun
+  var daysFromMon=todayJs===0?6:todayJs-1;
+  var thisMonday=new Date(today);
+  thisMonday.setDate(today.getDate()-daysFromMon);
+  thisMonday.setHours(0,0,0,0);
 
-  meetings.forEach(function(m){
-    if(!m.dt) return;
-    var evtDate = new Date(m.dt);
-    var evtDayIdx = dayMap[evtDate.getDay()]; // 0=Mon..6=Sun
-    var evtHour = evtDate.getHours();
-    var evtMin = evtDate.getMinutes();
+  var startDate=new Date(thisMonday);
+  startDate.setDate(thisMonday.getDate()-49); // 7 weeks back = 8 total weeks
 
-    // Format display time
-    var h = evtHour > 12 ? evtHour - 12 : (evtHour === 0 ? 12 : evtHour);
-    var ampm = evtHour >= 12 ? 'PM' : 'AM';
-    var timeStr = h + ':' + (evtMin < 10 ? '0' : '') + evtMin + ' ' + ampm;
+  var cells=[];
+  var grandTotal=0;
+  var maxDay=0;
 
-    // Find the right day panel
-    var panel = document.getElementById('p' + evtDayIdx);
-    if(!panel) return;
-
-    // Find the time-row that matches this hour
-    // We find the time-row whose hour is closest but <= evtHour
-    var timeRows = panel.querySelectorAll('.time-row');
-    var bestRow = null;
-    var bestHour = -1;
-
-    timeRows.forEach(function(row){
-      var span = row.querySelector('.tl[data-hour]');
-      if(!span) return;
-      var rowHour = parseInt(span.getAttribute('data-hour'));
-      if(rowHour <= evtHour && rowHour > bestHour){
-        bestHour = rowHour;
-        bestRow = row;
-      }
-    });
-
-    if(!bestRow) return;
-
-    // Determine platform icon and class
-    var plat = m.plat || 'general';
-    var platClass = plat === 'zoom' ? 'zoom-ev' : plat === 'meet' ? 'meet-ev' : plat === 'teams' ? 'teams-ev' : '';
-    var icon = plat === 'zoom' ? '&#128249;' : plat === 'meet' ? '&#128250;' : plat === 'teams' ? '&#128100;' : '&#128197;';
-    var isNow = evtDate <= now && (evtDate.getTime() + 3600000) >= now.getTime();
-
-    // Build the overlay card
-    var div = document.createElement('div');
-    div.className = 'cal-overlay-row';
-    var inner = '<div class="cal-overlay ' + platClass + '">';
-    inner += '<span class="co-badge">' + (isNow ? 'LIVE NOW' : 'GCAL') + '</span>';
-    inner += '<span class="co-icon">' + icon + '</span>';
-    inner += '<div class="co-body">';
-    inner += '<div class="co-title">' + esc(m.title) + '</div>';
-    inner += '<div class="co-time">&#128197; ' + timeStr + '</div>';
-    if(m.link){
-      inner += '<button class="co-join" onclick="joinCalEvt(this)" data-link="' + esc(m.link) + '">Join Now</button>';
-    }
-    inner += '</div></div>';
-    div.innerHTML = inner;
-
-    // Insert AFTER the matching time-row
-    bestRow.insertAdjacentElement('afterend', div);
+  // Count tasks per day from state
+  var dayCounts={};
+  Object.keys(state).forEach(function(k){
+    if(!state[k]) return;
+    var datePart=k.split('_')[0];
+    if(!datePart||!datePart.match(/^\d{4}-\d{2}-\d{2}$/)) return;
+    dayCounts[datePart]=(dayCounts[datePart]||0)+1;
+    grandTotal++;
   });
+
+  // Find max for scaling
+  Object.values(dayCounts).forEach(function(v){ if(v>maxDay) maxDay=v; });
+
+  // Build 56 cells (8 weeks x 7 days)
+  var html2='';
+  for(var i=0;i<56;i++){
+    var dt=new Date(startDate);
+    dt.setDate(startDate.getDate()+i);
+    var y=dt.getFullYear();
+    var mo=String(dt.getMonth()+1).padStart(2,'0');
+    var d=String(dt.getDate()).padStart(2,'0');
+    var dk=y+'-'+mo+'-'+d;
+    var count=dayCounts[dk]||0;
+    var units=count*UNITS;
+    var isToday=dt.toDateString()===today.toDateString();
+    var isFuture=dt>today;
+
+    var opacity=0;
+    if(!isFuture && maxDay>0) opacity=Math.max(0.1,count/maxDay);
+    var bg=isFuture?'#f0f0f0':count===0?'#eee':'rgba(17,17,17,'+opacity+')';
+    var border=isToday?'2px solid #2563EB':'1px solid #e8e8e8';
+    var title=dk+(count>0?' · '+count+' tasks · '+units+' units':'');
+
+    html2+='<div title="'+title+'" style="aspect-ratio:1;border-radius:3px;background:'+bg+';border:'+border+';cursor:default;"></div>';
+  }
+  grid.innerHTML=html2;
+  if(lbl) lbl.textContent='Total earned: '+grandTotal*UNITS+' units across 2 months · '+grandTotal+' tasks completed';
 }
 
-// Override renderAllMeetings to also inject into slots
-var _origRenderAll = renderAllMeetings;
-renderAllMeetings = function(){
-  _origRenderAll();
-  injectCalendarEventsIntoSlots();
-};
-
 </script>
-</body>
-</html>
