@@ -1408,6 +1408,1435 @@ body{font-family:'Mulish',sans-serif;background:#F0F0F0;color:#111;-webkit-font-
 
 <!-- SYNC CALENDAR POPUP -->
 <div class="overlay" id="sync-popup">
+  <div class="popup" style="max-height:92vh;overflow-y:auto;padding-bottom:20px;">
+    <div class="ph"></div>
+    <div class="pt">&#128197; Google Calendar</div>
+    <div class="ps">nayana.vaity17@gmail.com · Jun 6 – Aug 6, 2026</div>
+    <div style="background:#EFF6FF;border-radius:10px;padding:10px 12px;margin-bottom:10px;border:1.5px solid #BFDBFE;">
+      <div style="font-size:11px;font-weight:800;color:#1D4ED8;">&#9989; 18 Recurring Goal Events Active</div>
+      <div style="font-size:10px;color:#3B82F6;margin-top:2px;" id="sync-status">All 10 goals scheduled weekly · Reminders on</div>
+    </div>
+    <div style="border-radius:12px;overflow:hidden;margin-bottom:12px;border:1px solid #e8e8e8;">
+      <iframe src="https://calendar.google.com/calendar/embed?src=nayana.vaity17%40gmail.com&ctz=Asia%2FKolkata" style="border:0;display:block;" width="100%" height="420" frameborder="0" scrolling="no"></iframe>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <button onclick="window.open('https://calendar.google.com/calendar/u/0?cid=bmF5YW5hLnZhaXR5MTdAZ21haWwuY29t','_blank')" style="padding:13px;background:#4285F4;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:900;font-family:'Mulish',sans-serif;cursor:pointer;">&#128197; Open Google Calendar</button>
+      <button onclick="openAddFromSync()" style="padding:12px;background:#111;color:#fff;border:none;border-radius:12px;font-size:13px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">+ Add New Meeting to Dashboard</button>
+      <button onclick="clearTodayEvents()" style="padding:11px;background:#FEF2F2;color:#DC2626;border:1.5px solid #FECACA;border-radius:12px;font-size:12px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">&#128465; Clear Today's Events</button>
+      <button onclick="clearEntireGrid()" style="padding:11px;background:#FEF2F2;color:#DC2626;border:1.5px solid #FECACA;border-radius:12px;font-size:12px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">&#128465; Clear Entire Grid</button>
+      <button onclick="closeSyncPopup()" style="padding:11px;background:#f5f5f5;color:#111;border:none;border-radius:12px;font-size:13px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">Close</button>
+    </div>
+  </div>
+</div>TYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#111111">
+<title>Nayana Daily Blueprint</title>
+<link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Mulish',sans-serif;background:#F0F0F0;color:#111;-webkit-font-smoothing:antialiased;}
+
+.top-bar{position:fixed;top:0;left:0;right:0;z-index:100;background:#111;}
+.top-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 4px;}
+.top-row h1{font-size:16px;font-weight:900;color:#fff;}
+.top-btns{display:flex;gap:6px;}
+.hbtn{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:12px;padding:5px 10px;font-size:11px;font-weight:800;color:#fff;font-family:'Mulish',sans-serif;cursor:pointer;}
+.date-row{padding:2px 16px 6px;font-size:14px;font-weight:800;color:#ddd;}
+.progress-row{padding:0 16px 10px;display:flex;align-items:center;gap:8px;}
+.pr-lbl{font-size:11px;font-weight:800;color:#888;white-space:nowrap;}
+.pr-bar-wrap{flex:1;height:5px;background:#333;border-radius:3px;overflow:hidden;}
+.pr-bar{height:100%;background:#fff;border-radius:3px;transition:width 0.4s;}
+.pr-count{font-size:11px;font-weight:900;color:#fff;white-space:nowrap;}
+
+.day-tabs{position:fixed;top:124px;left:0;right:0;z-index:99;background:#fff;border-bottom:2px solid #eee;display:flex;overflow-x:auto;scrollbar-width:none;}
+.day-tabs::-webkit-scrollbar{display:none;}
+.day-tab{flex:1;min-width:42px;padding:7px 3px 6px;text-align:center;cursor:pointer;border-bottom:3px solid transparent;}
+.dn{font-size:11px;font-weight:900;color:#bbb;letter-spacing:1px;text-transform:uppercase;}
+.dp{font-size:10px;font-weight:700;color:#ccc;margin-top:1px;}
+.day-tab.active .dn{color:#111;}
+.day-tab.active .dp{color:#555;}
+.day-tab.active{border-bottom-color:#111;}
+.day-tab.full .dn{color:#16a34a;}
+.day-tab.full{border-bottom-color:#16a34a;}
+
+.page{margin-top:168px;}
+.swipe-track{display:flex;width:700%;transition:transform 0.36s cubic-bezier(0.25,0.46,0.45,0.94);will-change:transform;}
+.day-panel{width:calc(100%/7);padding:12px 12px 28px;}
+
+.day-hero{background:#fff;border-radius:14px;padding:14px;margin-bottom:12px;border:1.5px solid #e8e8e8;}
+.dh-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.dh-title{font-size:24px;font-weight:900;color:#111;letter-spacing:-0.5px;}
+.dh-date{font-size:12px;font-weight:600;color:#aaa;}
+.dh-stats{display:flex;gap:6px;}
+.dh-s{flex:1;background:#f5f5f5;border-radius:8px;padding:7px 8px;text-align:center;}
+.dh-n{font-size:18px;font-weight:900;color:#111;line-height:1;}
+.dh-l{font-size:9px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:0.8px;margin-top:2px;}
+.dh-bar{height:5px;background:#eee;border-radius:3px;margin-top:9px;overflow:hidden;}
+.dh-fill{height:100%;background:#111;border-radius:3px;transition:width 0.4s;}
+
+.time-row{display:flex;align-items:center;gap:8px;margin:12px 0 6px;}
+.tl{font-size:13px;font-weight:900;color:#555;white-space:nowrap;}
+.time-row::after{content:'';flex:1;height:1px;background:#e8e8e8;}
+
+.task-card{background:#fff;border:1.5px solid #e8e8e8;border-radius:13px;padding:12px 13px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all 0.18s;margin-bottom:6px;position:relative;user-select:none;-webkit-user-select:none;}
+.task-card:active{transform:scale(0.97);}
+.task-card.done{background:#111;border-color:#111;}
+.task-card.travel{background:#fafafa;border:1.5px dashed #ddd;cursor:default;opacity:0.5;}
+.task-card.travel:active{transform:none;}
+.ci{font-size:20px;flex-shrink:0;width:28px;text-align:center;}
+.cb{flex:1;min-width:0;}
+.ct{font-size:14px;font-weight:800;color:#111;line-height:1.3;margin-bottom:1px;}
+.task-card.done .ct{color:#fff;}
+.cs{font-size:11px;font-weight:500;color:#888;}
+.task-card.done .cs{color:rgba(255,255,255,0.5);}
+.task-card.travel .ct{color:#aaa;}
+.cr{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0;}
+.ck{width:24px;height:24px;border-radius:50%;border:2px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;}
+.task-card.done .ck{background:#fff;border-color:#fff;color:#111;}
+.ub{font-size:9px;font-weight:800;color:#ccc;}
+.task-card.done .ub{color:rgba(255,255,255,0.35);}
+
+/* MEETINGS */
+.meetings-box{background:#fff;border:2px solid #2563EB;border-radius:14px;padding:14px;margin-top:16px;margin-bottom:10px;}
+.mb-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.mb-title{font-size:14px;font-weight:900;color:#111;}
+.mb-btns{display:flex;gap:6px;}
+.mb-btn{padding:6px 12px;border-radius:10px;font-size:11px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;border:none;}
+.mb-btn.sync{background:#4285F4;color:#fff;}
+.mb-btn.add{background:#111;color:#fff;}
+.mb-btn:active{opacity:0.8;}
+.meet-card{background:#f8f8f8;border-radius:10px;border-left:4px solid #ddd;padding:10px 12px;margin-bottom:7px;}
+.meet-card.zoom{border-left-color:#2D8CFF;}
+.meet-card.meet{border-left-color:#34A853;}
+.meet-card.teams{border-left-color:#5B5EA6;}
+.meet-card.general{border-left-color:#888;}
+.mc-title{font-size:13px;font-weight:800;color:#111;margin-bottom:3px;}
+.mc-time{font-size:11px;font-weight:600;color:#555;margin-bottom:4px;}
+.mc-link{font-size:11px;color:#2563EB;word-break:break-all;display:block;margin-bottom:6px;}
+.mc-actions{display:flex;gap:6px;}
+.mc-action{flex:1;padding:7px 0;border-radius:8px;font-size:11px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;border:none;text-align:center;}
+.mc-join{background:#111;color:#fff;}
+.mc-cal{background:#4285F4;color:#fff;}
+.mc-del{flex:0;padding:7px 10px;background:#eee;color:#666;border-radius:8px;font-size:11px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;border:none;}
+.mc-action:active,.mc-del:active{opacity:0.8;}
+.no-meet{text-align:center;padding:16px;color:#aaa;font-size:12px;font-weight:600;}
+.today-badge{display:inline-block;background:#22c55e;color:#fff;font-size:9px;font-weight:900;padding:2px 6px;border-radius:5px;margin-left:6px;}
+
+
+/* CALENDAR EVENT OVERLAY ON TIMESLOT */
+.cal-overlay{
+  background:linear-gradient(135deg,#1a56db,#2563EB);
+  border-radius:13px;
+  padding:11px 13px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:6px;
+  border:2px solid #60A5FA;
+  position:relative;
+  animation:calPop 0.4s cubic-bezier(.22,.68,0,1.2) both;
+}
+@keyframes calPop{from{opacity:0;transform:scale(0.95) translateY(-4px);}to{opacity:1;transform:none;}}
+.cal-overlay .co-icon{font-size:18px;flex-shrink:0;}
+.cal-overlay .co-body{flex:1;min-width:0;}
+.cal-overlay .co-title{font-size:13px;font-weight:900;color:#fff;line-height:1.3;margin-bottom:2px;}
+.cal-overlay .co-time{font-size:10px;font-weight:700;color:#93C5FD;}
+.cal-overlay .co-badge{position:absolute;top:6px;right:8px;background:#fff;color:#1a56db;font-size:8px;font-weight:900;padding:2px 6px;border-radius:4px;letter-spacing:0.5px;}
+.cal-overlay .co-join{background:#fff;color:#1a56db;border:none;border-radius:7px;padding:5px 10px;font-size:10px;font-weight:900;font-family:'Mulish',sans-serif;cursor:pointer;margin-top:5px;}
+.cal-overlay.zoom-ev{background:linear-gradient(135deg,#1a56db,#2D8CFF);}
+.cal-overlay.meet-ev{background:linear-gradient(135deg,#166534,#16a34a);}
+.cal-overlay.teams-ev{background:linear-gradient(135deg,#4338ca,#5B5EA6);}
+.cal-overlay-row{margin-bottom:4px;}
+
+/* DAY SUMMARY */
+.day-summary{background:#fff;border:2px solid #111;border-radius:14px;padding:14px;margin-top:16px;margin-bottom:8px;}
+.ds-title{font-size:12px;font-weight:900;color:#111;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+.ds-row{display:flex;gap:6px;margin-bottom:8px;}
+.ds-s{flex:1;background:#f5f5f5;border-radius:8px;padding:8px;text-align:center;}
+.ds-n{font-size:20px;font-weight:900;color:#111;line-height:1;}
+.ds-l{font-size:9px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:0.8px;margin-top:2px;}
+.ds-bar{height:7px;background:#eee;border-radius:4px;overflow:hidden;margin-bottom:5px;}
+.ds-fill{height:100%;background:#111;border-radius:4px;transition:width 0.5s;}
+.ds-pct{font-size:12px;font-weight:800;color:#555;text-align:right;}
+
+/* TOTAL CARD */
+.total-card{background:#111;border-radius:14px;padding:14px;margin-bottom:8px;}
+.tc-title{font-size:11px;font-weight:900;color:#666;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;}
+.tc-row{display:flex;gap:6px;margin-bottom:10px;}
+.tc-s{flex:1;background:rgba(255,255,255,0.07);border-radius:8px;padding:8px;text-align:center;}
+.tc-n{font-size:18px;font-weight:900;color:#fff;line-height:1;}
+.tc-l{font-size:9px;font-weight:800;color:#555;text-transform:uppercase;letter-spacing:0.8px;margin-top:2px;}
+.tc-bar{height:7px;background:#333;border-radius:4px;overflow:hidden;margin-bottom:5px;}
+.tc-fill{height:100%;background:#22c55e;border-radius:4px;transition:width 0.5s;}
+.tc-pct{font-size:13px;font-weight:900;color:#22c55e;text-align:right;}
+.tc-days{display:flex;gap:4px;margin-top:12px;}
+.tc-day{flex:1;text-align:center;}
+.tc-day-n{font-size:8px;font-weight:900;color:#555;text-transform:uppercase;margin-bottom:3px;}
+.tc-day-bar{height:32px;background:#222;border-radius:3px;position:relative;overflow:hidden;margin-bottom:3px;}
+.tc-day-fill{position:absolute;bottom:0;left:0;right:0;background:#22c55e;border-radius:3px;transition:height 0.5s;}
+.tc-day-pct{font-size:8px;font-weight:700;color:#555;}
+
+/* NAV */
+.nav-row{display:flex;gap:10px;margin-top:6px;margin-bottom:30px;}
+.nav-btn{flex:1;padding:13px;border:none;border-radius:13px;font-family:'Mulish',sans-serif;font-size:14px;font-weight:900;cursor:pointer;}
+.nav-prev{background:#fff;color:#111;border:2px solid #e8e8e8;}
+.nav-next{background:#111;color:#fff;}
+
+/* WEEK PANEL */
+.week-panel{display:none;padding:168px 14px 14px;}
+.week-panel.on{display:block;}
+.wk-card{background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;border:1.5px solid #e8e8e8;}
+.wk-title{font-size:14px;font-weight:900;color:#111;margin-bottom:12px;}
+.wk-bars{display:flex;gap:5px;align-items:flex-end;}
+.wk-col{flex:1;text-align:center;}
+.wk-pts{font-size:10px;font-weight:900;color:#111;margin-bottom:3px;}
+.wk-bar-wrap{height:55px;background:#eee;border-radius:3px;position:relative;overflow:hidden;margin-bottom:3px;}
+.wk-bar-fill{position:absolute;bottom:0;left:0;right:0;background:#111;border-radius:3px;transition:height 0.5s;}
+.wk-day{font-size:9px;font-weight:800;color:#aaa;text-transform:uppercase;}
+
+/* POPUP */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:998;justify-content:flex-end;flex-direction:column;align-items:center;}
+.overlay.on{display:flex;}
+.popup{background:#fff;border-radius:22px 22px 0 0;padding:22px 18px 32px;width:100%;max-width:500px;animation:su 0.3s ease;}
+@keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.ph{width:36px;height:4px;background:#eee;border-radius:2px;margin:0 auto 18px;}
+.pt{font-size:18px;font-weight:900;color:#111;margin-bottom:4px;}
+.ps{font-size:12px;font-weight:500;color:#888;margin-bottom:16px;}
+.pf{margin-bottom:12px;}
+.pf label{font-size:11px;font-weight:800;color:#555;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;}
+.pf input,.pf select,.pf textarea{width:100%;padding:10px 12px;border:1.5px solid #eee;border-radius:9px;font-size:14px;font-family:'Mulish',sans-serif;font-weight:600;color:#111;background:#f8f8f8;outline:none;}
+.pf input:focus,.pf select:focus,.pf textarea:focus{border-color:#111;background:#fff;}
+.pf textarea{height:60px;resize:none;}
+.p-actions{display:flex;gap:8px;margin-top:4px;}
+.p-cancel{flex:1;padding:12px;background:#f5f5f5;border:none;border-radius:11px;font-size:14px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;color:#111;}
+.p-save{flex:2;padding:12px;background:#111;border:none;border-radius:11px;font-size:14px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;color:#fff;}
+
+/* TOAST */
+.toast{position:fixed;bottom:60px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;font-weight:700;font-family:'Mulish',sans-serif;z-index:9999;opacity:0;transition:opacity 0.3s;white-space:nowrap;max-width:90%;pointer-events:none;}
+.toast.on{opacity:1;}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-row">
+    <h1>Nayana's Blueprint</h1>
+    <div class="top-btns">
+      <button class="hbtn" onclick="toggleWeek()">Week</button>
+      <a href="https://calendar.google.com" target="_blank" class="hbtn" style="text-decoration:none;">&#128197; Cal</a>
+      <button class="hbtn" onclick="confirmReset()">Reset</button>
+    </div>
+  </div>
+  <div class="date-row" id="date-row">Loading...</div>
+  <div style="padding:0 16px 8px;color:#bdbdbd;font-size:12px;font-weight:800;" id="range-row">2-month timetable loading...</div>
+  <div style="padding:0 16px 8px;display:flex;gap:6px;">
+  <a href="https://calendar.google.com" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#4285F4;color:#fff;border-radius:10px;padding:8px 0;font-size:12px;font-weight:800;font-family:Mulish,sans-serif;text-decoration:none;">&#128197; Google Calendar</a>
+  <a href="calshow://" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#FF3B30;color:#fff;border-radius:10px;padding:8px 0;font-size:12px;font-weight:800;font-family:Mulish,sans-serif;text-decoration:none;">&#128247; iPhone Calendar</a>
+</div>
+<div class="progress-row">
+    <span class="pr-lbl">TODAY</span>
+    <div class="pr-bar-wrap"><div class="pr-bar" id="pr-bar" style="width:0%"></div></div>
+    <span class="pr-count" id="pr-count">0/0</span>
+  </div>
+</div>
+
+<div class="day-tabs">
+  <div class="day-tab active" onclick="goTo(0)"><div class="dn">MON</div><div class="dp" id="tp-0">0%</div></div>
+  <div class="day-tab" onclick="goTo(1)"><div class="dn">TUE</div><div class="dp" id="tp-1">0%</div></div>
+  <div class="day-tab" onclick="goTo(2)"><div class="dn">WED</div><div class="dp" id="tp-2">0%</div></div>
+  <div class="day-tab" onclick="goTo(3)"><div class="dn">THU</div><div class="dp" id="tp-3">0%</div></div>
+  <div class="day-tab" onclick="goTo(4)"><div class="dn">FRI</div><div class="dp" id="tp-4">0%</div></div>
+  <div class="day-tab" onclick="goTo(5)"><div class="dn">SAT</div><div class="dp" id="tp-5">0%</div></div>
+  <div class="day-tab" onclick="goTo(6)"><div class="dn">SUN</div><div class="dp" id="tp-6">0%</div></div>
+</div>
+
+<!-- WEEK PANEL -->
+<div class="week-panel" id="week-panel">
+  <div class="wk-card">
+    <div class="wk-title">Weekly Effort</div>
+    <div class="wk-bars">
+      <div class="wk-col"><div class="wk-pts" id="ww-0">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-0" style="height:0%"></div></div><div class="wk-day">M</div></div>
+      <div class="wk-col"><div class="wk-pts" id="ww-1">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-1" style="height:0%"></div></div><div class="wk-day">T</div></div>
+      <div class="wk-col"><div class="wk-pts" id="ww-2">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-2" style="height:0%"></div></div><div class="wk-day">W</div></div>
+      <div class="wk-col"><div class="wk-pts" id="ww-3">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-3" style="height:0%"></div></div><div class="wk-day">T</div></div>
+      <div class="wk-col"><div class="wk-pts" id="ww-4">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-4" style="height:0%"></div></div><div class="wk-day">F</div></div>
+      <div class="wk-col"><div class="wk-pts" id="ww-5">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-5" style="height:0%"></div></div><div class="wk-day">S</div></div>
+      <div class="wk-col"><div class="wk-pts" id="ww-6">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-6" style="height:0%"></div></div><div class="wk-day">S</div></div>
+    </div>
+  </div>
+  <div style="background:#111;border-radius:14px;padding:14px;">
+    <div style="font-size:11px;font-weight:900;color:#666;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;">2-Month Total</div>
+    <div style="display:flex;gap:6px;margin-bottom:10px;">
+      <div style="flex:1;background:rgba(255,255,255,0.07);border-radius:8px;padding:8px;text-align:center;"><div style="font-size:20px;font-weight:900;color:#fff;" id="wt-done">0</div><div style="font-size:9px;font-weight:800;color:#555;text-transform:uppercase;margin-top:2px;">Tasks</div></div>
+      <div style="flex:1;background:rgba(255,255,255,0.07);border-radius:8px;padding:8px;text-align:center;"><div style="font-size:20px;font-weight:900;color:#fff;" id="wt-units">0</div><div style="font-size:9px;font-weight:800;color:#555;text-transform:uppercase;margin-top:2px;">Units</div></div>
+      <div style="flex:1;background:rgba(255,255,255,0.07);border-radius:8px;padding:8px;text-align:center;"><div style="font-size:20px;font-weight:900;color:#22c55e;" id="wt-pct">0%</div><div style="font-size:9px;font-weight:800;color:#555;text-transform:uppercase;margin-top:2px;">of 2M</div></div>
+    </div>
+    <div style="height:7px;background:#333;border-radius:4px;overflow:hidden;margin-bottom:5px;"><div id="wt-bar" style="height:100%;background:#22c55e;border-radius:4px;width:0%;transition:width 0.5s;"></div></div>
+    <div style="font-size:11px;font-weight:700;color:#555;text-align:right;" id="wt-sub">0 / 12,800 units</div>
+  </div>
+  <!-- 2-MONTH HISTORY HEATMAP -->
+  <div style="background:#fff;border-radius:14px;padding:14px;margin-top:10px;border:1.5px solid #e8e8e8;">
+    <div style="font-size:12px;font-weight:900;color:#111;margin-bottom:10px;">&#128197; 2-Month Daily History</div>
+    <div id="history-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;"></div>
+    <div style="display:flex;justify-content:space-between;margin-top:8px;">
+      <span style="font-size:9px;color:#aaa;font-weight:700;">MON</span>
+      <span style="font-size:9px;color:#aaa;font-weight:700;">TUE</span>
+      <span style="font-size:9px;color:#aaa;font-weight:700;">WED</span>
+      <span style="font-size:9px;color:#aaa;font-weight:700;">THU</span>
+      <span style="font-size:9px;color:#aaa;font-weight:700;">FRI</span>
+      <span style="font-size:9px;color:#aaa;font-weight:700;">SAT</span>
+      <span style="font-size:9px;color:#aaa;font-weight:700;">SUN</span>
+    </div>
+    <div style="font-size:10px;color:#aaa;margin-top:6px;text-align:center;" id="history-total-lbl">Loading history...</div>
+  </div>
+</div>
+
+<!-- SWIPEABLE DAYS -->
+<div class="page" id="page">
+<div class="swipe-track" id="track">
+
+<div class="day-panel" id="p0">
+<div class="day-hero">
+  <div class="dh-top"><div class="dh-title">Monday</div><div class="dh-date" id="dd-0"></div></div>
+  <div class="dh-stats">
+    <div class="dh-s"><div class="dh-n" id="dn-0">0</div><div class="dh-l">Done</div></div>
+    <div class="dh-s"><div class="dh-n" id="dt-0">0</div><div class="dh-l">Total</div></div>
+    <div class="dh-s"><div class="dh-n" id="du-0">0</div><div class="dh-l">Units</div></div>
+    <div class="dh-s"><div class="dh-n" id="dp-0">0%</div><div class="dh-l">Done%</div></div>
+  </div>
+  <div class="dh-bar"><div class="dh-fill" id="df-0" style="width:0%"></div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="7" data-min="0">7:00 AM</span></div>
+<div class="task-card" data-task="mon-treadmill" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127939;</span>
+  <div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins · build habit</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="7" data-min="30">7:30 AM</span></div>
+<div class="task-card" data-task="mon-meditation" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#129488;</span>
+  <div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual · 30 mins</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="8" data-min="0">8:00 AM</span></div>
+<div class="task-card" data-task="mon-pmp" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127942;</span>
+  <div class="cb"><div class="ct">PMP — MCQ Practice</div><div class="cs">30 questions daily</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="8" data-min="30">8:30 AM</span></div>
+<div class="task-card travel" style="min-height:170px;">
+  <span class="ci">&#128663;</span>
+  <div class="cb"><div class="ct">Travelling</div><div class="cs">Free · podcast · relax</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="10" data-min="0">10:00 AM</span></div>
+<div class="task-card" data-task="mon-speaking" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127908;</span>
+  <div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12-15 mins</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="10" data-min="30">10:30 AM</span></div>
+<div class="task-card" data-task="mon-speaking_rev" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127908;</span>
+  <div class="cb"><div class="ct">Speaking — Review</div><div class="cs">Listen back · note improvements</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="11" data-min="0">11:00 AM</span></div>
+<div class="task-card" data-task="mon-job" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128188;</span>
+  <div class="cb"><div class="ct">Job Applications</div><div class="cs">LinkedIn · portals · 30 mins</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="11" data-min="30">11:30 AM</span></div>
+<div class="task-card" data-task="mon-job2" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128188;</span>
+  <div class="cb"><div class="ct">Job Applications cont.</div><div class="cs">Follow-ups · recruiter msgs</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="12" data-min="0">12:00 PM</span></div>
+<div class="task-card" data-task="mon-free1" data-slots="1" style="min-height:52px;background:#f8f8f8;border-color:#eee;">
+  <span class="ci">&#127774;</span>
+  <div class="cb"><div class="ct" style="color:#888;">Lunch Break</div><div class="cs">Nourish · recharge</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="12" data-min="30">12:30 PM</span></div>
+<div class="task-card" data-task="mon-free2" data-slots="1" style="min-height:52px;background:#f8f8f8;border-color:#eee;">
+  <span class="ci">&#127774;</span>
+  <div class="cb"><div class="ct" style="color:#888;">Lunch cont.</div><div class="cs">Rest · relax</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="13" data-min="0">1:00 PM</span></div>
+<div class="task-card" data-task="mon-free3" data-slots="1" style="min-height:52px;background:#f8f8f8;border-color:#eee;">
+  <span class="ci">&#127774;</span>
+  <div class="cb"><div class="ct" style="color:#888;">Post-Lunch Rest</div><div class="cs">Short break</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="13" data-min="30">1:30 PM</span></div>
+<div class="task-card" data-task="mon-coursera" data-slots="2" style="min-height:111px;">
+  <span class="ci">&#128187;</span>
+  <div class="cb"><div class="ct">Coursera — IT Automation</div><div class="cs">Google module · self-paced</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="14" data-min="30">2:30 PM</span></div>
+<div class="task-card" data-task="mon-pabbly" data-slots="2" style="min-height:111px;">
+  <span class="ci">&#9881;</span>
+  <div class="cb"><div class="ct">Pabbly / Saleshandy</div><div class="cs">Automation · outreach flows</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="15" data-min="30">3:30 PM</span></div>
+<div class="task-card" data-task="mon-pmp2" data-slots="2" style="min-height:111px;">
+  <span class="ci">&#128214;</span>
+  <div class="cb"><div class="ct">PMP Content Review</div><div class="cs">Chapter deep dive</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="16" data-min="30">4:30 PM</span></div>
+<div class="task-card" data-task="mon-break1" data-slots="1" style="min-height:52px;background:#fafafa;border:1.5px dashed #ddd;">
+  <span class="ci">&#127774;</span>
+  <div class="cb"><div class="ct" style="color:#999;">Evening Break</div><div class="cs">Tea · refresh</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="17" data-min="0">5:00 PM</span></div>
+<div class="task-card" data-task="mon-break2" data-slots="1" style="min-height:52px;background:#fafafa;border:1.5px dashed #ddd;">
+  <span class="ci">&#127774;</span>
+  <div class="cb"><div class="ct" style="color:#999;">Wrap Up / Admin</div><div class="cs">Emails · quick tasks</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="17" data-min="30">5:30 PM</span></div>
+<div class="task-card" data-task="mon-evemeditation" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#129488;</span>
+  <div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe · peace</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="18" data-min="0">6:00 PM</span></div>
+<div class="task-card" data-task="mon-call" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128222;</span>
+  <div class="cb"><div class="ct">Call Near & Dear Ones</div><div class="cs">Stay connected daily</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="18" data-min="30">6:30 PM</span></div>
+<div class="task-card" data-task="mon-call2" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128222;</span>
+  <div class="cb"><div class="ct">Call cont. / Family Time</div><div class="cs">Cherish connections</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="19" data-min="0">7:00 PM</span></div>
+<div class="task-card" data-task="mon-dinner" data-slots="2" style="min-height:111px;background:#f8f8f8;border-color:#eee;">
+  <span class="ci">&#127869;</span>
+  <div class="cb"><div class="ct" style="color:#888;">Dinner & Family Time</div><div class="cs">Nourish · unplug · present</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="20" data-min="0">8:00 PM</span></div>
+<div class="task-card" data-task="mon-review" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128203;</span>
+  <div class="cb"><div class="ct">Day Review & Plan Tomorrow</div><div class="cs">Count units · wind down</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="20" data-min="30">8:30 PM</span></div>
+<div class="task-card" data-task="mon-wind" data-slots="1" style="min-height:52px;background:#fafafa;border:1.5px dashed #ddd;">
+  <span class="ci">&#127761;</span>
+  <div class="cb"><div class="ct" style="color:#999;">Wind Down</div><div class="cs">No screens · sleep by 11 PM</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="meetings-box" id="meetings-box-0"></div>
+<div class="day-summary">
+  <div class="ds-title">Monday Summary</div>
+  <div class="ds-row">
+    <div class="ds-s"><div class="ds-n" id="ss-dn-0">0</div><div class="ds-l">Done</div></div>
+    <div class="ds-s"><div class="ds-n" id="ss-un-0">0</div><div class="ds-l">Units</div></div>
+    <div class="ds-s"><div class="ds-n" id="ss-mx-0">0</div><div class="ds-l">Max</div></div>
+  </div>
+  <div class="ds-bar"><div class="ds-fill" id="ss-fill-0" style="width:0%"></div></div>
+  <div class="ds-pct" id="ss-pct-0">0% complete</div>
+</div>
+<div class="total-card">
+  <div class="tc-title">All Days Total — 2 Months</div>
+  <div class="tc-row">
+    <div class="tc-s"><div class="tc-n" id="tc-dn-0">0</div><div class="tc-l">Tasks</div></div>
+    <div class="tc-s"><div class="tc-n" id="tc-un-0">0</div><div class="tc-l">Units</div></div>
+    <div class="tc-s"><div class="tc-n" id="tc-pc-0" style="color:#22c55e;">0%</div><div class="tc-l">2-Month</div></div>
+  </div>
+  <div class="tc-bar"><div class="tc-fill" id="tc-fill-0" style="width:0%"></div></div>
+  <div class="tc-pct" id="tc-sub-0">0 / 12,800 units</div>
+</div>
+<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next</button></div>
+</div>
+<div class="day-panel" id="p1">
+<div class="day-hero">
+  <div class="dh-top"><div class="dh-title">Tuesday</div><div class="dh-date" id="dd-1"></div></div>
+  <div class="dh-stats">
+    <div class="dh-s"><div class="dh-n" id="dn-1">0</div><div class="dh-l">Done</div></div>
+    <div class="dh-s"><div class="dh-n" id="dt-1">0</div><div class="dh-l">Total</div></div>
+    <div class="dh-s"><div class="dh-n" id="du-1">0</div><div class="dh-l">Units</div></div>
+    <div class="dh-s"><div class="dh-n" id="dp-1">0%</div><div class="dh-l">Done%</div></div>
+  </div>
+  <div class="dh-bar"><div class="dh-fill" id="df-1" style="width:0%"></div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="7" data-min="0">7:00 AM</span></div>
+<div class="task-card" data-task="tue-treadmill" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127939;</span>
+  <div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins · build habit</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="7" data-min="30">7:30 AM</span></div>
+<div class="task-card" data-task="tue-meditation" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#129488;</span>
+  <div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual · 30 mins</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="8" data-min="0">8:00 AM</span></div>
+<div class="task-card" data-task="tue-pmp" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127942;</span>
+  <div class="cb"><div class="ct">PMP — MCQ Practice</div><div class="cs">30 questions daily</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="8" data-min="30">8:30 AM</span></div>
+<div class="task-card travel" style="min-height:170px;">
+  <span class="ci">&#128663;</span>
+  <div class="cb"><div class="ct">Travelling</div><div class="cs">Free · podcast · relax</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="10" data-min="0">10:00 AM</span></div>
+<div class="task-card" data-task="tue-speaking" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127908;</span>
+  <div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12-15 mins</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="10" data-min="30">10:30 AM</span></div>
+<div class="task-card" data-task="tue-speaking_rev" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127908;</span>
+  <div class="cb"><div class="ct">Speaking — Review</div><div class="cs">Listen back · note improvements</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="11" data-min="0">11:00 AM</span></div>
+<div class="task-card" data-task="tue-job" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128188;</span>
+  <div class="cb"><div class="ct">Job Applications</div><div class="cs">LinkedIn · portals · 30 mins</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="11" data-min="30">11:30 AM</span></div>
+<div class="task-card" data-task="tue-job2" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128188;</span>
+  <div class="cb"><div class="ct">Job Applications cont.</div><div class="cs">Follow-ups · recruiter msgs</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="12" data-min="0">12:00 PM</span></div>
+<div class="task-card" data-task="tue-free1" data-slots="1" style="min-height:52px;background:#f8f8f8;border-color:#eee;">
+  <span class="ci">&#127774;</span>
+  <div class="cb"><div class="ct" style="color:#888;">Lunch Break</div><div class="cs">Nourish · recharge</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="12" data-min="30">12:30 PM</span></div>
+<div class="task-card" data-task="tue-free2" data-slots="1" style="min-height:52px;background:#f8f8f8;border-color:#eee;">
+  <span class="ci">&#127774;</span>
+  <div class="cb"><div class="ct" style="color:#888;">Lunch cont.</div><div class="cs">Rest · relax</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="13" data-min="0">1:00 PM</span></div>
+<div class="task-card" data-task="tue-free3" data-slots="1" style="min-height:52px;background:#f8f8f8;border-color:#eee;">
+  <span class="ci">&#127774;</span>
+  <div class="cb"><div class="ct" style="color:#888;">Post-Lunch Rest</div><div class="cs">Short break</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="13" data-min="30">1:30 PM</span></div>
+<div class="task-card" data-task="tue-coursera" data-slots="2" style="min-height:111px;">
+  <span class="ci">&#128187;</span>
+  <div class="cb"><div class="ct">Coursera — IT Automation</div><div class="cs">Google module · self-paced</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="14" data-min="30">2:30 PM</span></div>
+<div class="task-card" data-task="tue-pabbly" data-slots="2" style="min-height:111px;">
+  <span class="ci">&#9881;</span>
+  <div class="cb"><div class="ct">Pabbly / Saleshandy</div><div class="cs">Automation · outreach flows</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="15" data-min="30">3:30 PM</span></div>
+<div class="task-card" data-task="tue-pmp2" data-slots="2" style="min-height:111px;">
+  <span class="ci">&#128214;</span>
+  <div class="cb"><div class="ct">PMP Content Review</div><div class="cs">Chapter deep dive</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="16" data-min="30">4:30 PM</span></div>
+<div class="task-card" data-task="tue-break1" data-slots="1" style="min-height:52px;background:#fafafa;border:1.5px dashed #ddd;">
+  <span class="ci">&#127774;</span>
+  <div class="cb"><div class="ct" style="color:#999;">Evening Break</div><div class="cs">Tea · refresh</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="17" data-min="0">5:00 PM</span></div>
+<div class="task-card" data-task="tue-break2" data-slots="1" style="min-height:52px;background:#fafafa;border:1.5px dashed #ddd;">
+  <span class="ci">&#127774;</span>
+  <div class="cb"><div class="ct" style="color:#999;">Wrap Up / Admin</div><div class="cs">Emails · quick tasks</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="17" data-min="30">5:30 PM</span></div>
+<div class="task-card" data-task="tue-evemeditation" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#129488;</span>
+  <div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe · peace</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="18" data-min="0">6:00 PM</span></div>
+<div class="task-card" data-task="tue-call" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128222;</span>
+  <div class="cb"><div class="ct">Call Near & Dear Ones</div><div class="cs">Stay connected daily</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="18" data-min="30">6:30 PM</span></div>
+<div class="task-card" data-task="tue-call2" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128222;</span>
+  <div class="cb"><div class="ct">Call cont. / Family Time</div><div class="cs">Cherish connections</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="19" data-min="0">7:00 PM</span></div>
+<div class="task-card" data-task="tue-dinner" data-slots="2" style="min-height:111px;background:#f8f8f8;border-color:#eee;">
+  <span class="ci">&#127869;</span>
+  <div class="cb"><div class="ct" style="color:#888;">Dinner & Family Time</div><div class="cs">Nourish · unplug · present</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="20" data-min="0">8:00 PM</span></div>
+<div class="task-card" data-task="tue-review" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128203;</span>
+  <div class="cb"><div class="ct">Day Review & Plan Tomorrow</div><div class="cs">Count units · wind down</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="20" data-min="30">8:30 PM</span></div>
+<div class="task-card" data-task="tue-wind" data-slots="1" style="min-height:52px;background:#fafafa;border:1.5px dashed #ddd;">
+  <span class="ci">&#127761;</span>
+  <div class="cb"><div class="ct" style="color:#999;">Wind Down</div><div class="cs">No screens · sleep by 11 PM</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="meetings-box" id="meetings-box-1"></div>
+<div class="day-summary">
+  <div class="ds-title">Tuesday Summary</div>
+  <div class="ds-row">
+    <div class="ds-s"><div class="ds-n" id="ss-dn-1">0</div><div class="ds-l">Done</div></div>
+    <div class="ds-s"><div class="ds-n" id="ss-un-1">0</div><div class="ds-l">Units</div></div>
+    <div class="ds-s"><div class="ds-n" id="ss-mx-1">0</div><div class="ds-l">Max</div></div>
+  </div>
+  <div class="ds-bar"><div class="ds-fill" id="ss-fill-1" style="width:0%"></div></div>
+  <div class="ds-pct" id="ss-pct-1">0% complete</div>
+</div>
+<div class="total-card">
+  <div class="tc-title">All Days Total — 2 Months</div>
+  <div class="tc-row">
+    <div class="tc-s"><div class="tc-n" id="tc-dn-1">0</div><div class="tc-l">Tasks</div></div>
+    <div class="tc-s"><div class="tc-n" id="tc-un-1">0</div><div class="tc-l">Units</div></div>
+    <div class="tc-s"><div class="tc-n" id="tc-pc-1" style="color:#22c55e;">0%</div><div class="tc-l">2-Month</div></div>
+  </div>
+  <div class="tc-bar"><div class="tc-fill" id="tc-fill-1" style="width:0%"></div></div>
+  <div class="tc-pct" id="tc-sub-1">0 / 12,800 units</div>
+</div>
+<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next</button></div>
+</div>
+<div class="day-panel" id="p2">
+<div class="day-hero">
+  <div class="dh-top"><div class="dh-title">Wednesday</div><div class="dh-date" id="dd-2"></div></div>
+  <div class="dh-stats">
+    <div class="dh-s"><div class="dh-n" id="dn-2">0</div><div class="dh-l">Done</div></div>
+    <div class="dh-s"><div class="dh-n" id="dt-2">0</div><div class="dh-l">Total</div></div>
+    <div class="dh-s"><div class="dh-n" id="du-2">0</div><div class="dh-l">Units</div></div>
+    <div class="dh-s"><div class="dh-n" id="dp-2">0%</div><div class="dh-l">Done%</div></div>
+  </div>
+  <div class="dh-bar"><div class="dh-fill" id="df-2" style="width:0%"></div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="7" data-min="0">7:00 AM</span></div>
+<div class="task-card" data-task="wed-treadmill" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127939;</span>
+  <div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="7" data-min="30">7:30 AM</span></div>
+<div class="task-card" data-task="wed-meditation" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#129488;</span>
+  <div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="8" data-min="0">8:00 AM</span></div>
+<div class="task-card" data-task="wed-pmp" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127942;</span>
+  <div class="cb"><div class="ct">PMP — MCQ Practice</div><div class="cs">30 questions</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="8" data-min="30">8:30 AM</span></div>
+<div class="task-card travel" style="min-height:170px;">
+  <span class="ci">&#128663;</span>
+  <div class="cb"><div class="ct">Travelling</div><div class="cs">Free · podcast · relax</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="10" data-min="0">10:00 AM</span></div>
+<div class="task-card" data-task="wed-speaking" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127908;</span>
+  <div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12-15 mins</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="10" data-min="30">10:30 AM</span></div>
+<div class="task-card" data-task="wed-speaking_rev" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127908;</span>
+  <div class="cb"><div class="ct">Speaking — Review</div><div class="cs">Listen back · improve</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="11" data-min="0">11:00 AM</span></div>
+<div class="task-card" data-task="wed-job" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128188;</span>
+  <div class="cb"><div class="ct">Job Applications</div><div class="cs">LinkedIn · portals</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="11" data-min="30">11:30 AM</span></div>
+<div class="task-card" data-task="wed-job2" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128188;</span>
+  <div class="cb"><div class="ct">Job Applications cont.</div><div class="cs">Follow-ups</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="12" data-min="0">12:00 PM</span></div>
+<div class="task-card" data-task="wed-lunch" data-slots="2" style="min-height:111px;background:#f8f8f8;border-color:#eee;">
+  <span class="ci">&#127869;</span>
+  <div class="cb"><div class="ct" style="color:#888;">Lunch Break</div><div class="cs">Nourish · recharge</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="13" data-min="0">1:00 PM</span></div>
+<div class="task-card" data-task="wed-rest" data-slots="1" style="min-height:52px;background:#f8f8f8;border-color:#eee;">
+  <span class="ci">&#127774;</span>
+  <div class="cb"><div class="ct" style="color:#888;">Post-Lunch Rest</div><div class="cs">Short break</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="13" data-min="30">1:30 PM</span></div>
+<div class="task-card" data-task="wed-shoot" data-slots="3" style="min-height:170px;">
+  <span class="ci">&#127909;</span>
+  <div class="cb"><div class="ct">Content Shoot</div><div class="cs">YouTube · Instagram · 90 min</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="15" data-min="0">3:00 PM</span></div>
+<div class="task-card" data-task="wed-edit" data-slots="2" style="min-height:111px;">
+  <span class="ci">&#9986;</span>
+  <div class="cb"><div class="ct">Edit & Schedule Content</div><div class="cs">Vizard.ai · Pabbly</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="16" data-min="0">4:00 PM</span></div>
+<div class="task-card" data-task="wed-pmp2" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127942;</span>
+  <div class="cb"><div class="ct">PMP Flashcards</div><div class="cs">Quick revision</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="16" data-min="30">4:30 PM</span></div>
+<div class="task-card" data-task="wed-pabbly" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#9881;</span>
+  <div class="cb"><div class="ct">Pabbly / Saleshandy</div><div class="cs">Automation · outreach</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="17" data-min="0">5:00 PM</span></div>
+<div class="task-card" data-task="wed-break1" data-slots="1" style="min-height:52px;background:#fafafa;border:1.5px dashed #ddd;">
+  <span class="ci">&#127774;</span>
+  <div class="cb"><div class="ct" style="color:#999;">Evening Break</div><div class="cs">Tea · refresh</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="17" data-min="30">5:30 PM</span></div>
+<div class="task-card" data-task="wed-evemeditation" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#129488;</span>
+  <div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="18" data-min="0">6:00 PM</span></div>
+<div class="task-card" data-task="wed-call" data-slots="2" style="min-height:111px;">
+  <span class="ci">&#128222;</span>
+  <div class="cb"><div class="ct">Call Near & Dear Ones</div><div class="cs">Stay connected</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="19" data-min="0">7:00 PM</span></div>
+<div class="task-card" data-task="wed-dinner" data-slots="2" style="min-height:111px;background:#f8f8f8;border-color:#eee;">
+  <span class="ci">&#127869;</span>
+  <div class="cb"><div class="ct" style="color:#888;">Dinner & Family Time</div><div class="cs">Nourish · unplug</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="20" data-min="0">8:00 PM</span></div>
+<div class="task-card" data-task="wed-review" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128203;</span>
+  <div class="cb"><div class="ct">Day Review & Plan</div><div class="cs">Count units · wind down</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="20" data-min="30">8:30 PM</span></div>
+<div class="task-card" data-task="wed-wind" data-slots="1" style="min-height:52px;background:#fafafa;border:1.5px dashed #ddd;">
+  <span class="ci">&#127761;</span>
+  <div class="cb"><div class="ct" style="color:#999;">Wind Down</div><div class="cs">Sleep by 11 PM</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="meetings-box" id="meetings-box-2"></div>
+<div class="day-summary">
+  <div class="ds-title">Wednesday Summary</div>
+  <div class="ds-row">
+    <div class="ds-s"><div class="ds-n" id="ss-dn-2">0</div><div class="ds-l">Done</div></div>
+    <div class="ds-s"><div class="ds-n" id="ss-un-2">0</div><div class="ds-l">Units</div></div>
+    <div class="ds-s"><div class="ds-n" id="ss-mx-2">0</div><div class="ds-l">Max</div></div>
+  </div>
+  <div class="ds-bar"><div class="ds-fill" id="ss-fill-2" style="width:0%"></div></div>
+  <div class="ds-pct" id="ss-pct-2">0% complete</div>
+</div>
+<div class="total-card">
+  <div class="tc-title">All Days Total — 2 Months</div>
+  <div class="tc-row">
+    <div class="tc-s"><div class="tc-n" id="tc-dn-2">0</div><div class="tc-l">Tasks</div></div>
+    <div class="tc-s"><div class="tc-n" id="tc-un-2">0</div><div class="tc-l">Units</div></div>
+    <div class="tc-s"><div class="tc-n" id="tc-pc-2" style="color:#22c55e;">0%</div><div class="tc-l">2-Month</div></div>
+  </div>
+  <div class="tc-bar"><div class="tc-fill" id="tc-fill-2" style="width:0%"></div></div>
+  <div class="tc-pct" id="tc-sub-2">0 / 12,800 units</div>
+</div>
+<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next</button></div>
+</div>
+<div class="day-panel" id="p3">
+<div class="day-hero">
+  <div class="dh-top"><div class="dh-title">Thursday</div><div class="dh-date" id="dd-3"></div></div>
+  <div class="dh-stats">
+    <div class="dh-s"><div class="dh-n" id="dn-3">0</div><div class="dh-l">Done</div></div>
+    <div class="dh-s"><div class="dh-n" id="dt-3">0</div><div class="dh-l">Total</div></div>
+    <div class="dh-s"><div class="dh-n" id="du-3">0</div><div class="dh-l">Units</div></div>
+    <div class="dh-s"><div class="dh-n" id="dp-3">0%</div><div class="dh-l">Done%</div></div>
+  </div>
+  <div class="dh-bar"><div class="dh-fill" id="df-3" style="width:0%"></div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="7" data-min="0">7:00 AM</span></div>
+<div class="task-card" data-task="thu-treadmill" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127939;</span>
+  <div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins · build habit</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="7" data-min="30">7:30 AM</span></div>
+<div class="task-card" data-task="thu-meditation" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#129488;</span>
+  <div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual · 30 mins</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="8" data-min="0">8:00 AM</span></div>
+<div class="task-card" data-task="thu-pmp" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127942;</span>
+  <div class="cb"><div class="ct">PMP — MCQ Practice</div><div class="cs">30 questions daily</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="8" data-min="30">8:30 AM</span></div>
+<div class="task-card travel" style="min-height:170px;">
+  <span class="ci">&#128663;</span>
+  <div class="cb"><div class="ct">Travelling</div><div class="cs">Free · podcast · relax</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="10" data-min="0">10:00 AM</span></div>
+<div class="task-card" data-task="thu-speaking" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127908;</span>
+  <div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12-15 mins</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="10" data-min="30">10:30 AM</span></div>
+<div class="task-card" data-task="thu-speaking_rev" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127908;</span>
+  <div class="cb"><div class="ct">Speaking — Review</div><div class="cs">Listen back · note improvements</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="11" data-min="0">11:00 AM</span></div>
+<div class="task-card" data-task="thu-job" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128188;</span>
+  <div class="cb"><div class="ct">Job Applications</div><div class="cs">LinkedIn · portals · 30 mins</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="11" data-min="30">11:30 AM</span></div>
+<div class="task-card" data-task="thu-job2" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128188;</span>
+  <div class="cb"><div class="ct">Job Applications cont.</div><div class="cs">Follow-ups · recruiter msgs</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="12" data-min="0">12:00 PM</span></div>
+<div class="task-card" data-task="thu-free1" data-slots="1" style="min-height:52px;background:#f8f8f8;border-color:#eee;">
+  <span class="ci">&#127774;</span>
+  <div class="cb"><div class="ct" style="color:#888;">Lunch Break</div><div class="cs">Nourish · recharge</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="12" data-min="30">12:30 PM</span></div>
+<div class="task-card" data-task="thu-free2" data-slots="1" style="min-height:52px;background:#f8f8f8;border-color:#eee;">
+  <span class="ci">&#127774;</span>
+  <div class="cb"><div class="ct" style="color:#888;">Lunch cont.</div><div class="cs">Rest · relax</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="13" data-min="0">1:00 PM</span></div>
+<div class="task-card" data-task="thu-free3" data-slots="1" style="min-height:52px;background:#f8f8f8;border-color:#eee;">
+  <span class="ci">&#127774;</span>
+  <div class="cb"><div class="ct" style="color:#888;">Post-Lunch Rest</div><div class="cs">Short break</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="13" data-min="30">1:30 PM</span></div>
+<div class="task-card" data-task="thu-coursera" data-slots="2" style="min-height:111px;">
+  <span class="ci">&#128187;</span>
+  <div class="cb"><div class="ct">Coursera — IT Automation</div><div class="cs">Google module · self-paced</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="14" data-min="30">2:30 PM</span></div>
+<div class="task-card" data-task="thu-pabbly" data-slots="2" style="min-height:111px;">
+  <span class="ci">&#9881;</span>
+  <div class="cb"><div class="ct">Pabbly / Saleshandy</div><div class="cs">Automation · outreach flows</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="15" data-min="30">3:30 PM</span></div>
+<div class="task-card" data-task="thu-pmp2" data-slots="2" style="min-height:111px;">
+  <span class="ci">&#128214;</span>
+  <div class="cb"><div class="ct">PMP Content Review</div><div class="cs">Chapter deep dive</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="16" data-min="30">4:30 PM</span></div>
+<div class="task-card" data-task="thu-break1" data-slots="1" style="min-height:52px;background:#fafafa;border:1.5px dashed #ddd;">
+  <span class="ci">&#127774;</span>
+  <div class="cb"><div class="ct" style="color:#999;">Evening Break</div><div class="cs">Tea · refresh</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="17" data-min="0">5:00 PM</span></div>
+<div class="task-card" data-task="thu-break2" data-slots="1" style="min-height:52px;background:#fafafa;border:1.5px dashed #ddd;">
+  <span class="ci">&#127774;</span>
+  <div class="cb"><div class="ct" style="color:#999;">Wrap Up / Admin</div><div class="cs">Emails · quick tasks</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="17" data-min="30">5:30 PM</span></div>
+<div class="task-card" data-task="thu-evemeditation" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#129488;</span>
+  <div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe · peace</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="18" data-min="0">6:00 PM</span></div>
+<div class="task-card" data-task="thu-call" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128222;</span>
+  <div class="cb"><div class="ct">Call Near & Dear Ones</div><div class="cs">Stay connected daily</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="18" data-min="30">6:30 PM</span></div>
+<div class="task-card" data-task="thu-call2" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128222;</span>
+  <div class="cb"><div class="ct">Call cont. / Family Time</div><div class="cs">Cherish connections</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="19" data-min="0">7:00 PM</span></div>
+<div class="task-card" data-task="thu-dinner" data-slots="2" style="min-height:111px;background:#f8f8f8;border-color:#eee;">
+  <span class="ci">&#127869;</span>
+  <div class="cb"><div class="ct" style="color:#888;">Dinner & Family Time</div><div class="cs">Nourish · unplug · present</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="20" data-min="0">8:00 PM</span></div>
+<div class="task-card" data-task="thu-review" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128203;</span>
+  <div class="cb"><div class="ct">Day Review & Plan Tomorrow</div><div class="cs">Count units · wind down</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="20" data-min="30">8:30 PM</span></div>
+<div class="task-card" data-task="thu-wind" data-slots="1" style="min-height:52px;background:#fafafa;border:1.5px dashed #ddd;">
+  <span class="ci">&#127761;</span>
+  <div class="cb"><div class="ct" style="color:#999;">Wind Down</div><div class="cs">No screens · sleep by 11 PM</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="meetings-box" id="meetings-box-3"></div>
+<div class="day-summary">
+  <div class="ds-title">Thursday Summary</div>
+  <div class="ds-row">
+    <div class="ds-s"><div class="ds-n" id="ss-dn-3">0</div><div class="ds-l">Done</div></div>
+    <div class="ds-s"><div class="ds-n" id="ss-un-3">0</div><div class="ds-l">Units</div></div>
+    <div class="ds-s"><div class="ds-n" id="ss-mx-3">0</div><div class="ds-l">Max</div></div>
+  </div>
+  <div class="ds-bar"><div class="ds-fill" id="ss-fill-3" style="width:0%"></div></div>
+  <div class="ds-pct" id="ss-pct-3">0% complete</div>
+</div>
+<div class="total-card">
+  <div class="tc-title">All Days Total — 2 Months</div>
+  <div class="tc-row">
+    <div class="tc-s"><div class="tc-n" id="tc-dn-3">0</div><div class="tc-l">Tasks</div></div>
+    <div class="tc-s"><div class="tc-n" id="tc-un-3">0</div><div class="tc-l">Units</div></div>
+    <div class="tc-s"><div class="tc-n" id="tc-pc-3" style="color:#22c55e;">0%</div><div class="tc-l">2-Month</div></div>
+  </div>
+  <div class="tc-bar"><div class="tc-fill" id="tc-fill-3" style="width:0%"></div></div>
+  <div class="tc-pct" id="tc-sub-3">0 / 12,800 units</div>
+</div>
+<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next</button></div>
+</div>
+<div class="day-panel" id="p4">
+<div class="day-hero">
+  <div class="dh-top"><div class="dh-title">Friday</div><div class="dh-date" id="dd-4"></div></div>
+  <div class="dh-stats">
+    <div class="dh-s"><div class="dh-n" id="dn-4">0</div><div class="dh-l">Done</div></div>
+    <div class="dh-s"><div class="dh-n" id="dt-4">0</div><div class="dh-l">Total</div></div>
+    <div class="dh-s"><div class="dh-n" id="du-4">0</div><div class="dh-l">Units</div></div>
+    <div class="dh-s"><div class="dh-n" id="dp-4">0%</div><div class="dh-l">Done%</div></div>
+  </div>
+  <div class="dh-bar"><div class="dh-fill" id="df-4" style="width:0%"></div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="7" data-min="0">7:00 AM</span></div>
+<div class="task-card" data-task="fri-treadmill" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127939;</span>
+  <div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="7" data-min="30">7:30 AM</span></div>
+<div class="task-card" data-task="fri-meditation" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#129488;</span>
+  <div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="8" data-min="0">8:00 AM</span></div>
+<div class="task-card" data-task="fri-pmp" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127942;</span>
+  <div class="cb"><div class="ct">PMP — Mock Test</div><div class="cs">50Q full exam</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="8" data-min="30">8:30 AM</span></div>
+<div class="task-card travel" style="min-height:170px;">
+  <span class="ci">&#128663;</span>
+  <div class="cb"><div class="ct">Travelling</div><div class="cs">Free · podcast · relax</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="10" data-min="0">10:00 AM</span></div>
+<div class="task-card" data-task="fri-speaking" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127908;</span>
+  <div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12-15 mins</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="10" data-min="30">10:30 AM</span></div>
+<div class="task-card" data-task="fri-speaking_rev" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127908;</span>
+  <div class="cb"><div class="ct">Speaking — Review</div><div class="cs">Listen back · improve</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="11" data-min="0">11:00 AM</span></div>
+<div class="task-card" data-task="fri-job" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128188;</span>
+  <div class="cb"><div class="ct">Job Applications</div><div class="cs">LinkedIn · portals</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="11" data-min="30">11:30 AM</span></div>
+<div class="task-card" data-task="fri-job2" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128188;</span>
+  <div class="cb"><div class="ct">Job Applications cont.</div><div class="cs">Follow-ups</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="12" data-min="0">12:00 PM</span></div>
+<div class="task-card" data-task="fri-lunch" data-slots="2" style="min-height:111px;background:#f8f8f8;border-color:#eee;">
+  <span class="ci">&#127869;</span>
+  <div class="cb"><div class="ct" style="color:#888;">Lunch Break</div><div class="cs">Nourish · recharge</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="13" data-min="0">1:00 PM</span></div>
+<div class="task-card" data-task="fri-shoot" data-slots="3" style="min-height:170px;">
+  <span class="ci">&#127909;</span>
+  <div class="cb"><div class="ct">Content Shoot</div><div class="cs">YouTube · Instagram · 90 min</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="14" data-min="30">2:30 PM</span></div>
+<div class="task-card" data-task="fri-edit" data-slots="2" style="min-height:111px;">
+  <span class="ci">&#9986;</span>
+  <div class="cb"><div class="ct">Edit & Schedule Content</div><div class="cs">Vizard.ai · Pabbly</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="15" data-min="30">3:30 PM</span></div>
+<div class="task-card" data-task="fri-pmp2" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127942;</span>
+  <div class="cb"><div class="ct">PMP Weekly Review</div><div class="cs">Mock test analysis</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="16" data-min="0">4:00 PM</span></div>
+<div class="task-card" data-task="fri-free_fri" data-slots="1" style="min-height:52px;background:#fafafa;border:1.5px dashed #ddd;">
+  <span class="ci">&#127774;</span>
+  <div class="cb"><div class="ct" style="color:#999;">Free Evening</div><div class="cs">You earned it!</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="16" data-min="30">4:30 PM</span></div>
+<div class="task-card" data-task="fri-break1" data-slots="1" style="min-height:52px;background:#fafafa;border:1.5px dashed #ddd;">
+  <span class="ci">&#127774;</span>
+  <div class="cb"><div class="ct" style="color:#999;">Evening Break</div><div class="cs">Tea · refresh</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="17" data-min="0">5:00 PM</span></div>
+<div class="task-card" data-task="fri-evemeditation" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#129488;</span>
+  <div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="17" data-min="30">5:30 PM</span></div>
+<div class="task-card" data-task="fri-call" data-slots="2" style="min-height:111px;">
+  <span class="ci">&#128222;</span>
+  <div class="cb"><div class="ct">Call Near & Dear Ones</div><div class="cs">Stay connected</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="18" data-min="30">6:30 PM</span></div>
+<div class="task-card" data-task="fri-social" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127881;</span>
+  <div class="cb"><div class="ct">Social / Movie Time</div><div class="cs">Friends · fun · recharge</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="19" data-min="0">7:00 PM</span></div>
+<div class="task-card" data-task="fri-dinner" data-slots="2" style="min-height:111px;background:#f8f8f8;border-color:#eee;">
+  <span class="ci">&#127869;</span>
+  <div class="cb"><div class="ct" style="color:#888;">Dinner & Family Time</div><div class="cs">Nourish · unplug</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="20" data-min="0">8:00 PM</span></div>
+<div class="task-card" data-task="fri-review" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128203;</span>
+  <div class="cb"><div class="ct">Day Review & Plan</div><div class="cs">Count units · wind down</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="20" data-min="30">8:30 PM</span></div>
+<div class="task-card" data-task="fri-wind" data-slots="1" style="min-height:52px;background:#fafafa;border:1.5px dashed #ddd;">
+  <span class="ci">&#127761;</span>
+  <div class="cb"><div class="ct" style="color:#999;">Wind Down</div><div class="cs">Sleep by 11 PM</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="meetings-box" id="meetings-box-4"></div>
+<div class="day-summary">
+  <div class="ds-title">Friday Summary</div>
+  <div class="ds-row">
+    <div class="ds-s"><div class="ds-n" id="ss-dn-4">0</div><div class="ds-l">Done</div></div>
+    <div class="ds-s"><div class="ds-n" id="ss-un-4">0</div><div class="ds-l">Units</div></div>
+    <div class="ds-s"><div class="ds-n" id="ss-mx-4">0</div><div class="ds-l">Max</div></div>
+  </div>
+  <div class="ds-bar"><div class="ds-fill" id="ss-fill-4" style="width:0%"></div></div>
+  <div class="ds-pct" id="ss-pct-4">0% complete</div>
+</div>
+<div class="total-card">
+  <div class="tc-title">All Days Total — 2 Months</div>
+  <div class="tc-row">
+    <div class="tc-s"><div class="tc-n" id="tc-dn-4">0</div><div class="tc-l">Tasks</div></div>
+    <div class="tc-s"><div class="tc-n" id="tc-un-4">0</div><div class="tc-l">Units</div></div>
+    <div class="tc-s"><div class="tc-n" id="tc-pc-4" style="color:#22c55e;">0%</div><div class="tc-l">2-Month</div></div>
+  </div>
+  <div class="tc-bar"><div class="tc-fill" id="tc-fill-4" style="width:0%"></div></div>
+  <div class="tc-pct" id="tc-sub-4">0 / 12,800 units</div>
+</div>
+<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next</button></div>
+</div>
+<div class="day-panel" id="p5">
+<div class="day-hero">
+  <div class="dh-top"><div class="dh-title">Saturday</div><div class="dh-date" id="dd-5"></div></div>
+  <div class="dh-stats">
+    <div class="dh-s"><div class="dh-n" id="dn-5">0</div><div class="dh-l">Done</div></div>
+    <div class="dh-s"><div class="dh-n" id="dt-5">0</div><div class="dh-l">Total</div></div>
+    <div class="dh-s"><div class="dh-n" id="du-5">0</div><div class="dh-l">Units</div></div>
+    <div class="dh-s"><div class="dh-n" id="dp-5">0%</div><div class="dh-l">Done%</div></div>
+  </div>
+  <div class="dh-bar"><div class="dh-fill" id="df-5" style="width:0%"></div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="7" data-min="0">7:00 AM</span></div>
+<div class="task-card" data-task="sat-treadmill" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127939;</span>
+  <div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="7" data-min="30">7:30 AM</span></div>
+<div class="task-card" data-task="sat-meditation" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#129488;</span>
+  <div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="8" data-min="0">8:00 AM</span></div>
+<div class="task-card" data-task="sat-pmp" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127942;</span>
+  <div class="cb"><div class="ct">PMP — MCQ Practice</div><div class="cs">30 questions</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="8" data-min="30">8:30 AM</span></div>
+<div class="task-card" data-task="sat-slow_morning" data-slots="3" style="min-height:170px;background:#fafafa;border:1.5px dashed #ddd;">
+  <span class="ci">&#9749;</span>
+  <div class="cb"><div class="ct" style="color:#999;">Slow Morning</div><div class="cs">Relax · plan the week</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="10" data-min="0">10:00 AM</span></div>
+<div class="task-card" data-task="sat-speaking" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127908;</span>
+  <div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12-15 mins</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="10" data-min="30">10:30 AM</span></div>
+<div class="task-card" data-task="sat-job_deep" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128188;</span>
+  <div class="cb"><div class="ct">Job Apply — Deep Session</div><div class="cs">Weekend research · apply</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="11" data-min="0">11:00 AM</span></div>
+<div class="task-card" data-task="sat-job2" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128188;</span>
+  <div class="cb"><div class="ct">Job Apply cont.</div><div class="cs">Employer research</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="11" data-min="30">11:30 AM</span></div>
+<div class="task-card" data-task="sat-pabbly" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#9881;</span>
+  <div class="cb"><div class="ct">Pabbly / Saleshandy</div><div class="cs">Deep workflow setup</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="12" data-min="0">12:00 PM</span></div>
+<div class="task-card" data-task="sat-lunch" data-slots="2" style="min-height:111px;background:#f8f8f8;border-color:#eee;">
+  <span class="ci">&#127869;</span>
+  <div class="cb"><div class="ct" style="color:#888;">Lunch Break</div><div class="cs">Nourish · recharge</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="13" data-min="0">1:00 PM</span></div>
+<div class="task-card" data-task="sat-agentic" data-slots="6" style="min-height:347px;">
+  <span class="ci">&#129302;</span>
+  <div class="cb"><div class="ct">Agentic AI — LIVE CLASS</div><div class="cs">Simplilearn · Microsoft 2-5PM</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="16" data-min="0">4:00 PM</span></div>
+<div class="task-card" data-task="sat-break1" data-slots="1" style="min-height:52px;background:#fafafa;border:1.5px dashed #ddd;">
+  <span class="ci">&#127774;</span>
+  <div class="cb"><div class="ct" style="color:#999;">Tea Break</div><div class="cs">Recharge after class</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="16" data-min="30">4:30 PM</span></div>
+<div class="task-card" data-task="sat-coursera" data-slots="2" style="min-height:111px;">
+  <span class="ci">&#128187;</span>
+  <div class="cb"><div class="ct">Coursera — IT Automation</div><div class="cs">Weekend module</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="17" data-min="30">5:30 PM</span></div>
+<div class="task-card" data-task="sat-evemeditation" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#129488;</span>
+  <div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="18" data-min="0">6:00 PM</span></div>
+<div class="task-card" data-task="sat-call" data-slots="2" style="min-height:111px;">
+  <span class="ci">&#128222;</span>
+  <div class="cb"><div class="ct">Call Near & Dear Ones</div><div class="cs">Stay connected</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="19" data-min="0">7:00 PM</span></div>
+<div class="task-card" data-task="sat-social" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128522;</span>
+  <div class="cb"><div class="ct">Social Dinner</div><div class="cs">Friends · family · joy</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="19" data-min="30">7:30 PM</span></div>
+<div class="task-card" data-task="sat-dinner" data-slots="1" style="min-height:52px;background:#f8f8f8;border-color:#eee;">
+  <span class="ci">&#127869;</span>
+  <div class="cb"><div class="ct" style="color:#888;">Dinner</div><div class="cs">Nourish · relax</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="20" data-min="0">8:00 PM</span></div>
+<div class="task-card" data-task="sat-pmp2" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127942;</span>
+  <div class="cb"><div class="ct">PMP Mock Exam</div><div class="cs">Full 50Q test</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="20" data-min="30">8:30 PM</span></div>
+<div class="task-card" data-task="sat-review" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128203;</span>
+  <div class="cb"><div class="ct">Week Review & Plan Monday</div><div class="cs">Set goals · wind down</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="meetings-box" id="meetings-box-5"></div>
+<div class="day-summary">
+  <div class="ds-title">Saturday Summary</div>
+  <div class="ds-row">
+    <div class="ds-s"><div class="ds-n" id="ss-dn-5">0</div><div class="ds-l">Done</div></div>
+    <div class="ds-s"><div class="ds-n" id="ss-un-5">0</div><div class="ds-l">Units</div></div>
+    <div class="ds-s"><div class="ds-n" id="ss-mx-5">0</div><div class="ds-l">Max</div></div>
+  </div>
+  <div class="ds-bar"><div class="ds-fill" id="ss-fill-5" style="width:0%"></div></div>
+  <div class="ds-pct" id="ss-pct-5">0% complete</div>
+</div>
+<div class="total-card">
+  <div class="tc-title">All Days Total — 2 Months</div>
+  <div class="tc-row">
+    <div class="tc-s"><div class="tc-n" id="tc-dn-5">0</div><div class="tc-l">Tasks</div></div>
+    <div class="tc-s"><div class="tc-n" id="tc-un-5">0</div><div class="tc-l">Units</div></div>
+    <div class="tc-s"><div class="tc-n" id="tc-pc-5" style="color:#22c55e;">0%</div><div class="tc-l">2-Month</div></div>
+  </div>
+  <div class="tc-bar"><div class="tc-fill" id="tc-fill-5" style="width:0%"></div></div>
+  <div class="tc-pct" id="tc-sub-5">0 / 12,800 units</div>
+</div>
+<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next</button></div>
+</div>
+<div class="day-panel" id="p6">
+<div class="day-hero">
+  <div class="dh-top"><div class="dh-title">Sunday</div><div class="dh-date" id="dd-6"></div></div>
+  <div class="dh-stats">
+    <div class="dh-s"><div class="dh-n" id="dn-6">0</div><div class="dh-l">Done</div></div>
+    <div class="dh-s"><div class="dh-n" id="dt-6">0</div><div class="dh-l">Total</div></div>
+    <div class="dh-s"><div class="dh-n" id="du-6">0</div><div class="dh-l">Units</div></div>
+    <div class="dh-s"><div class="dh-n" id="dp-6">0%</div><div class="dh-l">Done%</div></div>
+  </div>
+  <div class="dh-bar"><div class="dh-fill" id="df-6" style="width:0%"></div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="7" data-min="0">7:00 AM</span></div>
+<div class="task-card" data-task="sun-treadmill" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127939;</span>
+  <div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="7" data-min="30">7:30 AM</span></div>
+<div class="task-card" data-task="sun-meditation" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#129488;</span>
+  <div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="8" data-min="0">8:00 AM</span></div>
+<div class="task-card" data-task="sun-pmp" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127942;</span>
+  <div class="cb"><div class="ct">PMP Content Review</div><div class="cs">Weekly chapter</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="8" data-min="30">8:30 AM</span></div>
+<div class="task-card" data-task="sun-family_morning" data-slots="3" style="min-height:170px;background:#fafafa;border:1.5px dashed #ddd;">
+  <span class="ci">&#127807;</span>
+  <div class="cb"><div class="ct" style="color:#999;">Family & Personal Time</div><div class="cs">Fully present · rest</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="10" data-min="0">10:00 AM</span></div>
+<div class="task-card" data-task="sun-speaking" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#127908;</span>
+  <div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12-15 mins</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="10" data-min="30">10:30 AM</span></div>
+<div class="task-card" data-task="sun-coursera" data-slots="2" style="min-height:111px;">
+  <span class="ci">&#128187;</span>
+  <div class="cb"><div class="ct">Coursera — IT Automation</div><div class="cs">Self-paced module</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="11" data-min="30">11:30 AM</span></div>
+<div class="task-card" data-task="sun-free_sun" data-slots="1" style="min-height:52px;background:#fafafa;border:1.5px dashed #ddd;">
+  <span class="ci">&#127774;</span>
+  <div class="cb"><div class="ct" style="color:#999;">Free Time</div><div class="cs">Rest fully</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="12" data-min="0">12:00 PM</span></div>
+<div class="task-card" data-task="sun-lunch" data-slots="2" style="min-height:111px;background:#f8f8f8;border-color:#eee;">
+  <span class="ci">&#127869;</span>
+  <div class="cb"><div class="ct" style="color:#888;">Lunch Break</div><div class="cs">Nourish · recharge</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="13" data-min="0">1:00 PM</span></div>
+<div class="task-card" data-task="sun-rest_sun" data-slots="1" style="min-height:52px;background:#fafafa;border:1.5px dashed #ddd;">
+  <span class="ci">&#127774;</span>
+  <div class="cb"><div class="ct" style="color:#999;">Nap / Rest</div><div class="cs">Recharge fully</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="13" data-min="30">1:30 PM</span></div>
+<div class="task-card" data-task="sun-agentic" data-slots="6" style="min-height:347px;">
+  <span class="ci">&#129302;</span>
+  <div class="cb"><div class="ct">Agentic AI — LIVE CLASS</div><div class="cs">Simplilearn · Microsoft 2-5PM</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="16" data-min="30">4:30 PM</span></div>
+<div class="task-card" data-task="sun-social" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128522;</span>
+  <div class="cb"><div class="ct">Social & Joy Time</div><div class="cs">Friends · movie · outing</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="17" data-min="0">5:00 PM</span></div>
+<div class="task-card" data-task="sun-break1" data-slots="1" style="min-height:52px;background:#fafafa;border:1.5px dashed #ddd;">
+  <span class="ci">&#127774;</span>
+  <div class="cb"><div class="ct" style="color:#999;">Tea Break</div><div class="cs">Recharge mindfully</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="17" data-min="30">5:30 PM</span></div>
+<div class="task-card" data-task="sun-evemeditation" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#129488;</span>
+  <div class="cb"><div class="ct">Evening Meditation & Gratitude</div><div class="cs">Reflect on the week</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="18" data-min="0">6:00 PM</span></div>
+<div class="task-card" data-task="sun-call" data-slots="2" style="min-height:111px;">
+  <span class="ci">&#128222;</span>
+  <div class="cb"><div class="ct">Call Near & Dear Ones</div><div class="cs">Stay connected</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="19" data-min="0">7:00 PM</span></div>
+<div class="task-card" data-task="sun-week_plan" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128203;</span>
+  <div class="cb"><div class="ct">Week Planning</div><div class="cs">Set Monday goals</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="19" data-min="30">7:30 PM</span></div>
+<div class="task-card" data-task="sun-dinner" data-slots="1" style="min-height:52px;background:#f8f8f8;border-color:#eee;">
+  <span class="ci">&#127869;</span>
+  <div class="cb"><div class="ct" style="color:#888;">Dinner</div><div class="cs">Nourish · relax</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="20" data-min="0">8:00 PM</span></div>
+<div class="task-card" data-task="sun-review" data-slots="1" style="min-height:52px;">
+  <span class="ci">&#128203;</span>
+  <div class="cb"><div class="ct">Week Review & Plan</div><div class="cs">Set goals · sleep well</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="time-row"><span class="tl" data-hour="20" data-min="30">8:30 PM</span></div>
+<div class="task-card" data-task="sun-wind" data-slots="1" style="min-height:52px;background:#fafafa;border:1.5px dashed #ddd;">
+  <span class="ci">&#127761;</span>
+  <div class="cb"><div class="ct" style="color:#999;">Wind Down</div><div class="cs">Sleep by 11 PM</div></div>
+  <div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div>
+</div>
+<div class="meetings-box" id="meetings-box-6"></div>
+<div class="day-summary">
+  <div class="ds-title">Sunday Summary</div>
+  <div class="ds-row">
+    <div class="ds-s"><div class="ds-n" id="ss-dn-6">0</div><div class="ds-l">Done</div></div>
+    <div class="ds-s"><div class="ds-n" id="ss-un-6">0</div><div class="ds-l">Units</div></div>
+    <div class="ds-s"><div class="ds-n" id="ss-mx-6">0</div><div class="ds-l">Max</div></div>
+  </div>
+  <div class="ds-bar"><div class="ds-fill" id="ss-fill-6" style="width:0%"></div></div>
+  <div class="ds-pct" id="ss-pct-6">0% complete</div>
+</div>
+<div class="total-card">
+  <div class="tc-title">All Days Total — 2 Months</div>
+  <div class="tc-row">
+    <div class="tc-s"><div class="tc-n" id="tc-dn-6">0</div><div class="tc-l">Tasks</div></div>
+    <div class="tc-s"><div class="tc-n" id="tc-un-6">0</div><div class="tc-l">Units</div></div>
+    <div class="tc-s"><div class="tc-n" id="tc-pc-6" style="color:#22c55e;">0%</div><div class="tc-l">2-Month</div></div>
+  </div>
+  <div class="tc-bar"><div class="tc-fill" id="tc-fill-6" style="width:0%"></div></div>
+  <div class="tc-pct" id="tc-sub-6">0 / 12,800 units</div>
+  <div class="tc-days">
+    <div class="tc-day"><div class="tc-day-n">M</div><div class="tc-day-bar"><div class="tc-day-fill" id="tdf-0" style="height:0%"></div></div><div class="tc-day-pct" id="tdp-0">0%</div></div>
+    <div class="tc-day"><div class="tc-day-n">T</div><div class="tc-day-bar"><div class="tc-day-fill" id="tdf-1" style="height:0%"></div></div><div class="tc-day-pct" id="tdp-1">0%</div></div>
+    <div class="tc-day"><div class="tc-day-n">W</div><div class="tc-day-bar"><div class="tc-day-fill" id="tdf-2" style="height:0%"></div></div><div class="tc-day-pct" id="tdp-2">0%</div></div>
+    <div class="tc-day"><div class="tc-day-n">T</div><div class="tc-day-bar"><div class="tc-day-fill" id="tdf-3" style="height:0%"></div></div><div class="tc-day-pct" id="tdp-3">0%</div></div>
+    <div class="tc-day"><div class="tc-day-n">F</div><div class="tc-day-bar"><div class="tc-day-fill" id="tdf-4" style="height:0%"></div></div><div class="tc-day-pct" id="tdp-4">0%</div></div>
+    <div class="tc-day"><div class="tc-day-n">S</div><div class="tc-day-bar"><div class="tc-day-fill" id="tdf-5" style="height:0%"></div></div><div class="tc-day-pct" id="tdp-5">0%</div></div>
+    <div class="tc-day"><div class="tc-day-n">S</div><div class="tc-day-bar"><div class="tc-day-fill" id="tdf-6" style="height:0%"></div></div><div class="tc-day-pct" id="tdp-6">0%</div></div>
+  </div>
+</div>
+<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next</button></div>
+</div>
+
+</div></div><!-- end track/page -->
+
+<!-- ADD MEETING POPUP -->
+<div class="overlay" id="add-popup">
+  <div class="popup">
+    <div class="ph"></div>
+    <div class="pt">Add Meeting / Event</div>
+    <div class="ps">Paste your Zoom, Meet or Teams link here</div>
+    <div class="pf"><label>Title *</label><input type="text" id="pm-title" placeholder="e.g. Interview with Google, Risers Club Call"></div>
+    <div class="pf"><label>Date &amp; Time</label><input type="datetime-local" id="pm-dt" style="margin-bottom:6px;">
+    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:4px;" id="quick-times">
+      <span style="font-size:10px;font-weight:800;color:#555;width:100%;margin-bottom:2px;">QUICK SELECT:</span>
+    </div></div>
+    <div class="pf"><label>Platform</label>
+      <select id="pm-plat">
+        <option value="zoom">Zoom</option>
+        <option value="meet">Google Meet</option>
+        <option value="teams">Microsoft Teams</option>
+        <option value="general">Other / General</option>
+      </select>
+    </div>
+    <div class="pf"><label>Join Link</label><input type="url" id="pm-link" placeholder="https://zoom.us/j/... or meet.google.com/..."></div>
+    <div class="pf"><label>Day of week</label>
+      <select id="pm-day">
+        <option value="0">Monday</option>
+        <option value="1">Tuesday</option>
+        <option value="2">Wednesday</option>
+        <option value="3">Thursday</option>
+        <option value="4">Friday</option>
+        <option value="5">Saturday</option>
+        <option value="6">Sunday</option>
+      </select>
+    </div>
+    <div class="pf"><label>Notes (optional)</label><textarea id="pm-notes" placeholder="Agenda, password, any notes..."></textarea></div>
+    <div class="p-actions">
+      <button class="p-cancel" onclick="closeAddPopup()">Cancel</button>
+      <button class="p-save" onclick="saveMeeting()">Save &amp; Add to Calendar</button>
+    </div>
+  </div>
+</div>
+
+<!-- SYNC CALENDAR POPUP -->
+<div class="overlay" id="sync-popup">
   <div class="popup">
     <div class="ph"></div>
     <div class="pt">&#128197; Google Calendar Sync</div>
@@ -1937,65 +3366,78 @@ function clearEntireGrid(){
 
 function pullLatest(){
   var ICAL='https://calendar.google.com/calendar/ical/nayana.vaity17%40gmail.com/public/basic.ics';
-  var P1='https://api.allorigins.win/raw?url=';
-  var P2='https://corsproxy.io/?';
-  updateSyncStatus('Syncing from Google Calendar...');
+  var proxies=[
+    'https://api.allorigins.win/raw?url=',
+    'https://corsproxy.io/?',
+    'https://api.codetabs.com/v1/proxy?quest=',
+    'https://thingproxy.freeboard.io/fetch/',
+    'https://openproxy.space/list/',
+    'https://cors.sh/?'
+  ];
+  var backup=JSON.parse(JSON.stringify(slotReplacements));
+  updateSyncStatus('Syncing...');
   showToast('Fetching Google Calendar...');
-  // Keep backup of slots before fetch for validation
-  var slotsBackup=JSON.parse(JSON.stringify(slotReplacements));
-  function tryFetch(url){
-    return fetch(url,{cache:'no-store'}).then(function(r){
-      if(!r.ok) throw new Error('fail');
-      return r.text();
-    });
+
+  function tryProxy(i){
+    if(i>=proxies.length){
+      // All proxies failed - show Google Calendar embed in popup and tell user
+      updateSyncStatus('Direct sync unavailable on GitHub Pages. Your 18 recurring events are active in Google Calendar. Use + Add for extra events.');
+      showToast('Tip: Use + Add button to add any new meetings to your dashboard.');
+      loadRecurringRef();
+      return;
+    }
+    var url=proxies[i]+encodeURIComponent(ICAL+'&v='+Date.now());
+    fetch(url,{cache:'no-store'})
+      .then(function(r){ if(!r.ok) throw new Error(r.status); return r.text(); })
+      .then(function(txt){
+        if(txt&&txt.indexOf('"contents"')>-1){ try{txt=JSON.parse(txt).contents;}catch(e){} }
+        if(!txt||txt.indexOf('BEGIN:VCALENDAR')===-1) throw new Error('invalid');
+        processICS(txt,backup);
+      })
+      .catch(function(){ tryProxy(i+1); });
   }
-  function processICS(txt){
-    if(!txt||txt.indexOf('BEGIN:VCALENDAR')===-1) throw new Error('invalid');
+
+  function processICS(txt,backup){
     var items=parseICS(txt);
     var now2=new Date(); now2.setHours(0,0,0,0);
-    var end=new Date(now2); end.setDate(end.getDate()+62);
-    // Clear ALL old gcal meetings - replace with fresh data only
+    var end2=new Date(now2); end2.setDate(end2.getDate()+62);
     meetings=meetings.filter(function(m){return !m.fromGCal;});
-    // Clear visual slot replacements - will re-apply valid ones after
-    document.querySelectorAll('.slot-replacement').forEach(function(el){ el.remove(); });
-    document.querySelectorAll('.task-card[data-slot-hidden]').forEach(function(c){
-      c.removeAttribute('data-slot-hidden'); c.style.display='';
-    });
+    document.querySelectorAll('.slot-replacement').forEach(function(el){el.remove();});
+    document.querySelectorAll('.task-card[data-slot-hidden]').forEach(function(c){c.removeAttribute('data-slot-hidden');c.style.display='';});
     var added=0;
     items.forEach(function(m){
       var dt=new Date(m.dt);
-      if(dt<now2||dt>end) return;
-      // Skip events that are already fixed dashboard tasks
+      if(dt<now2||dt>end2) return;
       if(isAlreadyInDashboard(m.title)) return;
       var jsDay=dt.getDay();
-      var map=[6,0,1,2,3,4,5];
-      m.day=map[jsDay];
+      m.day=[6,0,1,2,3,4,5][jsDay];
       m.fromGCal=true;
       if(!m.id) m.id='gcal_'+Date.now()+'_'+added;
-      meetings.push(m);
-      added++;
+      meetings.push(m); added++;
     });
     saveMeetings(); renderAllMeetings();
     var ts=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});
-    updateSyncStatus('Synced at '+ts+' · '+added+' event(s) from Google Calendar');
-    showToast(added>0?added+' new event(s) from Google Calendar added!':'No new events found (dashboard tasks filtered out).');
+    updateSyncStatus('Synced at '+ts+' · '+added+' extra event(s)');
+    showToast(added>0?added+' new event(s) synced!':'Calendar synced. Add new events via Google Calendar.');
     if(!window._gcalTimer) window._gcalTimer=setInterval(pullLatest,5*60*1000);
-  // Validate and restore slot replacements
-  // Restore all saved slots (user choices persist regardless of GCal changes)
-  slotReplacements=slotsBackup||{};
-  saveSlots();
-  restoreSavedSlots();
+    slotReplacements=backup||{}; saveSlots(); restoreSavedSlots();
   }
-  tryFetch(P1+encodeURIComponent(ICAL+'?nocache='+Date.now()))
-    .then(processICS)
-    .catch(function(){
-      tryFetch(P2+encodeURIComponent(ICAL))
-        .then(processICS)
-        .catch(function(){
-          updateSyncStatus('Sync failed — tap Sync Now to retry');
-          showToast('Calendar sync failed. Check internet & try again.');
-        });
-    });
+
+  tryProxy(0);
+}
+
+function loadRecurringRef(){
+  // Count today's scheduled recurring events for status display
+  var todayPanel=[6,0,1,2,3,4,5][new Date().getDay()];
+  var recurring=[
+    {d:[0,1,2,3,4,5,6],h:7,t:'Treadmill'},{d:[0,1,2,3,4,5,6],h:7.5,t:'Meditation'},
+    {d:[0,1,2,3,4],h:8,t:'PMP MCQ'},{d:[0,1,2,3,4,5,6],h:10,t:'Speaking'},
+    {d:[0,1,2,3,4],h:11,t:'Job Apps'},{d:[0,1,2,3,4],h:13.5,t:'Coursera'},
+    {d:[0,1,3],h:14.5,t:'Pabbly'},{d:[0,1,2,3,4,5,6],h:17,t:'Eve Meditation'},
+    {d:[0,1,2,3,4,5,6],h:17.5,t:'Call Family'}
+  ];
+  var todayCount=recurring.filter(function(e){return e.d.indexOf(todayPanel)>-1;}).length;
+  updateSyncStatus('Google Calendar active · '+todayCount+' recurring tasks today · Use + Add for new meetings');
 }
 document.getElementById('sync-popup').addEventListener('click', function(e){
   if(e.target===this) closeSyncPopup();
@@ -2558,8 +4000,7 @@ document.addEventListener('click', function(e){
   else if(t.classList.contains('mbtn-del')){ delById(mid); }
 });
 
-// Auto-pull Google Calendar on load — slots restored inside pullLatest after fetch
-setTimeout(function(){ pullLatest(); }, 1500);
+setTimeout(function(){ loadRecurringRef(); restoreSavedSlots(); pullLatest(); }, 800);
 
 document.getElementById('track').addEventListener('touchstart',function(e){ sx=e.touches[0].clientX; sy=e.touches[0].clientY; },{passive:true});
 document.getElementById('track').addEventListener('touchend',function(e){
