@@ -173,14 +173,14 @@ body{font-family:'Mulish',sans-serif;background:#F0F0F0;color:#111;-webkit-font-
     <div class="top-btns">
       <button class="hbtn" onclick="toggleWeek()">Week</button>
       <a href="https://calendar.google.com" target="_blank" rel="noopener noreferrer" class="hbtn" style="text-decoration:none;">&#128197; Cal</a>
-      <button class="hbtn" onclick="document.getElementById('sync-popup').classList.add('show')">Sync</button>
+      <button class="hbtn" onclick="openSyncPopup()">Sync</button>
       <button class="hbtn" onclick="confirmReset()">Reset</button>
     </div>
   </div>
   <div class="date-row" id="date-row">Loading...</div>
   <div style="padding:0 16px 8px;display:flex;gap:6px;">
   <a href="https://calendar.google.com" target="_blank" rel="noopener noreferrer" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#4285F4;color:#fff;border-radius:10px;padding:8px 0;font-size:12px;font-weight:800;font-family:Mulish,sans-serif;text-decoration:none;">&#128197; Google Calendar</a>
-  <button onclick="document.getElementById('sync-popup').classList.add('show')" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#111827;color:#fff;border:none;border-radius:10px;padding:8px 0;font-size:12px;font-weight:800;font-family:Mulish,sans-serif;cursor:pointer;">&#10227; Sync</button>
+  <button onclick="openSyncPopup()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#111827;color:#fff;border:none;border-radius:10px;padding:8px 0;font-size:12px;font-weight:800;font-family:Mulish,sans-serif;cursor:pointer;">&#10227; Sync</button>
   <a href="calshow://" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#FF3B30;color:#fff;border-radius:10px;padding:8px 0;font-size:12px;font-weight:800;font-family:Mulish,sans-serif;text-decoration:none;">&#128247; iPhone Calendar</a>
 </div>
 <div class="progress-row">
