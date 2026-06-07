@@ -1416,7 +1416,7 @@ body{font-family:'Mulish',sans-serif;background:#F0F0F0;color:#111;-webkit-font-
     <div style="background:#EFF6FF;border-radius:12px;padding:12px 14px;margin:10px 0;border:1.5px solid #BFDBFE;">
       <div style="font-size:12px;font-weight:800;color:#1D4ED8;margin-bottom:4px;">&#9989; Connected Calendar</div>
       <div style="font-size:11px;font-weight:600;color:#3B82F6;">nayana.vaity17@gmail.com</div>
-      <div style="font-size:10px;color:#93C5FD;margin-top:2px;">Auto-refreshes every 5 minutes</div>
+      <div style="font-size:10px;color:#93C5FD;margin-top:2px;">If sync fails: Go to Google Calendar &#8594; Settings &#8594; Make available to public &#8594; Save</div>
     </div>
 
     <div style="margin-top:10px;">
@@ -1428,6 +1428,8 @@ body{font-family:'Mulish',sans-serif;background:#F0F0F0;color:#111;-webkit-font-
       <button onclick="pullLatest()" style="padding:14px;background:#4285F4;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:900;font-family:'Mulish',sans-serif;cursor:pointer;">&#8635; Sync Now from Google Calendar</button>
       <button onclick="window.open('https://calendar.google.com','_blank')" style="padding:12px;background:#111;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">&#128197; Open Google Calendar</button>
       <button onclick="openAddFromSync()" style="padding:12px;background:#F3F4F6;color:#111;border:none;border-radius:12px;font-size:14px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">+ Add Meeting Manually</button>
+      <button onclick="clearTodayEvents()" style="padding:12px;background:#FEF2F2;color:#DC2626;border:1.5px solid #FECACA;border-radius:12px;font-size:13px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">&#128465; Clear Today's Events</button>
+      <button onclick="clearEntireGrid()" style="padding:12px;background:#FEF2F2;color:#DC2626;border:1.5px solid #FECACA;border-radius:12px;font-size:13px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">&#128465; Clear Entire Grid</button>
       <button onclick="closeSyncPopup()" style="padding:12px;background:#F3F4F6;color:#111;border:none;border-radius:12px;font-size:13px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">Close</button>
     </div>
   </div>
@@ -1441,13 +1443,23 @@ body{font-family:'Mulish',sans-serif;background:#F0F0F0;color:#111;-webkit-font-
 // DASHBOARD TASK KEYWORDS — filter duplicates from GCal
 // ══════════════════════════════════════════════════
 var DASHBOARD_KEYWORDS=[
-  'treadmill','workout','meditation','book reading','pmp','mcq',
-  'content review','speaking mastery','speaking','job application','linkedin',
-  'coursera','automation','pabbly','saleshandy','evening meditation',
-  'call near','dear ones','day review','plan tomorrow','agentic ai',
-  'live class','content shoot','edit','schedule content','social joy',
-  'week review','freshen up','travelling','travel','lunch','dinner',
-  'wind down','morning ritual','gratitude','job apply'
+  'treadmill','workout','🏃',
+  'meditation','spiritual','🧘',
+  'pmp','mcq','content review','flashcard','📖',
+  'speaking mastery','speaking','record','🎤',
+  'job application','job apply','linkedin','portals','💼',
+  'coursera','it automation','💻',
+  'pabbly','saleshandy','automation','⚙️',
+  'agentic ai','live class','🤖',
+  'content shoot','youtube','instagram','🎬',
+  'evening meditation','reflect','🧘',
+  'call near','dear ones','📞',
+  'day review','plan tomorrow','week review','📋',
+  'social','joy time','😊',
+  'travelling','travel','🚗',
+  'lunch','dinner','nourish','🍽',
+  'wind down','slow morning','family','🌙',
+  'post-lunch','tea break','free time','nap'
 ];
 
 function isAlreadyInDashboard(title){
@@ -1872,6 +1884,57 @@ function parseICS(ics){
   }
   return out;
 }
+
+// Clear all GCal events from today's dashboard slot
+function clearTodayEvents(){
+  if(!confirm('Remove all synced events from today\'s dashboard?')) return;
+  var todayDayIdx=[6,0,1,2,3,4,5][new Date().getDay()];
+  // Remove from meetings
+  meetings=meetings.filter(function(m){
+    if(!m.fromGCal) return true;
+    return m.day!==todayDayIdx;
+  });
+  saveMeetings();
+  // Remove slot replacements for today
+  Object.keys(slotReplacements).forEach(function(k){
+    if(k.indexOf('slot_'+todayDayIdx+'_')===0) delete slotReplacements[k];
+  });
+  saveSlots();
+  // Clear visual replacements on today's panel
+  var panel=document.getElementById('p'+todayDayIdx);
+  if(panel){
+    panel.querySelectorAll('.slot-replacement').forEach(function(el){ el.remove(); });
+    panel.querySelectorAll('.task-card[data-slot-hidden]').forEach(function(c){
+      c.removeAttribute('data-slot-hidden'); c.style.display='';
+    });
+    panel.querySelectorAll('.task-split-before,.task-split-after').forEach(function(el){ el.remove(); });
+  }
+  renderAllMeetings();
+  closeSyncPopup();
+  showToast('Today\'s events cleared from dashboard.');
+}
+
+// Clear entire grid - all events all days
+function clearEntireGrid(){
+  if(!confirm('Clear ALL events from entire dashboard grid?\nThis removes synced GCal events and slot replacements.\nYour task ticks and units are kept.')) return;
+  // Remove all gcal meetings
+  meetings=meetings.filter(function(m){ return !m.fromGCal; });
+  saveMeetings();
+  // Clear all slot replacements
+  slotReplacements={};
+  saveSlots();
+  // Clear all visual replacements
+  document.querySelectorAll('.slot-replacement').forEach(function(el){ el.remove(); });
+  document.querySelectorAll('.task-card[data-slot-hidden]').forEach(function(c){
+    c.removeAttribute('data-slot-hidden'); c.style.display='';
+  });
+  document.querySelectorAll('.task-split-before,.task-split-after').forEach(function(el){ el.remove(); });
+  // Clear meetings boxes
+  for(var d=0;d<7;d++) renderMeetingsForDay(d);
+  closeSyncPopup();
+  showToast('Entire grid cleared. Your task progress is preserved.');
+}
+
 function pullLatest(){
   var ICAL='https://calendar.google.com/calendar/ical/nayana.vaity17%40gmail.com/public/basic.ics';
   var P1='https://api.allorigins.win/raw?url=';
