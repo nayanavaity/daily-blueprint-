@@ -4,614 +4,647 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#111111">
 <title>Nayana · Daily Blueprint</title>
 <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Mulish',sans-serif;background:#F0F0F0;color:#111;-webkit-font-smoothing:antialiased;}
 
-:root {
-  --bg: #F5F5F5;
-  --white: #FFFFFF;
-  --black: #111111;
-  --dark: #222222;
-  --mid: #444444;
-  --light: #888888;
-  --pale: #CCCCCC;
-  --ice: #EEEEEE;
-  --done-bg: #111111;
-  --done-text: #FFFFFF;
-}
-
-html, body {
-  font-family: 'Mulish', sans-serif;
-  background: var(--bg);
-  color: var(--black);
-  min-height: 100vh;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* ── TOP HEADER ── */
-.top-bar {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  background: var(--black);
-  padding: 14px 20px 12px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.top-bar h1 {
-  font-size: 18px; font-weight: 900; color: #fff;
-  letter-spacing: -0.3px;
-}
-.top-bar .date-badge {
-  font-size: 11px; font-weight: 700; color: var(--pale);
-  letter-spacing: 1px; text-transform: uppercase;
-}
-
-/* ── EFFORT MINI BAR ── */
-.effort-mini {
-  position: fixed; top: 52px; left: 0; right: 0; z-index: 99;
-  background: var(--dark);
-  padding: 8px 20px;
-  display: flex; align-items: center; gap: 12px;
-}
-.effort-mini .em-label { font-size: 11px; font-weight: 700; color: var(--pale); white-space: nowrap; }
-.effort-mini .em-bar-wrap { flex: 1; height: 6px; background: #444; border-radius: 3px; overflow: hidden; }
-.effort-mini .em-bar { height: 100%; background: #fff; border-radius: 3px; transition: width 0.4s ease; }
-.effort-mini .em-count { font-size: 12px; font-weight: 900; color: #fff; white-space: nowrap; }
+/* ── FIXED TOP HEADER ── */
+.top-bar{position:fixed;top:0;left:0;right:0;z-index:100;background:#111;}
+.top-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 6px;}
+.top-row h1{font-size:17px;font-weight:900;color:#fff;letter-spacing:-0.3px;}
+.top-row .week-btn{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:14px;padding:5px 12px;font-size:11px;font-weight:800;color:#fff;font-family:'Mulish',sans-serif;cursor:pointer;}
+.date-row{padding:2px 16px 10px;font-size:15px;font-weight:800;color:#fff;letter-spacing:0.2px;}
+.progress-row{padding:0 16px 10px;display:flex;align-items:center;gap:10px;}
+.pr-label{font-size:12px;font-weight:800;color:#aaa;white-space:nowrap;}
+.pr-bar-wrap{flex:1;height:6px;background:#333;border-radius:3px;overflow:hidden;}
+.pr-bar{height:100%;background:#fff;border-radius:3px;transition:width 0.4s;}
+.pr-count{font-size:12px;font-weight:900;color:#fff;white-space:nowrap;}
 
 /* ── DAY TABS ── */
-.day-tabs {
-  position: fixed; top: 92px; left: 0; right: 0; z-index: 98;
-  background: var(--white);
-  border-bottom: 2px solid var(--ice);
-  display: flex; overflow-x: auto;
-  scrollbar-width: none; -ms-overflow-style: none;
-  scroll-snap-type: x mandatory;
-}
-.day-tabs::-webkit-scrollbar { display: none; }
-.day-tab {
-  flex: 1; min-width: 48px;
-  padding: 10px 6px 8px;
-  text-align: center;
-  cursor: pointer;
-  border-bottom: 3px solid transparent;
-  transition: all 0.2s;
-  scroll-snap-align: start;
-}
-.day-tab .dt-name { font-size: 11px; font-weight: 800; color: var(--light); letter-spacing: 1px; text-transform: uppercase; }
-.day-tab .dt-count { font-size: 10px; font-weight: 600; color: var(--pale); margin-top: 2px; }
-.day-tab.active { border-bottom-color: var(--black); }
-.day-tab.active .dt-name { color: var(--black); }
-.day-tab.active .dt-count { color: var(--mid); }
+.day-tabs{position:fixed;top:96px;left:0;right:0;z-index:99;background:#fff;border-bottom:2px solid #eee;display:flex;overflow-x:auto;scrollbar-width:none;}
+.day-tabs::-webkit-scrollbar{display:none;}
+.day-tab{flex:1;min-width:44px;padding:8px 4px 7px;text-align:center;cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s;}
+.day-tab .dn{font-size:11px;font-weight:900;color:#bbb;letter-spacing:1px;text-transform:uppercase;}
+.day-tab .dp{font-size:11px;font-weight:700;color:#ccc;margin-top:1px;}
+.day-tab.active .dn{color:#111;}
+.day-tab.active .dp{color:#555;}
+.day-tab.active{border-bottom-color:#111;}
+.day-tab.full .dn{color:#16a34a;}
+.day-tab.full{border-bottom-color:#16a34a;}
 
-/* ── SWIPE CONTAINER ── */
-.swipe-wrap {
-  margin-top: 148px;
-  overflow: hidden;
-  width: 100%;
-}
-.swipe-track {
-  display: flex;
-  width: 700%; /* 7 days */
-  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: transform;
-}
-.day-panel {
-  width: calc(100% / 7);
-  padding: 16px 14px 120px;
-  min-height: calc(100vh - 148px);
-}
+/* ── PAGE SCROLL AREA ── */
+.page{margin-top:140px;overflow-x:hidden;}
+.swipe-track{display:flex;width:700%;transition:transform 0.38s cubic-bezier(0.25,0.46,0.45,0.94);will-change:transform;}
+.day-panel{width:calc(100%/7);padding:14px 14px 30px;}
 
-/* ── DAY HEADER ── */
-.day-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 16px;
-}
-.day-title { font-size: 26px; font-weight: 900; color: var(--black); letter-spacing: -0.5px; }
-.day-progress {
-  text-align: right;
-}
-.day-progress .dp-num { font-size: 22px; font-weight: 900; color: var(--black); line-height: 1; }
-.day-progress .dp-lbl { font-size: 10px; font-weight: 600; color: var(--light); letter-spacing: 1px; text-transform: uppercase; }
-.day-bar-wrap { height: 4px; background: var(--ice); border-radius: 2px; overflow: hidden; margin-top: 4px; width: 80px; }
-.day-bar { height: 100%; background: var(--black); border-radius: 2px; transition: width 0.4s ease; }
+/* ── DAY HERO HEADER ── */
+.day-hero{background:#fff;border-radius:16px;padding:16px;margin-bottom:14px;border:1.5px solid #e8e8e8;}
+.day-hero-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.dh-title{font-size:26px;font-weight:900;color:#111;letter-spacing:-0.5px;}
+.dh-date{font-size:13px;font-weight:600;color:#aaa;}
+.dh-stats{display:flex;gap:8px;}
+.dh-stat{flex:1;background:#f5f5f5;border-radius:10px;padding:8px 10px;text-align:center;}
+.dh-num{font-size:20px;font-weight:900;color:#111;line-height:1;}
+.dh-lbl{font-size:9px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
+.dh-bar-wrap{height:6px;background:#eee;border-radius:3px;margin-top:10px;overflow:hidden;}
+.dh-bar{height:100%;background:#111;border-radius:3px;transition:width 0.4s;}
+.dh-pct-lbl{font-size:12px;font-weight:700;color:#888;margin-top:5px;}
+
+/* ── TIME LABELS ── */
+.time-row{display:flex;align-items:center;gap:8px;margin:14px 0 7px;}
+.tl{font-size:13px;font-weight:900;color:#555;letter-spacing:0.5px;white-space:nowrap;}
+.time-row::after{content:'';flex:1;height:1px;background:#e8e8e8;}
 
 /* ── TASK CARDS ── */
-.time-group { margin-bottom: 6px; }
-.time-label-row {
-  display: flex; align-items: center; gap: 8px;
-  margin-bottom: 6px; margin-top: 14px;
-}
-.time-label-row .tl {
-  font-size: 10px; font-weight: 800; color: var(--light);
-  letter-spacing: 1.5px; text-transform: uppercase;
-  white-space: nowrap;
-}
-.time-label-row::after {
-  content: ''; flex: 1; height: 1px; background: var(--ice);
-}
+.task-card{background:#fff;border:1.5px solid #e8e8e8;border-radius:14px;padding:13px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.18s;margin-bottom:7px;position:relative;user-select:none;-webkit-user-select:none;}
+.task-card:active{transform:scale(0.97);}
+.task-card.done{background:#111;border-color:#111;box-shadow:0 4px 14px rgba(0,0,0,0.18);}
+.task-card.travel{background:#fafafa;border:1.5px dashed #ddd;cursor:default;opacity:0.55;}
+.task-card.travel:active{transform:none;}
+.ci{font-size:22px;flex-shrink:0;width:30px;text-align:center;}
+.cb{flex:1;min-width:0;}
+.ct{font-size:15px;font-weight:800;color:#111;line-height:1.3;margin-bottom:2px;}
+.task-card.done .ct{color:#fff;}
+.cs{font-size:12px;font-weight:500;color:#888;line-height:1.4;}
+.task-card.done .cs{color:rgba(255,255,255,0.55);}
+.task-card.travel .ct{color:#999;}
+.cr{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
+.ck{width:26px;height:26px;border-radius:50%;border:2px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:12px;color:transparent;transition:all 0.2s;flex-shrink:0;}
+.task-card.done .ck{background:#fff;border-color:#fff;color:#111;}
+.ub{font-size:10px;font-weight:800;color:#ccc;letter-spacing:0.5px;}
+.task-card.done .ub{color:rgba(255,255,255,0.4);}
 
-.task-card {
-  background: var(--white);
-  border: 1.5px solid var(--ice);
-  border-radius: 16px;
-  padding: 16px 18px;
-  display: flex; align-items: center; gap: 14px;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  margin-bottom: 8px;
-  position: relative;
-  overflow: hidden;
-  user-select: none;
-  -webkit-user-select: none;
-  active: scale(0.98);
-}
-.task-card:active { transform: scale(0.97); }
-.task-card.done {
-  background: var(--black);
-  border-color: var(--black);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-}
-.task-card.travel-card {
-  background: var(--ice);
-  border: 1.5px dashed var(--pale);
-  cursor: default;
-  opacity: 0.6;
-}
-.task-card.travel-card:active { transform: none; }
+/* ── DAY SUMMARY CARD ── */
+.day-summary{background:#fff;border:2px solid #111;border-radius:16px;padding:16px;margin-top:20px;margin-bottom:6px;}
+.ds-title{font-size:13px;font-weight:900;color:#111;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;}
+.ds-row{display:flex;gap:8px;margin-bottom:10px;}
+.ds-stat{flex:1;background:#f5f5f5;border-radius:10px;padding:10px;text-align:center;}
+.ds-num{font-size:22px;font-weight:900;color:#111;line-height:1;}
+.ds-lbl{font-size:9px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:1px;margin-top:3px;}
+.ds-bar-wrap{height:8px;background:#eee;border-radius:4px;overflow:hidden;margin-bottom:6px;}
+.ds-bar{height:100%;background:#111;border-radius:4px;transition:width 0.5s;}
+.ds-pct{font-size:13px;font-weight:800;color:#555;text-align:right;}
 
-.card-icon { font-size: 24px; flex-shrink: 0; width: 36px; text-align: center; }
-.card-body { flex: 1; min-width: 0; }
-.card-title {
-  font-size: 15px; font-weight: 800; color: var(--black);
-  line-height: 1.3; margin-bottom: 2px;
-}
-.task-card.done .card-title { color: var(--white); }
-.card-sub {
-  font-size: 12px; font-weight: 500; color: var(--light);
-  line-height: 1.4;
-}
-.task-card.done .card-sub { color: rgba(255,255,255,0.6); }
-.task-card.travel-card .card-title { color: var(--mid); }
+/* ── ALL-DAYS TOTAL CARD ── */
+.total-card{background:#111;border-radius:16px;padding:16px;margin-bottom:6px;}
+.tc-title{font-size:12px;font-weight:900;color:#aaa;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;}
+.tc-row{display:flex;gap:8px;margin-bottom:12px;}
+.tc-stat{flex:1;background:rgba(255,255,255,0.08);border-radius:10px;padding:10px;text-align:center;}
+.tc-num{font-size:20px;font-weight:900;color:#fff;line-height:1;}
+.tc-lbl{font-size:9px;font-weight:800;color:#666;text-transform:uppercase;letter-spacing:1px;margin-top:3px;}
+.tc-bar-wrap{height:8px;background:#333;border-radius:4px;overflow:hidden;margin-bottom:6px;}
+.tc-bar{height:100%;background:#22c55e;border-radius:4px;transition:width 0.5s;}
+.tc-pct{font-size:13px;font-weight:800;color:#22c55e;text-align:right;}
+.tc-week-row{display:flex;gap:5px;margin-top:12px;}
+.tc-day-col{flex:1;text-align:center;}
+.tc-day-name{font-size:8px;font-weight:800;color:#555;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;}
+.tc-dot-bar{height:28px;background:#222;border-radius:3px;position:relative;overflow:hidden;}
+.tc-dot-fill{position:absolute;bottom:0;left:0;right:0;background:#22c55e;border-radius:3px;transition:height 0.4s;}
+.tc-day-pct{font-size:8px;font-weight:800;color:#555;margin-top:3px;}
 
-.card-check {
-  width: 28px; height: 28px; border-radius: 50%;
-  border: 2px solid var(--pale);
-  background: transparent;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; transition: all 0.2s;
-  font-size: 13px; color: transparent;
-}
-.task-card.done .card-check {
-  background: #fff; border-color: #fff; color: var(--black);
-}
-.task-card.travel-card .card-check { display: none; }
+/* ── PREV/NEXT BUTTONS ── */
+.nav-row{display:flex;gap:10px;margin-bottom:30px;}
+.nav-btn{flex:1;padding:14px;border:none;border-radius:14px;font-family:'Mulish',sans-serif;font-size:15px;font-weight:900;cursor:pointer;transition:all 0.18s;letter-spacing:0.3px;}
+.nav-prev{background:#fff;color:#111;border:2px solid #e8e8e8;}
+.nav-prev:active{background:#f0f0f0;}
+.nav-next{background:#111;color:#fff;}
+.nav-next:active{background:#333;}
 
-.units-badge {
-  position: absolute; top: 8px; right: 8px;
-  font-size: 9px; font-weight: 800; color: var(--pale);
-  letter-spacing: 0.5px;
-}
-.task-card.done .units-badge { color: rgba(255,255,255,0.4); }
-
-/* ── BOTTOM SUMMARY ── */
-.bottom-summary {
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-  background: var(--white);
-  border-top: 2px solid var(--ice);
-  padding: 12px 20px 20px;
-}
-.bs-row { display: flex; gap: 12px; }
-.bs-stat {
-  flex: 1; background: var(--ice); border-radius: 12px;
-  padding: 10px 12px; text-align: center;
-}
-.bs-num { font-size: 20px; font-weight: 900; color: var(--black); line-height: 1; }
-.bs-lbl { font-size: 10px; font-weight: 700; color: var(--light); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
-
-/* ── SWIPE HINT ── */
-.swipe-hint {
-  position: fixed; bottom: 88px; left: 50%; transform: translateX(-50%);
-  background: rgba(0,0,0,0.7); color: #fff;
-  padding: 6px 16px; border-radius: 20px;
-  font-size: 12px; font-weight: 600;
-  pointer-events: none;
-  animation: fadeHint 3s ease forwards;
-  z-index: 200;
-}
-@keyframes fadeHint {
-  0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
-  20% { opacity: 1; transform: translateX(-50%) translateY(0); }
-  70% { opacity: 1; }
-  100% { opacity: 0; }
-}
-
-/* ── WEEK VIEW TOGGLE ── */
-.week-btn {
-  position: fixed; top: 14px; right: 20px; z-index: 101;
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.25);
-  border-radius: 20px; padding: 5px 12px;
-  font-size: 11px; font-weight: 700; color: #fff;
-  font-family: 'Mulish', sans-serif;
-  cursor: pointer;
-}
+/* ── WEEK PANEL ── */
+.week-panel{display:none;padding:14px;}
+.week-panel.on{display:block;}
+.wk-card{background:#fff;border-radius:16px;padding:16px;margin-bottom:10px;border:1.5px solid #e8e8e8;}
+.wk-title{font-size:14px;font-weight:900;color:#111;margin-bottom:14px;}
+.wk-bars{display:flex;gap:6px;align-items:flex-end;height:80px;}
+.wk-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;}
+.wk-bar-wrap{width:100%;background:#eee;border-radius:4px;height:60px;position:relative;overflow:hidden;}
+.wk-bar-fill{position:absolute;bottom:0;left:0;right:0;background:#111;border-radius:4px;transition:height 0.5s;}
+.wk-day{font-size:9px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:0.5px;}
+.wk-pts{font-size:10px;font-weight:900;color:#111;}
 </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
+<!-- FIXED TOP -->
 <div class="top-bar">
-  <h1>📋 Nayana's Blueprint</h1>
-  <div class="date-badge" id="today-date">Jun–Aug 2026</div>
-</div>
-
-<!-- EFFORT MINI -->
-<div class="effort-mini">
-  <span class="em-label">TODAY</span>
-  <div class="em-bar-wrap"><div class="em-bar" id="mini-bar" style="width:0%"></div></div>
-  <span class="em-count" id="mini-count">0 / 0 units</span>
+  <div class="top-row">
+    <h1>📋 Nayana's Blueprint</h1>
+    <button class="week-btn" id="wbtn" onclick="toggleWeek()">📊 Week</button>
+  </div>
+  <div class="date-row" id="date-row">Sunday, 7 June 2026</div>
+  <div class="progress-row">
+    <span class="pr-label">TODAY</span>
+    <div class="pr-bar-wrap"><div class="pr-bar" id="pr-bar" style="width:0%"></div></div>
+    <span class="pr-count" id="pr-count">0 / 0</span>
+  </div>
 </div>
 
 <!-- DAY TABS -->
-<div class="day-tabs" id="day-tabs">
-  <div class="day-tab active" data-day="0" onclick="goToDay(0)">
-    <div class="dt-name">MON</div><div class="dt-count" id="tab-count-0">0%</div>
-  </div>
-  <div class="day-tab" data-day="1" onclick="goToDay(1)">
-    <div class="dt-name">TUE</div><div class="dt-count" id="tab-count-1">0%</div>
-  </div>
-  <div class="day-tab" data-day="2" onclick="goToDay(2)">
-    <div class="dt-name">WED</div><div class="dt-count" id="tab-count-2">0%</div>
-  </div>
-  <div class="day-tab" data-day="3" onclick="goToDay(3)">
-    <div class="dt-name">THU</div><div class="dt-count" id="tab-count-3">0%</div>
-  </div>
-  <div class="day-tab" data-day="4" onclick="goToDay(4)">
-    <div class="dt-name">FRI</div><div class="dt-count" id="tab-count-4">0%</div>
-  </div>
-  <div class="day-tab" data-day="5" onclick="goToDay(5)">
-    <div class="dt-name">SAT</div><div class="dt-count" id="tab-count-5">0%</div>
-  </div>
-  <div class="day-tab" data-day="6" onclick="goToDay(6)">
-    <div class="dt-name">SUN</div><div class="dt-count" id="tab-count-6">0%</div>
-  </div>
+<div class="day-tabs">
+  <div class="day-tab active" data-d="0" onclick="goTo(0)"><div class="dn">MON</div><div class="dp" id="tp-0">0%</div></div>
+  <div class="day-tab" data-d="1" onclick="goTo(1)"><div class="dn">TUE</div><div class="dp" id="tp-1">0%</div></div>
+  <div class="day-tab" data-d="2" onclick="goTo(2)"><div class="dn">WED</div><div class="dp" id="tp-2">0%</div></div>
+  <div class="day-tab" data-d="3" onclick="goTo(3)"><div class="dn">THU</div><div class="dp" id="tp-3">0%</div></div>
+  <div class="day-tab" data-d="4" onclick="goTo(4)"><div class="dn">FRI</div><div class="dp" id="tp-4">0%</div></div>
+  <div class="day-tab" data-d="5" onclick="goTo(5)"><div class="dn">SAT</div><div class="dp" id="tp-5">0%</div></div>
+  <div class="day-tab" data-d="6" onclick="goTo(6)"><div class="dn">SUN</div><div class="dp" id="tp-6">0%</div></div>
 </div>
 
-<!-- SWIPE HINT -->
-<div class="swipe-hint">👈 Swipe left / right to change day</div>
-
-<!-- SWIPEABLE PANELS -->
-<div class="swipe-wrap">
-<div class="swipe-track" id="swipe-track">
-
-<!-- ═══════════════ MONDAY ═══════════════ -->
-<div class="day-panel" id="panel-0">
-  <div class="day-header">
-    <div class="day-title">Monday</div>
-    <div class="day-progress">
-      <div class="dp-num" id="dp-0">0</div>
-      <div class="dp-lbl">units</div>
-      <div class="day-bar-wrap"><div class="day-bar" id="db-0" style="width:0%"></div></div>
+<!-- WEEK PANEL (hidden by default) -->
+<div class="week-panel" id="week-panel">
+  <div class="wk-card">
+    <div class="wk-title">📊 This Week — Effort Bars</div>
+    <div class="wk-bars">
+      <div class="wk-col"><div class="wk-pts" id="ww-0">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-0" style="height:0%"></div></div><div class="wk-day">MON</div></div>
+      <div class="wk-col"><div class="wk-pts" id="ww-1">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-1" style="height:0%"></div></div><div class="wk-day">TUE</div></div>
+      <div class="wk-col"><div class="wk-pts" id="ww-2">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-2" style="height:0%"></div></div><div class="wk-day">WED</div></div>
+      <div class="wk-col"><div class="wk-pts" id="ww-3">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-3" style="height:0%"></div></div><div class="wk-day">THU</div></div>
+      <div class="wk-col"><div class="wk-pts" id="ww-4">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-4" style="height:0%"></div></div><div class="wk-day">FRI</div></div>
+      <div class="wk-col"><div class="wk-pts" id="ww-5">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-5" style="height:0%"></div></div><div class="wk-day">SAT</div></div>
+      <div class="wk-col"><div class="wk-pts" id="ww-6">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-6" style="height:0%"></div></div><div class="wk-day">SUN</div></div>
     </div>
   </div>
-
-  <div class="time-label-row"><span class="tl">7:00 AM</span></div>
-  <div class="task-card" data-day="0" data-task="Treadmill"><span class="card-icon">🏃‍♀️</span><div class="card-body"><div class="card-title">Treadmill Workout</div><div class="card-sub">30 mins · build the habit</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-
-  <div class="time-label-row"><span class="tl">7:30 AM</span></div>
-  <div class="task-card" data-day="0" data-task="Meditation"><span class="card-icon">🧘</span><div class="card-body"><div class="card-title">Meditation / Book Reading</div><div class="card-sub">Morning sacred ritual</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-
-  <div class="time-label-row"><span class="tl">8:00 AM</span></div>
-  <div class="task-card" data-day="0" data-task="PMP Study"><span class="card-icon">🏆</span><div class="card-body"><div class="card-title">PMP — MCQ Practice</div><div class="card-sub">30 questions daily</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-
-  <div class="time-label-row"><span class="tl">8:30 AM</span></div>
-  <div class="task-card travel-card"><span class="card-icon">🚗</span><div class="card-body"><div class="card-title">Travelling</div><div class="card-sub">Free · podcast · relax</div></div></div>
-
-  <div class="time-label-row"><span class="tl">11:00 AM</span></div>
-  <div class="task-card" data-day="0" data-task="Speaking"><span class="card-icon">🎤</span><div class="card-body"><div class="card-title">Speaking Mastery</div><div class="card-sub">Record 12–15 mins on phone</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-
-  <div class="time-label-row"><span class="tl">12:30 PM</span></div>
-  <div class="task-card" data-day="0" data-task="Job Apply"><span class="card-icon">💼</span><div class="card-body"><div class="card-title">Job Applications</div><div class="card-sub">LinkedIn · portals · 30 mins</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-
-  <div class="time-label-row"><span class="tl">2:00 PM</span></div>
-  <div class="task-card" data-day="0" data-task="Coursera"><span class="card-icon">💻</span><div class="card-body"><div class="card-title">Coursera — IT Automation</div><div class="card-sub">Google module · self-paced</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-
-  <div class="time-label-row"><span class="tl">5:00 PM</span></div>
-  <div class="task-card" data-day="0" data-task="Pabbly"><span class="card-icon">⚙️</span><div class="card-body"><div class="card-title">Pabbly / Saleshandy</div><div class="card-sub">Automation · outreach flows</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-
-  <div class="time-label-row"><span class="tl">6:00 PM</span></div>
-  <div class="task-card" data-day="0" data-task="PMP Night"><span class="card-icon">📖</span><div class="card-body"><div class="card-title">PMP Content Review</div><div class="card-sub">Chapter deep dive</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-
-  <div class="time-label-row"><span class="tl">7:00 PM</span></div>
-  <div class="task-card" data-day="0" data-task="Evening Meditation"><span class="card-icon">🧘</span><div class="card-body"><div class="card-title">Evening Meditation</div><div class="card-sub">Reflect · breathe · peace</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-
-  <div class="time-label-row"><span class="tl">8:00 PM</span></div>
-  <div class="task-card" data-day="0" data-task="Call Dear"><span class="card-icon">📞</span><div class="card-body"><div class="card-title">Call Near & Dear Ones</div><div class="card-sub">Stay connected daily</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-
-  <div class="time-label-row"><span class="tl">9:00 PM</span></div>
-  <div class="task-card" data-day="0" data-task="Day Review"><span class="card-icon">📋</span><div class="card-body"><div class="card-title">Day Review & Plan Tomorrow</div><div class="card-sub">Count units · wind down</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-</div>
-
-<!-- ═══════════════ TUESDAY ═══════════════ -->
-<div class="day-panel" id="panel-1">
-  <div class="day-header">
-    <div class="day-title">Tuesday</div>
-    <div class="day-progress"><div class="dp-num" id="dp-1">0</div><div class="dp-lbl">units</div><div class="day-bar-wrap"><div class="day-bar" id="db-1" style="width:0%"></div></div></div>
-  </div>
-  <div class="time-label-row"><span class="tl">7:00 AM</span></div>
-  <div class="task-card" data-day="1" data-task="Treadmill"><span class="card-icon">🏃‍♀️</span><div class="card-body"><div class="card-title">Treadmill Workout</div><div class="card-sub">30 mins</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">7:30 AM</span></div>
-  <div class="task-card" data-day="1" data-task="Meditation"><span class="card-icon">🧘</span><div class="card-body"><div class="card-title">Meditation / Book Reading</div><div class="card-sub">Morning sacred ritual</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">8:00 AM</span></div>
-  <div class="task-card" data-day="1" data-task="PMP Study"><span class="card-icon">🏆</span><div class="card-body"><div class="card-title">PMP — Content Review</div><div class="card-sub">Chapter study</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">8:30 AM</span></div>
-  <div class="task-card travel-card"><span class="card-icon">🚗</span><div class="card-body"><div class="card-title">Travelling</div><div class="card-sub">Free · podcast · relax</div></div></div>
-  <div class="time-label-row"><span class="tl">11:00 AM</span></div>
-  <div class="task-card" data-day="1" data-task="Speaking"><span class="card-icon">🎤</span><div class="card-body"><div class="card-title">Speaking Mastery</div><div class="card-sub">Record 12–15 mins on phone</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">12:30 PM</span></div>
-  <div class="task-card" data-day="1" data-task="Job Apply"><span class="card-icon">💼</span><div class="card-body"><div class="card-title">Job Applications</div><div class="card-sub">LinkedIn · portals</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">2:00 PM</span></div>
-  <div class="task-card" data-day="1" data-task="Employer Discussion"><span class="card-icon">🤝</span><div class="card-body"><div class="card-title">Employer Discussion</div><div class="card-sub">Recruiter calls · follow-up</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">5:00 PM</span></div>
-  <div class="task-card" data-day="1" data-task="Pabbly"><span class="card-icon">⚙️</span><div class="card-body"><div class="card-title">Pabbly / Saleshandy</div><div class="card-sub">Sequences · follow-ups</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">6:00 PM</span></div>
-  <div class="task-card" data-day="1" data-task="Coursera"><span class="card-icon">💻</span><div class="card-body"><div class="card-title">Coursera — IT Automation</div><div class="card-sub">Google module</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">7:00 PM</span></div>
-  <div class="task-card" data-day="1" data-task="Evening Meditation"><span class="card-icon">🧘</span><div class="card-body"><div class="card-title">Evening Meditation</div><div class="card-sub">Reflect · breathe · peace</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">8:00 PM</span></div>
-  <div class="task-card" data-day="1" data-task="Call Dear"><span class="card-icon">📞</span><div class="card-body"><div class="card-title">Call Near & Dear Ones</div><div class="card-sub">Stay connected daily</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">9:00 PM</span></div>
-  <div class="task-card" data-day="1" data-task="Day Review"><span class="card-icon">📋</span><div class="card-body"><div class="card-title">Day Review & Plan Tomorrow</div><div class="card-sub">Count units · wind down</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-</div>
-
-<!-- ═══════════════ WEDNESDAY ═══════════════ -->
-<div class="day-panel" id="panel-2">
-  <div class="day-header">
-    <div class="day-title">Wednesday</div>
-    <div class="day-progress"><div class="dp-num" id="dp-2">0</div><div class="dp-lbl">units</div><div class="day-bar-wrap"><div class="day-bar" id="db-2" style="width:0%"></div></div></div>
-  </div>
-  <div class="time-label-row"><span class="tl">7:00 AM</span></div>
-  <div class="task-card" data-day="2" data-task="Treadmill"><span class="card-icon">🏃‍♀️</span><div class="card-body"><div class="card-title">Treadmill Workout</div><div class="card-sub">30 mins</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">7:30 AM</span></div>
-  <div class="task-card" data-day="2" data-task="Meditation"><span class="card-icon">🧘</span><div class="card-body"><div class="card-title">Meditation / Book Reading</div><div class="card-sub">Morning sacred ritual</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">8:00 AM</span></div>
-  <div class="task-card" data-day="2" data-task="PMP Study"><span class="card-icon">🏆</span><div class="card-body"><div class="card-title">PMP — MCQ Practice</div><div class="card-sub">30 questions</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">8:30 AM</span></div>
-  <div class="task-card travel-card"><span class="card-icon">🚗</span><div class="card-body"><div class="card-title">Travelling</div><div class="card-sub">Free · podcast · relax</div></div></div>
-  <div class="time-label-row"><span class="tl">11:00 AM</span></div>
-  <div class="task-card" data-day="2" data-task="Speaking"><span class="card-icon">🎤</span><div class="card-body"><div class="card-title">Speaking Mastery</div><div class="card-sub">Record 12–15 mins on phone</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">12:30 PM</span></div>
-  <div class="task-card" data-day="2" data-task="Job Apply"><span class="card-icon">💼</span><div class="card-body"><div class="card-title">Job Applications</div><div class="card-sub">LinkedIn · portals</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">3:00 PM</span></div>
-  <div class="task-card" data-day="2" data-task="Content Shoot"><span class="card-icon">🎬</span><div class="card-body"><div class="card-title">Content Shoot</div><div class="card-sub">YouTube · Instagram · 2 hrs</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">5:00 PM</span></div>
-  <div class="task-card" data-day="2" data-task="Content Edit"><span class="card-icon">✂️</span><div class="card-body"><div class="card-title">Edit & Schedule Content</div><div class="card-sub">Vizard.ai · Pabbly</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">7:00 PM</span></div>
-  <div class="task-card" data-day="2" data-task="Evening Meditation"><span class="card-icon">🧘</span><div class="card-body"><div class="card-title">Evening Meditation</div><div class="card-sub">Reflect · breathe · peace</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">8:00 PM</span></div>
-  <div class="task-card" data-day="2" data-task="Call Dear"><span class="card-icon">📞</span><div class="card-body"><div class="card-title">Call Near & Dear Ones</div><div class="card-sub">Stay connected daily</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">9:00 PM</span></div>
-  <div class="task-card" data-day="2" data-task="Day Review"><span class="card-icon">📋</span><div class="card-body"><div class="card-title">Day Review & Plan Tomorrow</div><div class="card-sub">Count units · wind down</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-</div>
-
-<!-- ═══════════════ THURSDAY ═══════════════ -->
-<div class="day-panel" id="panel-3">
-  <div class="day-header">
-    <div class="day-title">Thursday</div>
-    <div class="day-progress"><div class="dp-num" id="dp-3">0</div><div class="dp-lbl">units</div><div class="day-bar-wrap"><div class="day-bar" id="db-3" style="width:0%"></div></div></div>
-  </div>
-  <div class="time-label-row"><span class="tl">7:00 AM</span></div>
-  <div class="task-card" data-day="3" data-task="Treadmill"><span class="card-icon">🏃‍♀️</span><div class="card-body"><div class="card-title">Treadmill Workout</div><div class="card-sub">30 mins</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">7:30 AM</span></div>
-  <div class="task-card" data-day="3" data-task="Meditation"><span class="card-icon">🧘</span><div class="card-body"><div class="card-title">Meditation / Book Reading</div><div class="card-sub">Morning sacred ritual</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">8:00 AM</span></div>
-  <div class="task-card" data-day="3" data-task="PMP Study"><span class="card-icon">🏆</span><div class="card-body"><div class="card-title">PMP — Content Review</div><div class="card-sub">Chapter study</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">8:30 AM</span></div>
-  <div class="task-card travel-card"><span class="card-icon">🚗</span><div class="card-body"><div class="card-title">Travelling</div><div class="card-sub">Free · podcast · relax</div></div></div>
-  <div class="time-label-row"><span class="tl">11:00 AM</span></div>
-  <div class="task-card" data-day="3" data-task="Speaking"><span class="card-icon">🎤</span><div class="card-body"><div class="card-title">Speaking Mastery</div><div class="card-sub">Record 12–15 mins on phone</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">12:30 PM</span></div>
-  <div class="task-card" data-day="3" data-task="Job Apply"><span class="card-icon">💼</span><div class="card-body"><div class="card-title">Job Applications</div><div class="card-sub">LinkedIn · portals</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">2:00 PM</span></div>
-  <div class="task-card" data-day="3" data-task="Coursera"><span class="card-icon">💻</span><div class="card-body"><div class="card-title">Coursera — IT Automation</div><div class="card-sub">Google module</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">5:00 PM</span></div>
-  <div class="task-card" data-day="3" data-task="Pabbly"><span class="card-icon">⚙️</span><div class="card-body"><div class="card-title">Pabbly / Saleshandy</div><div class="card-sub">Workflows · campaigns</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">7:00 PM</span></div>
-  <div class="task-card" data-day="3" data-task="Evening Meditation"><span class="card-icon">🧘</span><div class="card-body"><div class="card-title">Evening Meditation</div><div class="card-sub">Reflect · breathe · peace</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">8:00 PM</span></div>
-  <div class="task-card" data-day="3" data-task="Call Dear"><span class="card-icon">📞</span><div class="card-body"><div class="card-title">Call Near & Dear Ones</div><div class="card-sub">Stay connected daily</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">9:00 PM</span></div>
-  <div class="task-card" data-day="3" data-task="Day Review"><span class="card-icon">📋</span><div class="card-body"><div class="card-title">Day Review & Plan Tomorrow</div><div class="card-sub">Count units · wind down</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-</div>
-
-<!-- ═══════════════ FRIDAY ═══════════════ -->
-<div class="day-panel" id="panel-4">
-  <div class="day-header">
-    <div class="day-title">Friday</div>
-    <div class="day-progress"><div class="dp-num" id="dp-4">0</div><div class="dp-lbl">units</div><div class="day-bar-wrap"><div class="day-bar" id="db-4" style="width:0%"></div></div></div>
-  </div>
-  <div class="time-label-row"><span class="tl">7:00 AM</span></div>
-  <div class="task-card" data-day="4" data-task="Treadmill"><span class="card-icon">🏃‍♀️</span><div class="card-body"><div class="card-title">Treadmill Workout</div><div class="card-sub">30 mins</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">7:30 AM</span></div>
-  <div class="task-card" data-day="4" data-task="Meditation"><span class="card-icon">🧘</span><div class="card-body"><div class="card-title">Meditation / Book Reading</div><div class="card-sub">Morning sacred ritual</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">8:00 AM</span></div>
-  <div class="task-card" data-day="4" data-task="PMP Study"><span class="card-icon">🏆</span><div class="card-body"><div class="card-title">PMP — Mock Test</div><div class="card-sub">50Q full exam</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">8:30 AM</span></div>
-  <div class="task-card travel-card"><span class="card-icon">🚗</span><div class="card-body"><div class="card-title">Travelling</div><div class="card-sub">Free · podcast · relax</div></div></div>
-  <div class="time-label-row"><span class="tl">11:00 AM</span></div>
-  <div class="task-card" data-day="4" data-task="Speaking"><span class="card-icon">🎤</span><div class="card-body"><div class="card-title">Speaking Mastery</div><div class="card-sub">Record 12–15 mins on phone</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">12:30 PM</span></div>
-  <div class="task-card" data-day="4" data-task="Job Apply"><span class="card-icon">💼</span><div class="card-body"><div class="card-title">Job Applications</div><div class="card-sub">LinkedIn · portals</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">3:00 PM</span></div>
-  <div class="task-card" data-day="4" data-task="Content Shoot"><span class="card-icon">🎬</span><div class="card-body"><div class="card-title">Content Shoot</div><div class="card-sub">YouTube · Instagram · 2 hrs</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">5:00 PM</span></div>
-  <div class="task-card" data-day="4" data-task="Content Edit"><span class="card-icon">✂️</span><div class="card-body"><div class="card-title">Edit & Schedule Content</div><div class="card-sub">Vizard.ai · Pabbly</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">7:00 PM</span></div>
-  <div class="task-card" data-day="4" data-task="Evening Meditation"><span class="card-icon">🧘</span><div class="card-body"><div class="card-title">Evening Meditation</div><div class="card-sub">Reflect · breathe · peace</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">8:00 PM</span></div>
-  <div class="task-card" data-day="4" data-task="Call Dear"><span class="card-icon">📞</span><div class="card-body"><div class="card-title">Call Near & Dear Ones</div><div class="card-sub">Stay connected daily</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">9:00 PM</span></div>
-  <div class="task-card" data-day="4" data-task="Day Review"><span class="card-icon">📋</span><div class="card-body"><div class="card-title">Day Review & Plan Tomorrow</div><div class="card-sub">Count units · wind down</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-</div>
-
-<!-- ═══════════════ SATURDAY ═══════════════ -->
-<div class="day-panel" id="panel-5">
-  <div class="day-header">
-    <div class="day-title">Saturday</div>
-    <div class="day-progress"><div class="dp-num" id="dp-5">0</div><div class="dp-lbl">units</div><div class="day-bar-wrap"><div class="day-bar" id="db-5" style="width:0%"></div></div></div>
-  </div>
-  <div class="time-label-row"><span class="tl">7:00 AM</span></div>
-  <div class="task-card" data-day="5" data-task="Treadmill"><span class="card-icon">🏃‍♀️</span><div class="card-body"><div class="card-title">Treadmill Workout</div><div class="card-sub">30 mins</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">7:30 AM</span></div>
-  <div class="task-card" data-day="5" data-task="Meditation"><span class="card-icon">🧘</span><div class="card-body"><div class="card-title">Meditation / Book Reading</div><div class="card-sub">Morning sacred ritual</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">8:00 AM</span></div>
-  <div class="task-card" data-day="5" data-task="PMP Study"><span class="card-icon">🏆</span><div class="card-body"><div class="card-title">PMP — MCQ Practice</div><div class="card-sub">30 questions</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">11:00 AM</span></div>
-  <div class="task-card" data-day="5" data-task="Speaking"><span class="card-icon">🎤</span><div class="card-body"><div class="card-title">Speaking Mastery</div><div class="card-sub">Record 12–15 mins on phone</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">12:00 PM</span></div>
-  <div class="task-card" data-day="5" data-task="Job Apply"><span class="card-icon">💼</span><div class="card-body"><div class="card-title">Job Apply — Deep Session</div><div class="card-sub">Weekend · research · apply</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">2:00 PM</span></div>
-  <div class="task-card" data-day="5" data-task="Agentic AI"><span class="card-icon">🤖</span><div class="card-body"><div class="card-title">Agentic AI — LIVE CLASS</div><div class="card-sub">Simplilearn · Microsoft · 3 hrs</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">5:00 PM</span></div>
-  <div class="task-card" data-day="5" data-task="Pabbly"><span class="card-icon">⚙️</span><div class="card-body"><div class="card-title">Pabbly / Saleshandy</div><div class="card-sub">Deep workflow setup</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">6:00 PM</span></div>
-  <div class="task-card" data-day="5" data-task="Coursera"><span class="card-icon">💻</span><div class="card-body"><div class="card-title">Coursera — IT Automation</div><div class="card-sub">Weekend module</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">7:00 PM</span></div>
-  <div class="task-card" data-day="5" data-task="Evening Meditation"><span class="card-icon">🧘</span><div class="card-body"><div class="card-title">Evening Meditation</div><div class="card-sub">Reflect · breathe · peace</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">8:00 PM</span></div>
-  <div class="task-card" data-day="5" data-task="Call Dear"><span class="card-icon">📞</span><div class="card-body"><div class="card-title">Call Near & Dear Ones</div><div class="card-sub">Stay connected daily</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">9:00 PM</span></div>
-  <div class="task-card" data-day="5" data-task="Day Review"><span class="card-icon">📋</span><div class="card-body"><div class="card-title">Week Review & Plan</div><div class="card-sub">Count units · set Monday goals</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-</div>
-
-<!-- ═══════════════ SUNDAY ═══════════════ -->
-<div class="day-panel" id="panel-6">
-  <div class="day-header">
-    <div class="day-title">Sunday</div>
-    <div class="day-progress"><div class="dp-num" id="dp-6">0</div><div class="dp-lbl">units</div><div class="day-bar-wrap"><div class="day-bar" id="db-6" style="width:0%"></div></div></div>
-  </div>
-  <div class="time-label-row"><span class="tl">7:00 AM</span></div>
-  <div class="task-card" data-day="6" data-task="Treadmill"><span class="card-icon">🏃‍♀️</span><div class="card-body"><div class="card-title">Treadmill Workout</div><div class="card-sub">30 mins</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">7:30 AM</span></div>
-  <div class="task-card" data-day="6" data-task="Meditation"><span class="card-icon">🧘</span><div class="card-body"><div class="card-title">Meditation / Book Reading</div><div class="card-sub">Morning sacred ritual</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">8:00 AM</span></div>
-  <div class="task-card" data-day="6" data-task="PMP Study"><span class="card-icon">🏆</span><div class="card-body"><div class="card-title">PMP — Content Review</div><div class="card-sub">Weekly chapter</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">11:00 AM</span></div>
-  <div class="task-card" data-day="6" data-task="Speaking"><span class="card-icon">🎤</span><div class="card-body"><div class="card-title">Speaking Mastery</div><div class="card-sub">Record 12–15 mins on phone</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">12:00 PM</span></div>
-  <div class="task-card" data-day="6" data-task="Coursera"><span class="card-icon">💻</span><div class="card-body"><div class="card-title">Coursera — IT Automation</div><div class="card-sub">Self-paced module</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">2:00 PM</span></div>
-  <div class="task-card" data-day="6" data-task="Agentic AI"><span class="card-icon">🤖</span><div class="card-body"><div class="card-title">Agentic AI — LIVE CLASS</div><div class="card-sub">Simplilearn · Microsoft · 3 hrs</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">5:00 PM</span></div>
-  <div class="task-card" data-day="6" data-task="Social"><span class="card-icon">😊</span><div class="card-body"><div class="card-title">Social & Joy Time</div><div class="card-sub">Friends · movie · outing</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">7:00 PM</span></div>
-  <div class="task-card" data-day="6" data-task="Evening Meditation"><span class="card-icon">🧘</span><div class="card-body"><div class="card-title">Evening Meditation & Gratitude</div><div class="card-sub">Reflect on the week</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">8:00 PM</span></div>
-  <div class="task-card" data-day="6" data-task="Call Dear"><span class="card-icon">📞</span><div class="card-body"><div class="card-title">Call Near & Dear Ones</div><div class="card-sub">Stay connected daily</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-  <div class="time-label-row"><span class="tl">9:00 PM</span></div>
-  <div class="task-card" data-day="6" data-task="Day Review"><span class="card-icon">📋</span><div class="card-body"><div class="card-title">Week Review & Plan Monday</div><div class="card-sub">Set goals · sleep well</div></div><div class="card-check">✓</div><span class="units-badge">20 pts</span></div>
-</div>
-
-</div><!-- end swipe-track -->
-</div><!-- end swipe-wrap -->
-
-<!-- BOTTOM SUMMARY -->
-<div class="bottom-summary">
-  <div class="bs-row">
-    <div class="bs-stat"><div class="bs-num" id="bs-today">0</div><div class="bs-lbl">Today Units</div></div>
-    <div class="bs-stat"><div class="bs-num" id="bs-week">0</div><div class="bs-lbl">Week Units</div></div>
-    <div class="bs-stat"><div class="bs-num" id="bs-pct">0%</div><div class="bs-lbl">Today %</div></div>
+  <div style="background:#111;border-radius:16px;padding:16px;margin-bottom:10px;">
+    <div style="font-size:12px;font-weight:900;color:#aaa;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;">🏆 2-Month Total Progress</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <div style="flex:1;background:rgba(255,255,255,0.08);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:22px;font-weight:900;color:#fff;" id="wt-done">0</div><div style="font-size:9px;font-weight:800;color:#666;text-transform:uppercase;letter-spacing:1px;margin-top:3px;">Tasks Done</div></div>
+      <div style="flex:1;background:rgba(255,255,255,0.08);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:22px;font-weight:900;color:#fff;" id="wt-units">0</div><div style="font-size:9px;font-weight:800;color:#666;text-transform:uppercase;letter-spacing:1px;margin-top:3px;">Units Earned</div></div>
+      <div style="flex:1;background:rgba(255,255,255,0.08);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:22px;font-weight:900;color:#22c55e;" id="wt-pct">0%</div><div style="font-size:9px;font-weight:800;color:#666;text-transform:uppercase;letter-spacing:1px;margin-top:3px;">of 2-Month</div></div>
+    </div>
+    <div style="height:8px;background:#333;border-radius:4px;overflow:hidden;margin-bottom:5px;"><div id="wt-bar" style="height:100%;background:#22c55e;border-radius:4px;width:0%;transition:width 0.5s;"></div></div>
+    <div style="font-size:11px;font-weight:700;color:#555;text-align:right;" id="wt-sub">0 / 12,800 units</div>
   </div>
 </div>
+
+<!-- SWIPEABLE DAYS -->
+<div class="page" id="page">
+<div class="swipe-track" id="track">
+
+<!-- ════ MONDAY ════ -->
+<div class="day-panel" id="p0">
+<div class="day-hero">
+  <div class="day-hero-top"><div class="dh-title">Monday</div><div class="dh-date" id="dh-date-0"></div></div>
+  <div class="dh-stats">
+    <div class="dh-stat"><div class="dh-num" id="d-done-0">0</div><div class="dh-lbl">Done</div></div>
+    <div class="dh-stat"><div class="dh-num" id="d-total-0">0</div><div class="dh-lbl">Total</div></div>
+    <div class="dh-stat"><div class="dh-num" id="d-units-0">0</div><div class="dh-lbl">Units</div></div>
+    <div class="dh-stat"><div class="dh-num" id="d-pct-0">0%</div><div class="dh-lbl">Done %</div></div>
+  </div>
+  <div class="dh-bar-wrap"><div class="dh-bar" id="dh-bar-0" style="width:0%"></div></div>
+</div>
+
+<div class="time-row"><span class="tl">7:00 AM</span></div>
+<div class="task-card" data-task="mon-treadmill"><span class="ci">🏃‍♀️</span><div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins · build the habit</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">7:30 AM</span></div>
+<div class="task-card" data-task="mon-meditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual · 30 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">8:00 AM</span></div>
+<div class="task-card" data-task="mon-pmp"><span class="ci">🏆</span><div class="cb"><div class="ct">PMP — MCQ Practice</div><div class="cs">30 questions daily</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">8:30 AM</span></div>
+<div class="task-card travel"><span class="ci">🚗</span><div class="cb"><div class="ct">Travelling</div><div class="cs">Free · podcast · relax</div></div></div>
+<div class="time-row"><span class="tl">11:00 AM</span></div>
+<div class="task-card" data-task="mon-speaking"><span class="ci">🎤</span><div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12–15 mins on phone</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">12:30 PM</span></div>
+<div class="task-card" data-task="mon-job"><span class="ci">💼</span><div class="cb"><div class="ct">Job Applications</div><div class="cs">LinkedIn · portals · 30 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">2:00 PM</span></div>
+<div class="task-card" data-task="mon-coursera"><span class="ci">💻</span><div class="cb"><div class="ct">Coursera — IT Automation</div><div class="cs">Google module · self-paced</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">5:00 PM</span></div>
+<div class="task-card" data-task="mon-pabbly"><span class="ci">⚙️</span><div class="cb"><div class="ct">Pabbly / Saleshandy</div><div class="cs">Automation · outreach flows</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">6:00 PM</span></div>
+<div class="task-card" data-task="mon-pmp2"><span class="ci">📖</span><div class="cb"><div class="ct">PMP Content Review</div><div class="cs">Chapter deep dive</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">7:00 PM</span></div>
+<div class="task-card" data-task="mon-evemeditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe · peace</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">8:00 PM</span></div>
+<div class="task-card" data-task="mon-call"><span class="ci">📞</span><div class="cb"><div class="ct">Call Near & Dear Ones</div><div class="cs">Stay connected daily</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">9:00 PM</span></div>
+<div class="task-card" data-task="mon-review"><span class="ci">📋</span><div class="cb"><div class="ct">Day Review & Plan Tomorrow</div><div class="cs">Count units · wind down</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+
+<!-- DAY SUMMARY -->
+<div class="day-summary">
+  <div class="ds-title">📊 Monday Summary</div>
+  <div class="ds-row">
+    <div class="ds-stat"><div class="ds-num" id="ds-done-0">0</div><div class="ds-lbl">Tasks Done</div></div>
+    <div class="ds-stat"><div class="ds-num" id="ds-units-0">0</div><div class="ds-lbl">Units Earned</div></div>
+    <div class="ds-stat"><div class="ds-num" id="ds-max-0">0</div><div class="ds-lbl">Max Units</div></div>
+  </div>
+  <div class="ds-bar-wrap"><div class="ds-bar" id="ds-bar-0" style="width:0%"></div></div>
+  <div class="ds-pct" id="ds-pct-0">0% complete</div>
+</div>
+
+<!-- ALL-DAYS TOTAL -->
+<div class="total-card">
+  <div class="tc-title">🏆 All Days Total — 2 Months</div>
+  <div class="tc-row">
+    <div class="tc-stat"><div class="tc-num" id="tc-done">0</div><div class="tc-lbl">Tasks Done</div></div>
+    <div class="tc-stat"><div class="tc-num" id="tc-units">0</div><div class="tc-lbl">Units</div></div>
+    <div class="tc-stat"><div class="tc-num" id="tc-pct">0%</div><div class="tc-lbl">2-Month %</div></div>
+  </div>
+  <div class="tc-bar-wrap"><div class="tc-bar" id="tc-bar" style="width:0%"></div></div>
+  <div class="tc-pct" id="tc-sub">0 / 12,800 units</div>
+  <div class="tc-week-row" style="margin-top:14px;">
+    <div class="tc-day-col"><div class="tc-day-name">M</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-0" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p0">0%</div></div>
+    <div class="tc-day-col"><div class="tc-day-name">T</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-1" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p1">0%</div></div>
+    <div class="tc-day-col"><div class="tc-day-name">W</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-2" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p2">0%</div></div>
+    <div class="tc-day-col"><div class="tc-day-name">T</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-3" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p3">0%</div></div>
+    <div class="tc-day-col"><div class="tc-day-name">F</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-4" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p4">0%</div></div>
+    <div class="tc-day-col"><div class="tc-day-name">S</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-5" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p5">0%</div></div>
+    <div class="tc-day-col"><div class="tc-day-name">S</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-6" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p6">0%</div></div>
+  </div>
+</div>
+
+<!-- PREV / NEXT -->
+<div class="nav-row">
+  <button class="nav-btn nav-prev" onclick="prevDay()">← Prev</button>
+  <button class="nav-btn nav-next" onclick="nextDay()">Next →</button>
+</div>
+</div><!-- end panel 0 -->
+
+<!-- ════ TUESDAY ════ -->
+<div class="day-panel" id="p1">
+<div class="day-hero">
+  <div class="day-hero-top"><div class="dh-title">Tuesday</div><div class="dh-date" id="dh-date-1"></div></div>
+  <div class="dh-stats">
+    <div class="dh-stat"><div class="dh-num" id="d-done-1">0</div><div class="dh-lbl">Done</div></div>
+    <div class="dh-stat"><div class="dh-num" id="d-total-1">0</div><div class="dh-lbl">Total</div></div>
+    <div class="dh-stat"><div class="dh-num" id="d-units-1">0</div><div class="dh-lbl">Units</div></div>
+    <div class="dh-stat"><div class="dh-num" id="d-pct-1">0%</div><div class="dh-lbl">Done %</div></div>
+  </div>
+  <div class="dh-bar-wrap"><div class="dh-bar" id="dh-bar-1" style="width:0%"></div></div>
+</div>
+<div class="time-row"><span class="tl">7:00 AM</span></div>
+<div class="task-card" data-task="tue-treadmill"><span class="ci">🏃‍♀️</span><div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">7:30 AM</span></div>
+<div class="task-card" data-task="tue-meditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">8:00 AM</span></div>
+<div class="task-card" data-task="tue-pmp"><span class="ci">🏆</span><div class="cb"><div class="ct">PMP — Content Review</div><div class="cs">Chapter study</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">8:30 AM</span></div>
+<div class="task-card travel"><span class="ci">🚗</span><div class="cb"><div class="ct">Travelling</div><div class="cs">Free · podcast</div></div></div>
+<div class="time-row"><span class="tl">11:00 AM</span></div>
+<div class="task-card" data-task="tue-speaking"><span class="ci">🎤</span><div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12–15 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">12:30 PM</span></div>
+<div class="task-card" data-task="tue-job"><span class="ci">💼</span><div class="cb"><div class="ct">Job Applications</div><div class="cs">LinkedIn · portals</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">2:00 PM</span></div>
+<div class="task-card" data-task="tue-employer"><span class="ci">🤝</span><div class="cb"><div class="ct">Employer Discussion</div><div class="cs">Recruiter calls · follow-up</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">5:00 PM</span></div>
+<div class="task-card" data-task="tue-pabbly"><span class="ci">⚙️</span><div class="cb"><div class="ct">Pabbly / Saleshandy</div><div class="cs">Sequences · follow-ups</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">6:00 PM</span></div>
+<div class="task-card" data-task="tue-coursera"><span class="ci">💻</span><div class="cb"><div class="ct">Coursera — IT Automation</div><div class="cs">Google module</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">7:00 PM</span></div>
+<div class="task-card" data-task="tue-evemeditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">8:00 PM</span></div>
+<div class="task-card" data-task="tue-call"><span class="ci">📞</span><div class="cb"><div class="ct">Call Near & Dear Ones</div><div class="cs">Stay connected</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">9:00 PM</span></div>
+<div class="task-card" data-task="tue-review"><span class="ci">📋</span><div class="cb"><div class="ct">Day Review & Plan</div><div class="cs">Count units · wind down</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="day-summary"><div class="ds-title">📊 Tuesday Summary</div><div class="ds-row"><div class="ds-stat"><div class="ds-num" id="ds-done-1">0</div><div class="ds-lbl">Tasks Done</div></div><div class="ds-stat"><div class="ds-num" id="ds-units-1">0</div><div class="ds-lbl">Units Earned</div></div><div class="ds-stat"><div class="ds-num" id="ds-max-1">0</div><div class="ds-lbl">Max Units</div></div></div><div class="ds-bar-wrap"><div class="ds-bar" id="ds-bar-1" style="width:0%"></div></div><div class="ds-pct" id="ds-pct-1">0% complete</div></div>
+<div class="total-card"><div class="tc-title">🏆 All Days Total — 2 Months</div><div class="tc-row"><div class="tc-stat"><div class="tc-num" id="tc-done-1">0</div><div class="tc-lbl">Tasks Done</div></div><div class="tc-stat"><div class="tc-num" id="tc-units-1">0</div><div class="tc-lbl">Units</div></div><div class="tc-stat"><div class="tc-num" id="tc-pct-1">0%</div><div class="tc-lbl">2-Month %</div></div></div><div class="tc-bar-wrap"><div class="tc-bar" id="tc-bar-1" style="width:0%"></div></div><div class="tc-pct" id="tc-sub-1">0 / 12,800 units</div></div>
+<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">← Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next →</button></div>
+</div>
+
+<!-- ════ WEDNESDAY ════ -->
+<div class="day-panel" id="p2">
+<div class="day-hero">
+  <div class="day-hero-top"><div class="dh-title">Wednesday</div><div class="dh-date" id="dh-date-2"></div></div>
+  <div class="dh-stats"><div class="dh-stat"><div class="dh-num" id="d-done-2">0</div><div class="dh-lbl">Done</div></div><div class="dh-stat"><div class="dh-num" id="d-total-2">0</div><div class="dh-lbl">Total</div></div><div class="dh-stat"><div class="dh-num" id="d-units-2">0</div><div class="dh-lbl">Units</div></div><div class="dh-stat"><div class="dh-num" id="d-pct-2">0%</div><div class="dh-lbl">Done %</div></div></div>
+  <div class="dh-bar-wrap"><div class="dh-bar" id="dh-bar-2" style="width:0%"></div></div>
+</div>
+<div class="time-row"><span class="tl">7:00 AM</span></div>
+<div class="task-card" data-task="wed-treadmill"><span class="ci">🏃‍♀️</span><div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">7:30 AM</span></div>
+<div class="task-card" data-task="wed-meditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">8:00 AM</span></div>
+<div class="task-card" data-task="wed-pmp"><span class="ci">🏆</span><div class="cb"><div class="ct">PMP — MCQ Practice</div><div class="cs">30 questions</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">8:30 AM</span></div>
+<div class="task-card travel"><span class="ci">🚗</span><div class="cb"><div class="ct">Travelling</div><div class="cs">Free · podcast</div></div></div>
+<div class="time-row"><span class="tl">11:00 AM</span></div>
+<div class="task-card" data-task="wed-speaking"><span class="ci">🎤</span><div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12–15 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">12:30 PM</span></div>
+<div class="task-card" data-task="wed-job"><span class="ci">💼</span><div class="cb"><div class="ct">Job Applications</div><div class="cs">LinkedIn · portals</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">3:00 PM</span></div>
+<div class="task-card" data-task="wed-shoot"><span class="ci">🎬</span><div class="cb"><div class="ct">Content Shoot</div><div class="cs">YouTube · Instagram · 2 hrs</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">5:00 PM</span></div>
+<div class="task-card" data-task="wed-edit"><span class="ci">✂️</span><div class="cb"><div class="ct">Edit & Schedule Content</div><div class="cs">Vizard.ai · Pabbly</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">7:00 PM</span></div>
+<div class="task-card" data-task="wed-evemeditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">8:00 PM</span></div>
+<div class="task-card" data-task="wed-call"><span class="ci">📞</span><div class="cb"><div class="ct">Call Near & Dear Ones</div><div class="cs">Stay connected</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">9:00 PM</span></div>
+<div class="task-card" data-task="wed-review"><span class="ci">📋</span><div class="cb"><div class="ct">Day Review & Plan</div><div class="cs">Count units · wind down</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="day-summary"><div class="ds-title">📊 Wednesday Summary</div><div class="ds-row"><div class="ds-stat"><div class="ds-num" id="ds-done-2">0</div><div class="ds-lbl">Tasks Done</div></div><div class="ds-stat"><div class="ds-num" id="ds-units-2">0</div><div class="ds-lbl">Units Earned</div></div><div class="ds-stat"><div class="ds-num" id="ds-max-2">0</div><div class="ds-lbl">Max Units</div></div></div><div class="ds-bar-wrap"><div class="ds-bar" id="ds-bar-2" style="width:0%"></div></div><div class="ds-pct" id="ds-pct-2">0% complete</div></div>
+<div class="total-card"><div class="tc-title">🏆 All Days Total — 2 Months</div><div class="tc-row"><div class="tc-stat"><div class="tc-num" id="tc-done-2">0</div><div class="tc-lbl">Tasks Done</div></div><div class="tc-stat"><div class="tc-num" id="tc-units-2">0</div><div class="tc-lbl">Units</div></div><div class="tc-stat"><div class="tc-num" id="tc-pct-2">0%</div><div class="tc-lbl">2-Month %</div></div></div><div class="tc-bar-wrap"><div class="tc-bar" id="tc-bar-2" style="width:0%"></div></div><div class="tc-pct" id="tc-sub-2">0 / 12,800 units</div></div>
+<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">← Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next →</button></div>
+</div>
+
+<!-- ════ THURSDAY ════ -->
+<div class="day-panel" id="p3">
+<div class="day-hero">
+  <div class="day-hero-top"><div class="dh-title">Thursday</div><div class="dh-date" id="dh-date-3"></div></div>
+  <div class="dh-stats"><div class="dh-stat"><div class="dh-num" id="d-done-3">0</div><div class="dh-lbl">Done</div></div><div class="dh-stat"><div class="dh-num" id="d-total-3">0</div><div class="dh-lbl">Total</div></div><div class="dh-stat"><div class="dh-num" id="d-units-3">0</div><div class="dh-lbl">Units</div></div><div class="dh-stat"><div class="dh-num" id="d-pct-3">0%</div><div class="dh-lbl">Done %</div></div></div>
+  <div class="dh-bar-wrap"><div class="dh-bar" id="dh-bar-3" style="width:0%"></div></div>
+</div>
+<div class="time-row"><span class="tl">7:00 AM</span></div>
+<div class="task-card" data-task="thu-treadmill"><span class="ci">🏃‍♀️</span><div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">7:30 AM</span></div>
+<div class="task-card" data-task="thu-meditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">8:00 AM</span></div>
+<div class="task-card" data-task="thu-pmp"><span class="ci">🏆</span><div class="cb"><div class="ct">PMP — Content Review</div><div class="cs">Chapter study</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">8:30 AM</span></div>
+<div class="task-card travel"><span class="ci">🚗</span><div class="cb"><div class="ct">Travelling</div><div class="cs">Free · podcast</div></div></div>
+<div class="time-row"><span class="tl">11:00 AM</span></div>
+<div class="task-card" data-task="thu-speaking"><span class="ci">🎤</span><div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12–15 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">12:30 PM</span></div>
+<div class="task-card" data-task="thu-job"><span class="ci">💼</span><div class="cb"><div class="ct">Job Applications</div><div class="cs">LinkedIn · portals</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">2:00 PM</span></div>
+<div class="task-card" data-task="thu-coursera"><span class="ci">💻</span><div class="cb"><div class="ct">Coursera — IT Automation</div><div class="cs">Google module</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">5:00 PM</span></div>
+<div class="task-card" data-task="thu-pabbly"><span class="ci">⚙️</span><div class="cb"><div class="ct">Pabbly / Saleshandy</div><div class="cs">Workflows · campaigns</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">7:00 PM</span></div>
+<div class="task-card" data-task="thu-evemeditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">8:00 PM</span></div>
+<div class="task-card" data-task="thu-call"><span class="ci">📞</span><div class="cb"><div class="ct">Call Near & Dear Ones</div><div class="cs">Stay connected</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">9:00 PM</span></div>
+<div class="task-card" data-task="thu-review"><span class="ci">📋</span><div class="cb"><div class="ct">Day Review & Plan</div><div class="cs">Count units · wind down</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="day-summary"><div class="ds-title">📊 Thursday Summary</div><div class="ds-row"><div class="ds-stat"><div class="ds-num" id="ds-done-3">0</div><div class="ds-lbl">Tasks Done</div></div><div class="ds-stat"><div class="ds-num" id="ds-units-3">0</div><div class="ds-lbl">Units Earned</div></div><div class="ds-stat"><div class="ds-num" id="ds-max-3">0</div><div class="ds-lbl">Max Units</div></div></div><div class="ds-bar-wrap"><div class="ds-bar" id="ds-bar-3" style="width:0%"></div></div><div class="ds-pct" id="ds-pct-3">0% complete</div></div>
+<div class="total-card"><div class="tc-title">🏆 All Days Total — 2 Months</div><div class="tc-row"><div class="tc-stat"><div class="tc-num" id="tc-done-3">0</div><div class="tc-lbl">Tasks Done</div></div><div class="tc-stat"><div class="tc-num" id="tc-units-3">0</div><div class="tc-lbl">Units</div></div><div class="tc-stat"><div class="tc-num" id="tc-pct-3">0%</div><div class="tc-lbl">2-Month %</div></div></div><div class="tc-bar-wrap"><div class="tc-bar" id="tc-bar-3" style="width:0%"></div></div><div class="tc-pct" id="tc-sub-3">0 / 12,800 units</div></div>
+<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">← Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next →</button></div>
+</div>
+
+<!-- ════ FRIDAY ════ -->
+<div class="day-panel" id="p4">
+<div class="day-hero">
+  <div class="day-hero-top"><div class="dh-title">Friday</div><div class="dh-date" id="dh-date-4"></div></div>
+  <div class="dh-stats"><div class="dh-stat"><div class="dh-num" id="d-done-4">0</div><div class="dh-lbl">Done</div></div><div class="dh-stat"><div class="dh-num" id="d-total-4">0</div><div class="dh-lbl">Total</div></div><div class="dh-stat"><div class="dh-num" id="d-units-4">0</div><div class="dh-lbl">Units</div></div><div class="dh-stat"><div class="dh-num" id="d-pct-4">0%</div><div class="dh-lbl">Done %</div></div></div>
+  <div class="dh-bar-wrap"><div class="dh-bar" id="dh-bar-4" style="width:0%"></div></div>
+</div>
+<div class="time-row"><span class="tl">7:00 AM</span></div>
+<div class="task-card" data-task="fri-treadmill"><span class="ci">🏃‍♀️</span><div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">7:30 AM</span></div>
+<div class="task-card" data-task="fri-meditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">8:00 AM</span></div>
+<div class="task-card" data-task="fri-pmp"><span class="ci">🏆</span><div class="cb"><div class="ct">PMP — Mock Test</div><div class="cs">50Q full exam</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">8:30 AM</span></div>
+<div class="task-card travel"><span class="ci">🚗</span><div class="cb"><div class="ct">Travelling</div><div class="cs">Free · podcast</div></div></div>
+<div class="time-row"><span class="tl">11:00 AM</span></div>
+<div class="task-card" data-task="fri-speaking"><span class="ci">🎤</span><div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12–15 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">12:30 PM</span></div>
+<div class="task-card" data-task="fri-job"><span class="ci">💼</span><div class="cb"><div class="ct">Job Applications</div><div class="cs">LinkedIn · portals</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">3:00 PM</span></div>
+<div class="task-card" data-task="fri-shoot"><span class="ci">🎬</span><div class="cb"><div class="ct">Content Shoot</div><div class="cs">YouTube · Instagram · 2 hrs</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">5:00 PM</span></div>
+<div class="task-card" data-task="fri-edit"><span class="ci">✂️</span><div class="cb"><div class="ct">Edit & Schedule Content</div><div class="cs">Vizard.ai · Pabbly</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">7:00 PM</span></div>
+<div class="task-card" data-task="fri-evemeditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">8:00 PM</span></div>
+<div class="task-card" data-task="fri-call"><span class="ci">📞</span><div class="cb"><div class="ct">Call Near & Dear Ones</div><div class="cs">Stay connected</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">9:00 PM</span></div>
+<div class="task-card" data-task="fri-review"><span class="ci">📋</span><div class="cb"><div class="ct">Day Review & Plan</div><div class="cs">Count units · wind down</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="day-summary"><div class="ds-title">📊 Friday Summary</div><div class="ds-row"><div class="ds-stat"><div class="ds-num" id="ds-done-4">0</div><div class="ds-lbl">Tasks Done</div></div><div class="ds-stat"><div class="ds-num" id="ds-units-4">0</div><div class="ds-lbl">Units Earned</div></div><div class="ds-stat"><div class="ds-num" id="ds-max-4">0</div><div class="ds-lbl">Max Units</div></div></div><div class="ds-bar-wrap"><div class="ds-bar" id="ds-bar-4" style="width:0%"></div></div><div class="ds-pct" id="ds-pct-4">0% complete</div></div>
+<div class="total-card"><div class="tc-title">🏆 All Days Total — 2 Months</div><div class="tc-row"><div class="tc-stat"><div class="tc-num" id="tc-done-4">0</div><div class="tc-lbl">Tasks Done</div></div><div class="tc-stat"><div class="tc-num" id="tc-units-4">0</div><div class="tc-lbl">Units</div></div><div class="tc-stat"><div class="tc-num" id="tc-pct-4">0%</div><div class="tc-lbl">2-Month %</div></div></div><div class="tc-bar-wrap"><div class="tc-bar" id="tc-bar-4" style="width:0%"></div></div><div class="tc-pct" id="tc-sub-4">0 / 12,800 units</div></div>
+<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">← Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next →</button></div>
+</div>
+
+<!-- ════ SATURDAY ════ -->
+<div class="day-panel" id="p5">
+<div class="day-hero">
+  <div class="day-hero-top"><div class="dh-title">Saturday</div><div class="dh-date" id="dh-date-5"></div></div>
+  <div class="dh-stats"><div class="dh-stat"><div class="dh-num" id="d-done-5">0</div><div class="dh-lbl">Done</div></div><div class="dh-stat"><div class="dh-num" id="d-total-5">0</div><div class="dh-lbl">Total</div></div><div class="dh-stat"><div class="dh-num" id="d-units-5">0</div><div class="dh-lbl">Units</div></div><div class="dh-stat"><div class="dh-num" id="d-pct-5">0%</div><div class="dh-lbl">Done %</div></div></div>
+  <div class="dh-bar-wrap"><div class="dh-bar" id="dh-bar-5" style="width:0%"></div></div>
+</div>
+<div class="time-row"><span class="tl">7:00 AM</span></div>
+<div class="task-card" data-task="sat-treadmill"><span class="ci">🏃‍♀️</span><div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">7:30 AM</span></div>
+<div class="task-card" data-task="sat-meditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">8:00 AM</span></div>
+<div class="task-card" data-task="sat-pmp"><span class="ci">🏆</span><div class="cb"><div class="ct">PMP — MCQ Practice</div><div class="cs">30 questions</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">11:00 AM</span></div>
+<div class="task-card" data-task="sat-speaking"><span class="ci">🎤</span><div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12–15 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">12:00 PM</span></div>
+<div class="task-card" data-task="sat-job"><span class="ci">💼</span><div class="cb"><div class="ct">Job Apply — Deep Session</div><div class="cs">Weekend deep apply</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">2:00 PM</span></div>
+<div class="task-card" data-task="sat-agentic"><span class="ci">🤖</span><div class="cb"><div class="ct">Agentic AI — LIVE CLASS</div><div class="cs">Simplilearn · Microsoft · 3 hrs</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">5:00 PM</span></div>
+<div class="task-card" data-task="sat-pabbly"><span class="ci">⚙️</span><div class="cb"><div class="ct">Pabbly / Saleshandy</div><div class="cs">Deep workflow setup</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">6:00 PM</span></div>
+<div class="task-card" data-task="sat-coursera"><span class="ci">💻</span><div class="cb"><div class="ct">Coursera — IT Automation</div><div class="cs">Weekend module</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">7:00 PM</span></div>
+<div class="task-card" data-task="sat-evemeditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">8:00 PM</span></div>
+<div class="task-card" data-task="sat-call"><span class="ci">📞</span><div class="cb"><div class="ct">Call Near & Dear Ones</div><div class="cs">Stay connected</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">9:00 PM</span></div>
+<div class="task-card" data-task="sat-review"><span class="ci">📋</span><div class="cb"><div class="ct">Week Review & Plan Monday</div><div class="cs">Set goals · wind down</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="day-summary"><div class="ds-title">📊 Saturday Summary</div><div class="ds-row"><div class="ds-stat"><div class="ds-num" id="ds-done-5">0</div><div class="ds-lbl">Tasks Done</div></div><div class="ds-stat"><div class="ds-num" id="ds-units-5">0</div><div class="ds-lbl">Units Earned</div></div><div class="ds-stat"><div class="ds-num" id="ds-max-5">0</div><div class="ds-lbl">Max Units</div></div></div><div class="ds-bar-wrap"><div class="ds-bar" id="ds-bar-5" style="width:0%"></div></div><div class="ds-pct" id="ds-pct-5">0% complete</div></div>
+<div class="total-card"><div class="tc-title">🏆 All Days Total — 2 Months</div><div class="tc-row"><div class="tc-stat"><div class="tc-num" id="tc-done-5">0</div><div class="tc-lbl">Tasks Done</div></div><div class="tc-stat"><div class="tc-num" id="tc-units-5">0</div><div class="tc-lbl">Units</div></div><div class="tc-stat"><div class="tc-num" id="tc-pct-5">0%</div><div class="tc-lbl">2-Month %</div></div></div><div class="tc-bar-wrap"><div class="tc-bar" id="tc-bar-5" style="width:0%"></div></div><div class="tc-pct" id="tc-sub-5">0 / 12,800 units</div></div>
+<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">← Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next →</button></div>
+</div>
+
+<!-- ════ SUNDAY ════ -->
+<div class="day-panel" id="p6">
+<div class="day-hero">
+  <div class="day-hero-top"><div class="dh-title">Sunday</div><div class="dh-date" id="dh-date-6"></div></div>
+  <div class="dh-stats"><div class="dh-stat"><div class="dh-num" id="d-done-6">0</div><div class="dh-lbl">Done</div></div><div class="dh-stat"><div class="dh-num" id="d-total-6">0</div><div class="dh-lbl">Total</div></div><div class="dh-stat"><div class="dh-num" id="d-units-6">0</div><div class="dh-lbl">Units</div></div><div class="dh-stat"><div class="dh-num" id="d-pct-6">0%</div><div class="dh-lbl">Done %</div></div></div>
+  <div class="dh-bar-wrap"><div class="dh-bar" id="dh-bar-6" style="width:0%"></div></div>
+</div>
+<div class="time-row"><span class="tl">7:00 AM</span></div>
+<div class="task-card" data-task="sun-treadmill"><span class="ci">🏃‍♀️</span><div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">7:30 AM</span></div>
+<div class="task-card" data-task="sun-meditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">8:00 AM</span></div>
+<div class="task-card" data-task="sun-pmp"><span class="ci">🏆</span><div class="cb"><div class="ct">PMP — Content Review</div><div class="cs">Weekly chapter</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">11:00 AM</span></div>
+<div class="task-card" data-task="sun-speaking"><span class="ci">🎤</span><div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12–15 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">12:00 PM</span></div>
+<div class="task-card" data-task="sun-coursera"><span class="ci">💻</span><div class="cb"><div class="ct">Coursera — IT Automation</div><div class="cs">Self-paced module</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">2:00 PM</span></div>
+<div class="task-card" data-task="sun-agentic"><span class="ci">🤖</span><div class="cb"><div class="ct">Agentic AI — LIVE CLASS</div><div class="cs">Simplilearn · Microsoft · 3 hrs</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">5:00 PM</span></div>
+<div class="task-card" data-task="sun-social"><span class="ci">😊</span><div class="cb"><div class="ct">Social & Joy Time</div><div class="cs">Friends · movie · outing</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">7:00 PM</span></div>
+<div class="task-card" data-task="sun-evemeditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Evening Meditation & Gratitude</div><div class="cs">Reflect on the week</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">8:00 PM</span></div>
+<div class="task-card" data-task="sun-call"><span class="ci">📞</span><div class="cb"><div class="ct">Call Near & Dear Ones</div><div class="cs">Stay connected</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="time-row"><span class="tl">9:00 PM</span></div>
+<div class="task-card" data-task="sun-review"><span class="ci">📋</span><div class="cb"><div class="ct">Week Review & Plan Monday</div><div class="cs">Set goals · sleep well</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="day-summary"><div class="ds-title">📊 Sunday Summary</div><div class="ds-row"><div class="ds-stat"><div class="ds-num" id="ds-done-6">0</div><div class="ds-lbl">Tasks Done</div></div><div class="ds-stat"><div class="ds-num" id="ds-units-6">0</div><div class="ds-lbl">Units Earned</div></div><div class="ds-stat"><div class="ds-num" id="ds-max-6">0</div><div class="ds-lbl">Max Units</div></div></div><div class="ds-bar-wrap"><div class="ds-bar" id="ds-bar-6" style="width:0%"></div></div><div class="ds-pct" id="ds-pct-6">0% complete</div></div>
+<div class="total-card">
+  <div class="tc-title">🏆 All Days Total — 2 Months</div>
+  <div class="tc-row">
+    <div class="tc-stat"><div class="tc-num" id="tc-done-6">0</div><div class="tc-lbl">Tasks Done</div></div>
+    <div class="tc-stat"><div class="tc-num" id="tc-units-6">0</div><div class="tc-lbl">Units</div></div>
+    <div class="tc-stat"><div class="tc-num" id="tc-pct-6">0%</div><div class="tc-lbl">2-Month %</div></div>
+  </div>
+  <div class="tc-bar-wrap"><div class="tc-bar" id="tc-bar-6" style="width:0%"></div></div>
+  <div class="tc-pct" id="tc-sub-6">0 / 12,800 units</div>
+  <div class="tc-week-row" style="margin-top:14px;">
+    <div class="tc-day-col"><div class="tc-day-name">M</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-0" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p0">0%</div></div>
+    <div class="tc-day-col"><div class="tc-day-name">T</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-1" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p1">0%</div></div>
+    <div class="tc-day-col"><div class="tc-day-name">W</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-2" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p2">0%</div></div>
+    <div class="tc-day-col"><div class="tc-day-name">T</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-3" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p3">0%</div></div>
+    <div class="tc-day-col"><div class="tc-day-name">F</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-4" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p4">0%</div></div>
+    <div class="tc-day-col"><div class="tc-day-name">S</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-5" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p5">0%</div></div>
+    <div class="tc-day-col"><div class="tc-day-name">S</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-6" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p6">0%</div></div>
+  </div>
+</div>
+<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">← Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next →</button></div>
+</div>
+
+</div><!-- end track -->
+</div><!-- end page -->
 
 <script>
-const UNITS = 20;
-let currentDay = 0;
-const state = {}; // "d-task" -> bool
-const dayDone = [0,0,0,0,0,0,0];
-const dayTotal = [0,0,0,0,0,0,0];
+const UNITS=20, MAX_2M=12800, SK='nayana_v3';
+let cur=0, showWeek=false;
+const dayDone=[0,0,0,0,0,0,0], dayTotal=[0,0,0,0,0,0,0];
 
-// Count tasks per day
-document.querySelectorAll('.task-card[data-task]').forEach(card => {
-  const d = parseInt(card.dataset.day);
-  const id = d + '-' + card.dataset.task;
-  state[id] = false;
+// load localStorage
+let state={};
+try{ const s=localStorage.getItem(SK); if(s) state=JSON.parse(s); }catch(e){}
+function save(){ try{localStorage.setItem(SK,JSON.stringify(state));}catch(e){} }
+
+// init cards
+document.querySelectorAll('.task-card[data-task]').forEach(card=>{
+  const key=card.dataset.task;
+  const d=parseInt(card.closest('.day-panel').id.replace('p',''));
   dayTotal[d]++;
-
-  card.addEventListener('click', () => {
-    if (card.classList.contains('travel-card')) return;
-    state[id] = !state[id];
-    if (state[id]) { card.classList.add('done'); dayDone[d]++; }
-    else           { card.classList.remove('done'); dayDone[d]--; }
-    updateAll();
+  if(state[key]){ card.classList.add('done'); dayDone[d]++; }
+  card.addEventListener('click',()=>{
+    if(card.classList.contains('travel')) return;
+    const was=card.classList.contains('done');
+    if(was){ card.classList.remove('done'); dayDone[d]--; delete state[key]; }
+    else { card.classList.add('done'); dayDone[d]++; state[key]=true; }
+    save(); updateAll();
   });
 });
 
-function updateAll() {
-  let weekUnits = 0;
-  for (let d = 0; d < 7; d++) {
-    const units = dayDone[d] * UNITS;
-    const maxU  = dayTotal[d] * UNITS;
-    const pct   = dayTotal[d] > 0 ? Math.round(dayDone[d]/dayTotal[d]*100) : 0;
-    document.getElementById('dp-' + d).textContent = units;
-    document.getElementById('db-' + d).style.width = pct + '%';
-    document.getElementById('tab-count-' + d).textContent = pct + '%';
-    weekUnits += units;
-  }
-  const todayUnits = dayDone[currentDay] * UNITS;
-  const todayMax   = dayTotal[currentDay] * UNITS;
-  const todayPct   = todayMax > 0 ? Math.round(todayUnits/todayMax*100) : 0;
-  document.getElementById('mini-bar').style.width = todayPct + '%';
-  document.getElementById('mini-count').textContent = todayUnits + ' / ' + todayMax + ' units';
-  document.getElementById('bs-today').textContent = todayUnits;
-  document.getElementById('bs-week').textContent  = weekUnits;
-  document.getElementById('bs-pct').textContent   = todayPct + '%';
+// set dates
+const DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const dayNames=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const now=new Date();
+const todayJSDay=now.getDay(); // 0=Sun
+const dayMap=[6,0,1,2,3,4,5];
+const todayIdx=dayMap[todayJSDay];
+
+// compute date for each day panel relative to today
+for(let d=0;d<7;d++){
+  const diff=d-todayIdx;
+  const dt=new Date(now); dt.setDate(now.getDate()+diff);
+  const el=document.getElementById('dh-date-'+d);
+  if(el) el.textContent=dt.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
 }
 
-// Navigate to day
-function goToDay(d) {
-  currentDay = d;
-  document.getElementById('swipe-track').style.transform = 'translateX(-' + (d * (100/7)) + '%)';
-  document.querySelectorAll('.day-tab').forEach((t,i) => t.classList.toggle('active', i===d));
-  // scroll tab into view
-  const tab = document.querySelector('.day-tab[data-day="' + d + '"]');
-  tab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+// set top date
+const dr=document.getElementById('date-row');
+if(dr) dr.textContent=now.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+function updateAll(){
+  const totalDone=Object.keys(state).length;
+  const totalUnits=totalDone*UNITS;
+  const totalPct=Math.round(totalUnits/MAX_2M*100);
+
+  for(let d=0;d<7;d++){
+    const done=dayDone[d], tot=dayTotal[d];
+    const units=done*UNITS, maxU=tot*UNITS;
+    const pct=tot>0?Math.round(done/tot*100):0;
+
+    // day hero
+    setTxt('d-done-'+d,done);
+    setTxt('d-total-'+d,tot);
+    setTxt('d-units-'+d,units);
+    setTxt('d-pct-'+d,pct+'%');
+    setStyle('dh-bar-'+d,'width',pct+'%');
+
+    // tab
+    setTxt('tp-'+d,pct+'%');
+    const tab=document.querySelector('.day-tab[data-d="'+d+'"]');
+    if(tab){ tab.classList.toggle('full',pct===100); tab.classList.toggle('active',d===cur); }
+
+    // day summary (on each panel)
+    setTxt('ds-done-'+d,done);
+    setTxt('ds-units-'+d,units);
+    setTxt('ds-max-'+d,maxU);
+    setStyle('ds-bar-'+d,'width',pct+'%');
+    setTxt('ds-pct-'+d,pct+'% complete');
+
+    // total card (on each panel)
+    ['tc-done-','tc-units-','tc-pct-','tc-bar-','tc-sub-'].forEach(p=>{
+      const el=document.getElementById(p+d);
+      if(!el) return;
+      if(p==='tc-done-') el.textContent=totalDone;
+      else if(p==='tc-units-') el.textContent=totalUnits;
+      else if(p==='tc-pct-') el.textContent=totalPct+'%';
+      else if(p==='tc-bar-') el.style.width=totalPct+'%';
+      else if(p==='tc-sub-') el.textContent=totalUnits.toLocaleString()+' / 12,800 units';
+    });
+
+    // week view bars
+    setTxt('ww-'+d,units);
+    setStyle('wb-'+d,'height',pct+'%');
+
+    // mini bars in sunday total card
+    setStyle('tw-'+d,'height',pct+'%');
+    setTxt('tw-p'+d,pct+'%');
+  }
+
+  // week panel totals
+  setTxt('wt-done',totalDone);
+  setTxt('wt-units',totalUnits);
+  setTxt('wt-pct',totalPct+'%');
+  setStyle('wt-bar','width',totalPct+'%');
+  setTxt('wt-sub',totalUnits.toLocaleString()+' / 12,800 units');
+
+  // top progress bar (today)
+  const tUnits=dayDone[cur]*UNITS, tMax=dayTotal[cur]*UNITS;
+  const tPct=tMax>0?Math.round(tUnits/tMax*100):0;
+  setStyle('pr-bar','width',tPct+'%');
+  setTxt('pr-count',tUnits+' / '+tMax+' units');
+}
+
+function setTxt(id,v){ const el=document.getElementById(id); if(el) el.textContent=v; }
+function setStyle(id,prop,v){ const el=document.getElementById(id); if(el) el.style[prop]=v; }
+
+function goTo(d){
+  cur=d;
+  document.getElementById('track').style.transform='translateX(-'+(d*(100/7))+'%)';
+  document.querySelectorAll('.day-tab').forEach((t,i)=>t.classList.toggle('active',i===d));
+  const tab=document.querySelector('.day-tab[data-d="'+d+'"]');
+  if(tab) tab.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+  updateAll();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function prevDay(){ if(cur>0) goTo(cur-1); }
+function nextDay(){ if(cur<6) goTo(cur+1); }
+
+function toggleWeek(){
+  showWeek=!showWeek;
+  document.getElementById('week-panel').classList.toggle('on',showWeek);
+  document.getElementById('page').style.display=showWeek?'none':'block';
+  document.getElementById('wbtn').textContent=showWeek?'← Day':'📊 Week';
   updateAll();
 }
 
-// Touch / swipe
-let startX = 0, startY = 0, isDragging = false;
-const track = document.getElementById('swipe-track');
-
-track.addEventListener('touchstart', e => {
-  startX = e.touches[0].clientX;
-  startY = e.touches[0].clientY;
-  isDragging = true;
-}, { passive: true });
-
-track.addEventListener('touchend', e => {
-  if (!isDragging) return;
-  isDragging = false;
-  const dx = e.changedTouches[0].clientX - startX;
-  const dy = e.changedTouches[0].clientY - startY;
-  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
-    if (dx < 0 && currentDay < 6) goToDay(currentDay + 1);
-    if (dx > 0 && currentDay > 0) goToDay(currentDay - 1);
+// touch swipe
+let sx=0,sy=0;
+document.getElementById('track').addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
+document.getElementById('track').addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>40){
+    if(dx<0&&cur<6) goTo(cur+1);
+    if(dx>0&&cur>0) goTo(cur-1);
   }
-}, { passive: true });
+},{passive:true});
 
-// Auto-jump to today's day
-const todayNum = new Date().getDay(); // 0=Sun
-const dayMap = [6,0,1,2,3,4,5]; // map JS day to Mon=0
-goToDay(dayMap[todayNum]);
+// reset
+function confirmReset(){
+  if(confirm('Reset ALL progress? Cannot be undone.')){
+    localStorage.removeItem(SK); state={};
+    document.querySelectorAll('.task-card.done').forEach(c=>c.classList.remove('done'));
+    for(let d=0;d<7;d++) dayDone[d]=0;
+    updateAll();
+  }
+}
 
-// Set today's date
-const now = new Date();
-document.getElementById('today-date').textContent = now.toLocaleDateString('en-IN', { weekday:'short', day:'numeric', month:'short' });
-
+// start on today
+goTo(todayIdx);
 updateAll();
 </script>
 </body>
