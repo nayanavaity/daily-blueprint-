@@ -178,7 +178,7 @@ body{font-family:'Mulish',sans-serif;background:#F0F0F0;color:#111;-webkit-font-
   </div>
   <div class="date-row" id="date-row">Loading...</div>
   <div style="padding:0 16px 8px;display:flex;gap:6px;">
-  <a href="https://calendar.google.com" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#4285F4;color:#fff;border-radius:10px;padding:8px 0;font-size:12px;font-weight:800;font-family:Mulish,sans-serif;text-decoration:none;">&#128197; Google Calendar</a>
+  <a href="https://calendar.google.com" target="_blank" rel="noopener noreferrer" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#4285F4;color:#fff;border-radius:10px;padding:8px 0;font-size:12px;font-weight:800;font-family:Mulish,sans-serif;text-decoration:none;">&#128197; Google Calendar</a>
   <a href="calshow://" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#FF3B30;color:#fff;border-radius:10px;padding:8px 0;font-size:12px;font-weight:800;font-family:Mulish,sans-serif;text-decoration:none;">&#128247; iPhone Calendar</a>
 </div>
 <div class="progress-row">
@@ -566,16 +566,20 @@ body{font-family:'Mulish',sans-serif;background:#F0F0F0;color:#111;-webkit-font-
 <div class="overlay" id="sync-popup">
   <div class="popup">
     <div class="ph"></div>
-    <div class="pt">Sync from Google Calendar</div>
-    <div class="ps">Open your calendar, copy a meeting link, then paste it here</div>
-    <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+    <div class="pt">Google Calendar Sync</div>
+    <div class="ps">For GitHub Pages: connect your published Google Calendar ICS feed, then tap Pull Latest whenever you add a new event in Google Calendar.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;">
       <button onclick="window.open('https://calendar.google.com','_blank')" style="padding:14px;background:#4285F4;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">Open Google Calendar</button>
-      <button onclick="openAddFromSync()" style="padding:14px;background:#111;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">Paste Meeting Link Here</button>
-      <button onclick="window.open('https://mail.google.com','_blank')" style="padding:14px;background:#EA4335;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">Open Gmail for Invites</button>
-      <div style="background:#EFF6FF;border-radius:10px;padding:12px;font-size:12px;font-weight:600;color:#1D4ED8;line-height:1.6;">
-        Tip: Set up Pabbly Connect to auto-detect Zoom/Meet links in Gmail and send them here automatically.
-      </div>
-      <button onclick="closeSyncPopup()" style="padding:12px;background:#f5f5f5;color:#111;border:none;border-radius:12px;font-size:14px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">Close</button>
+      <button onclick="window.open('https://calendar.google.com/calendar/u/0/r/settings/export','_blank')" style="padding:14px;background:#0F9D58;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">Get ICS Feed</button>
+    </div>
+    <div class="pf"><label>Google Calendar ICS / public feed URL</label><input type="url" id="calendar-feed-url" placeholder="https://calendar.google.com/calendar/ical/.../public/basic.ics"></div>
+    <div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end;">
+      <div class="pf" style="margin:0;"><label>Sync Status</label><input type="text" id="calendar-sync-status" value="Not connected" readonly></div>
+      <button onclick="manualRefreshCalendar()" style="padding:14px;background:#111827;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">Pull Latest</button>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:10px;">
+      <button class="p-save" onclick="connectCalendarFeed()">Connect Feed</button>
+      <button class="p-cancel" onclick="closeSyncPopup()">Close</button>
     </div>
   </div>
 </div>
@@ -594,6 +598,97 @@ try{ var s=localStorage.getItem(SK); if(s) state=JSON.parse(s); }catch(e){}
 try{ var m=localStorage.getItem(MK); if(m) meetings=JSON.parse(m); }catch(e){}
 function saveState(){ try{localStorage.setItem(SK,JSON.stringify(state));}catch(e){} }
 function saveMeetings(){ try{localStorage.setItem(MK,JSON.stringify(meetings));}catch(e){} }
+var CK='nayana_calendar_sync_v1';
+var calendarSync={feedUrl:'',lastSyncAt:'',connected:false};
+try{ var c=localStorage.getItem(CK); if(c) calendarSync=Object.assign(calendarSync,JSON.parse(c)); }catch(e){}
+function saveCalendarSync(){ try{localStorage.setItem(CK,JSON.stringify(calendarSync));}catch(e){} updateCalendarSyncStatus(); }
+function updateCalendarSyncStatus(){
+  var el=document.getElementById('calendar-sync-status'); if(!el) return;
+  if(calendarSync.connected && calendarSync.feedUrl){ el.value='Connected · '+(calendarSync.lastSyncAt?('Last sync '+calendarSync.lastSyncAt):'Ready to pull'); }
+  else { el.value='Not connected'; }
+}
+function connectCalendarFeed(){
+  var input=document.getElementById('calendar-feed-url');
+  var url=(input&&input.value||'').trim();
+  if(!url){ showToast('Paste your Google Calendar ICS feed URL first.'); return; }
+  calendarSync.feedUrl=url; calendarSync.connected=true; saveCalendarSync();
+  showToast('Calendar feed connected. Now tap Pull Latest after new Google Calendar events.');
+}
+function parseICSDate(raw){
+  if(!raw) return null; raw=raw.trim();
+  if(/^\d{8}$/.test(raw)){ return new Date(raw.slice(0,4)+'-'+raw.slice(4,6)+'-'+raw.slice(6,8)+'T00:00:00'); }
+  if(/^\d{8}T\d{6}Z$/.test(raw)){ return new Date(raw.slice(0,4)+'-'+raw.slice(4,6)+'-'+raw.slice(6,8)+'T'+raw.slice(9,11)+':'+raw.slice(11,13)+':'+raw.slice(13,15)+'Z'); }
+  if(/^\d{8}T\d{6}$/.test(raw)){ return new Date(raw.slice(0,4)+'-'+raw.slice(4,6)+'-'+raw.slice(6,8)+'T'+raw.slice(9,11)+':'+raw.slice(11,13)+':'+raw.slice(13,15)); }
+  var d=new Date(raw); return isNaN(d)?null:d;
+}
+function unfoldICS(text){ return text.replace(/\r\n[ \t]/g,'').replace(/\n[ \t]/g,''); }
+function parseICS(ics){
+  ics=unfoldICS(ics||'');
+  var blocks=ics.split('BEGIN:VEVENT').slice(1);
+  return blocks.map(function(block){
+    var seg=block.split('END:VEVENT')[0]||'';
+    function pick(prefix){
+      var line=seg.split(/\r?\n/).find(function(l){ return l.indexOf(prefix)===0; });
+      return line?line.substring(line.indexOf(':')+1).trim():'';
+    }
+    var startLine=(seg.match(/DTSTART[^:]*:(.+)/)||[])[1]||'';
+    var endLine=(seg.match(/DTEND[^:]*:(.+)/)||[])[1]||'';
+    var desc=pick('DESCRIPTION');
+    var loc=pick('LOCATION');
+    return {
+      uid: pick('UID') || ('evt_'+Math.random().toString(36).slice(2)),
+      title: pick('SUMMARY') || 'Calendar Event',
+      description: desc.replace(/\\n/g,'\n'),
+      location: loc.replace(/\\n/g,'\n'),
+      start: parseICSDate(startLine),
+      end: parseICSDate(endLine) || null
+    };
+  }).filter(function(evt){ return evt.start; });
+}
+function formatInputDateTimeLocal(dt){ var p=function(n){return String(n).padStart(2,'0')}; return dt.getFullYear()+'-'+p(dt.getMonth()+1)+'-'+p(dt.getDate())+'T'+p(dt.getHours())+':'+p(dt.getMinutes()); }
+function extractMeetingLink(text){ var m=String(text||'').match(/https?:\/\/[^\s]+/i); return m?m[0]:''; }
+function addOrUpdateMeetingFromCalendar(evt){
+  var dt=evt.start; if(!dt) return false;
+  var when=formatInputDateTimeLocal(dt);
+  var existing=meetings.find(function(m){ return m.sourceUid===evt.uid; });
+  var payload={
+    title: evt.title || 'Calendar Event',
+    datetime: when,
+    platform: 'other',
+    link: extractMeetingLink((evt.description||'')+' '+(evt.location||'')),
+    day: DAYS[dt.getDay()===0?6:dt.getDay()-1],
+    notes: ((evt.location||'') + ((evt.description||'') ? ('\n'+evt.description) : '')).trim(),
+    source: 'google',
+    sourceUid: evt.uid
+  };
+  if(existing){ Object.assign(existing,payload); return true; }
+  meetings.push(payload); return true;
+}
+async function manualRefreshCalendar(){
+  if(!calendarSync.feedUrl){ showToast('Connect a calendar feed first.'); return; }
+  try{
+    var res=await fetch(calendarSync.feedUrl,{cache:'no-store'});
+    if(!res.ok) throw new Error('Feed fetch failed');
+    var txt=await res.text();
+    var events=parseICS(txt);
+    var now=new Date();
+    var horizon=new Date(); horizon.setDate(now.getDate()+62);
+    var changed=0;
+    events.forEach(function(evt){ if(evt.start>=now && evt.start<=horizon){ if(addOrUpdateMeetingFromCalendar(evt)) changed++; } });
+    saveMeetings();
+    calendarSync.lastSyncAt=new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}); saveCalendarSync();
+    if(typeof renderMeetings==='function') renderMeetings();
+    if(typeof renderAll==='function') renderAll();
+    showToast(changed ? ('Pulled '+changed+' calendar event(s).') : 'Calendar checked. No matching new events.');
+  }catch(err){
+    console.error(err);
+    showToast('Could not pull Google Calendar feed. Make sure the ICS URL is public.');
+  }
+}
+setTimeout(function(){
+  var input=document.getElementById('calendar-feed-url'); if(input && calendarSync.feedUrl) input.value=calendarSync.feedUrl;
+  updateCalendarSyncStatus();
+},800);
 
 // Init task cards
 document.querySelectorAll('.task-card[data-task]').forEach(function(card){
@@ -793,7 +888,7 @@ function saveMeeting(){
     day:parseInt(document.getElementById('pm-day').value)
   };
   meetings.push(m); saveMeetings(); renderAllMeetings(); closeAddPopup();
-  showToast('Saved! Tap Add to Cal to add to Google Calendar.');
+  showToast('Saved! It is in dashboard now, and you can still push it to Google Calendar.');
   setTimeout(function(){ addToGCal(meetings.length-1); }, 600);
 }
 
