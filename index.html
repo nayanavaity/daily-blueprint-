@@ -673,6 +673,9 @@ var meetings=[];
 var state={};
 try{ var s=localStorage.getItem(SK); if(s) state=JSON.parse(s); }catch(e){}
 try{ var m=localStorage.getItem(MK); if(m) meetings=JSON.parse(m); }catch(e){}
+// Strip stale GCal events on load — fresh fetch will repopulate
+meetings=meetings.filter(function(x){ return !x.fromGCal; });
+saveMeetings();
 var syncUrl=''; try{ syncUrl=localStorage.getItem(SYNCK)||''; }catch(e){}
 
 function saveState(){ try{localStorage.setItem(SK,JSON.stringify(state));}catch(e){} }
@@ -798,21 +801,33 @@ function saveSlots(){ try{localStorage.setItem(SLOT_KEY,JSON.stringify(slotRepla
 // Apply saved slot replacements on load — only if meeting still exists in current gcal data
 function restoreSavedSlots(){
   var validKeys=[];
+  // Clear existing visual replacements first
+  document.querySelectorAll('.slot-replacement').forEach(function(el){ el.remove(); });
+  document.querySelectorAll('.task-card[data-slot-hidden]').forEach(function(c){
+    c.removeAttribute('data-slot-hidden'); c.style.display='';
+  });
+
   Object.keys(slotReplacements).forEach(function(key){
     var m=slotReplacements[key];
     if(!m) return;
-    // Check if this gcal event still exists in meetings
-    var stillExists=meetings.some(function(me){
-      return me.fromGCal && me.title===m.title && me.dt===m.dt;
-    });
-    // Also allow manually added (non-gcal) slot replacements
-    if(!m.fromGCal) stillExists=true;
+    var stillExists=false;
+    if(!m.fromGCal){
+      // Manually added slots always persist
+      stillExists=true;
+    } else {
+      // GCal slots only persist if that event still exists after latest fetch
+      stillExists=meetings.some(function(me){
+        return me.fromGCal &&
+               me.title===m.title &&
+               me.dt===m.dt;
+      });
+    }
     if(stillExists){
       replaceSlotWithEvent(m);
       validKeys.push(key);
     }
   });
-  // Prune stale slot replacements
+  // Remove stale slots
   Object.keys(slotReplacements).forEach(function(key){
     if(validKeys.indexOf(key)===-1) delete slotReplacements[key];
   });
@@ -1074,19 +1089,11 @@ function pullLatest(){
   var P2='https://corsproxy.io/?';
   updateSyncStatus('Syncing from Google Calendar...');
   showToast('Fetching Google Calendar...');
-  // ALWAYS wipe all previous gcal events before fresh fetch
-  // This ensures events deleted from Google Calendar disappear from dashboard too
+  // Wipe old gcal meetings - will re-fetch fresh ones
   meetings=meetings.filter(function(m){ return !m.fromGCal; });
   saveMeetings();
-  // Also clear any slot replacements so stale ones don't show
-  slotReplacements={};
-  saveSlots();
-  // Remove visual slot replacements
-  document.querySelectorAll('.slot-replacement').forEach(function(el){ el.remove(); });
-  // Restore any hidden task cards
-  document.querySelectorAll('.task-card[data-slot-hidden]').forEach(function(c){
-    c.removeAttribute('data-slot-hidden'); c.style.display='';
-  });
+  // Keep slot replacements backup - we'll validate after fetch
+  var slotsBackup=JSON.parse(JSON.stringify(slotReplacements));
   function tryFetch(url){
     return fetch(url,{cache:'no-store'}).then(function(r){
       if(!r.ok) throw new Error('fail');
@@ -1118,8 +1125,10 @@ function pullLatest(){
     updateSyncStatus('Synced at '+ts+' · '+added+' event(s) from Google Calendar');
     showToast(added>0?added+' new event(s) from Google Calendar added!':'No new events found (dashboard tasks filtered out).');
     if(!window._gcalTimer) window._gcalTimer=setInterval(pullLatest,5*60*1000);
-  // Restore slot replacements only for events that still exist
-  setTimeout(function(){ restoreSavedSlots(); }, 300);
+  // Validate and restore slot replacements
+  slotReplacements=slotsBackup||{};
+  saveSlots();
+  setTimeout(function(){ restoreSavedSlots(); }, 200);
   }
   tryFetch(P1+encodeURIComponent(ICAL+'?nocache='+Date.now()))
     .then(processICS)
