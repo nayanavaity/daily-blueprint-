@@ -144,7 +144,7 @@ body{font-family:'Mulish',sans-serif;background:#F0F0F0;color:#111;-webkit-font-
 .wk-day{font-size:9px;font-weight:800;color:#aaa;text-transform:uppercase;}
 
 /* POPUP */
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:998;justify-content:flex-end;flex-direction:column;align-items:center;-webkit-overflow-scrolling:touch;touch-action:manipulation;}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:998;justify-content:flex-end;flex-direction:column;align-items:center;}
 .overlay.on{display:flex;}
 .popup{background:#fff;border-radius:22px 22px 0 0;padding:22px 18px 32px;width:100%;max-width:500px;animation:su 0.3s ease;}
 @keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
@@ -172,15 +172,14 @@ body{font-family:'Mulish',sans-serif;background:#F0F0F0;color:#111;-webkit-font-
     <h1>Nayana's Blueprint</h1>
     <div class="top-btns">
       <button class="hbtn" onclick="toggleWeek()">Week</button>
-      <a href="https://calendar.google.com" target="_blank" rel="noopener noreferrer" class="hbtn" style="text-decoration:none;">&#128197; Cal</a>
-      <button class="hbtn" onclick="openSyncPopup()">Sync</button>
+      <a href="https://calendar.google.com" target="_blank" class="hbtn" style="text-decoration:none;">&#128197; Cal</a>
       <button class="hbtn" onclick="confirmReset()">Reset</button>
     </div>
   </div>
   <div class="date-row" id="date-row">Loading...</div>
+  <div style="padding:0 16px 8px;color:#bdbdbd;font-size:12px;font-weight:800;" id="range-row">2-month timetable loading...</div>
   <div style="padding:0 16px 8px;display:flex;gap:6px;">
-  <a href="https://calendar.google.com" target="_blank" rel="noopener noreferrer" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#4285F4;color:#fff;border-radius:10px;padding:8px 0;font-size:12px;font-weight:800;font-family:Mulish,sans-serif;text-decoration:none;">&#128197; Google Calendar</a>
-  <button onclick="openSyncPopup()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#111827;color:#fff;border:none;border-radius:10px;padding:8px 0;font-size:12px;font-weight:800;font-family:Mulish,sans-serif;cursor:pointer;">&#10227; Sync</button>
+  <a href="https://calendar.google.com" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#4285F4;color:#fff;border-radius:10px;padding:8px 0;font-size:12px;font-weight:800;font-family:Mulish,sans-serif;text-decoration:none;">&#128197; Google Calendar</a>
   <a href="calshow://" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#FF3B30;color:#fff;border-radius:10px;padding:8px 0;font-size:12px;font-weight:800;font-family:Mulish,sans-serif;text-decoration:none;">&#128247; iPhone Calendar</a>
 </div>
 <div class="progress-row">
@@ -569,19 +568,24 @@ body{font-family:'Mulish',sans-serif;background:#F0F0F0;color:#111;-webkit-font-
   <div class="popup">
     <div class="ph"></div>
     <div class="pt">Google Calendar Sync</div>
-    <div class="ps">For GitHub Pages: connect your published Google Calendar ICS feed, then tap Pull Latest whenever you add a new event in Google Calendar.</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;">
-      <button onclick="window.open('https://calendar.google.com','_blank')" style="padding:14px;background:#4285F4;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">Open Google Calendar</button>
-      <button onclick="window.open('https://calendar.google.com/calendar/u/0/r/settings/export','_blank')" style="padding:14px;background:#0F9D58;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">Get ICS Feed</button>
+    <div class="ps">For GitHub Pages: connect your Apps Script web app URL, then tap Pull Latest whenever you add a new event in Google Calendar.</div>
+    <div style="display:flex;gap:10px;margin-top:10px;">
+      <button onclick="window.open('https://calendar.google.com','_blank')" style="flex:1;padding:14px;background:#4285F4;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">Open Google Calendar</button>
+      <button onclick="window.open('https://script.google.com','_blank')" style="flex:1;padding:14px;background:#16A34A;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">Open Apps Script</button>
     </div>
-    <div class="pf"><label>Google Calendar ICS / public feed URL</label><input type="url" id="calendar-feed-url" placeholder="https://calendar.google.com/calendar/ical/.../public/basic.ics"></div>
-    <div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end;">
-      <div class="pf" style="margin:0;"><label>Sync Status</label><input type="text" id="calendar-sync-status" value="Not connected" readonly></div>
-      <button onclick="manualRefreshCalendar()" style="padding:14px;background:#111827;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">Pull Latest</button>
+    <div style="margin-top:12px;">
+      <div style="font-size:11px;font-weight:900;letter-spacing:.8px;color:#555;margin-bottom:6px;">GOOGLE CALENDAR ICS / PUBLIC FEED URL</div>
+      <input id="sync-url" type="url" placeholder="Paste Apps Script /exec URL here" style="width:100%;padding:14px 16px;border-radius:14px;border:1px solid #ddd;background:#F7F7F7;font-size:14px;font-weight:700;font-family:'Mulish',sans-serif;color:#111;outline:none;" />
     </div>
-    <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:10px;">
-      <button class="p-save" onclick="connectCalendarFeed()">Connect Feed</button>
-      <button class="p-cancel" onclick="closeSyncPopup()">Close</button>
+    <div style="margin-top:12px;">
+      <div style="font-size:11px;font-weight:900;letter-spacing:.8px;color:#555;margin-bottom:6px;">SYNC STATUS</div>
+      <div id="sync-status" style="padding:14px 16px;border-radius:14px;background:#F7F7F7;border:1px solid #e5e5e5;font-size:14px;font-weight:700;color:#333;">Not connected</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;">
+      <button onclick="connectFeed()" style="padding:14px;background:#111827;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">Connect Feed</button>
+      <button onclick="pullLatest()" style="padding:14px;background:#0F172A;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">Pull Latest</button>
+      <button onclick="openAddFromSync()" style="padding:12px;background:#F3F4F6;color:#111;border:none;border-radius:12px;font-size:14px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">Paste Meeting Link</button>
+      <button onclick="closeSyncPopup()" style="padding:12px;background:#F3F4F6;color:#111;border:none;border-radius:12px;font-size:14px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">Close</button>
     </div>
   </div>
 </div>
@@ -590,7 +594,7 @@ body{font-family:'Mulish',sans-serif;background:#F0F0F0;color:#111;-webkit-font-
 <div class="toast" id="toast"></div>
 
 <script>
-var UNITS=20, MAX2M=12800, SK='nv3', MK='nm2';
+var UNITS=20, MAX2M=12800, SK='nv3', MK='nm2', SYNCK='ngcal_sync_url_v1';
 var cur=0, showWeek=false;
 var dayDone=[0,0,0,0,0,0,0], dayTotal=[0,0,0,0,0,0,0];
 var state={}, meetings=[];
@@ -598,99 +602,9 @@ var state={}, meetings=[];
 // Load state
 try{ var s=localStorage.getItem(SK); if(s) state=JSON.parse(s); }catch(e){}
 try{ var m=localStorage.getItem(MK); if(m) meetings=JSON.parse(m); }catch(e){}
+var syncUrl=''; try{ syncUrl=localStorage.getItem(SYNCK)||''; }catch(e){}
 function saveState(){ try{localStorage.setItem(SK,JSON.stringify(state));}catch(e){} }
 function saveMeetings(){ try{localStorage.setItem(MK,JSON.stringify(meetings));}catch(e){} }
-var CK='nayana_calendar_sync_v1';
-var calendarSync={feedUrl:'',lastSyncAt:'',connected:false};
-try{ var c=localStorage.getItem(CK); if(c) calendarSync=Object.assign(calendarSync,JSON.parse(c)); }catch(e){}
-function saveCalendarSync(){ try{localStorage.setItem(CK,JSON.stringify(calendarSync));}catch(e){} updateCalendarSyncStatus(); }
-function updateCalendarSyncStatus(){
-  var el=document.getElementById('calendar-sync-status'); if(!el) return;
-  if(calendarSync.connected && calendarSync.feedUrl){ el.value='Connected · '+(calendarSync.lastSyncAt?('Last sync '+calendarSync.lastSyncAt):'Ready to pull'); }
-  else { el.value='Not connected'; }
-}
-function connectCalendarFeed(){
-  var input=document.getElementById('calendar-feed-url');
-  var url=(input&&input.value||'').trim();
-  if(!url){ showToast('Paste your Google Calendar ICS feed URL first.'); return; }
-  calendarSync.feedUrl=url; calendarSync.connected=true; saveCalendarSync();
-  showToast('Calendar feed connected. Now tap Pull Latest after new Google Calendar events.');
-}
-function parseICSDate(raw){
-  if(!raw) return null; raw=raw.trim();
-  if(/^\d{8}$/.test(raw)){ return new Date(raw.slice(0,4)+'-'+raw.slice(4,6)+'-'+raw.slice(6,8)+'T00:00:00'); }
-  if(/^\d{8}T\d{6}Z$/.test(raw)){ return new Date(raw.slice(0,4)+'-'+raw.slice(4,6)+'-'+raw.slice(6,8)+'T'+raw.slice(9,11)+':'+raw.slice(11,13)+':'+raw.slice(13,15)+'Z'); }
-  if(/^\d{8}T\d{6}$/.test(raw)){ return new Date(raw.slice(0,4)+'-'+raw.slice(4,6)+'-'+raw.slice(6,8)+'T'+raw.slice(9,11)+':'+raw.slice(11,13)+':'+raw.slice(13,15)); }
-  var d=new Date(raw); return isNaN(d)?null:d;
-}
-function unfoldICS(text){ return text.replace(/\r\n[ \t]/g,'').replace(/\n[ \t]/g,''); }
-function parseICS(ics){
-  ics=unfoldICS(ics||'');
-  var blocks=ics.split('BEGIN:VEVENT').slice(1);
-  return blocks.map(function(block){
-    var seg=block.split('END:VEVENT')[0]||'';
-    function pick(prefix){
-      var line=seg.split(/\r?\n/).find(function(l){ return l.indexOf(prefix)===0; });
-      return line?line.substring(line.indexOf(':')+1).trim():'';
-    }
-    var startLine=(seg.match(/DTSTART[^:]*:(.+)/)||[])[1]||'';
-    var endLine=(seg.match(/DTEND[^:]*:(.+)/)||[])[1]||'';
-    var desc=pick('DESCRIPTION');
-    var loc=pick('LOCATION');
-    return {
-      uid: pick('UID') || ('evt_'+Math.random().toString(36).slice(2)),
-      title: pick('SUMMARY') || 'Calendar Event',
-      description: desc.replace(/\\n/g,'\n'),
-      location: loc.replace(/\\n/g,'\n'),
-      start: parseICSDate(startLine),
-      end: parseICSDate(endLine) || null
-    };
-  }).filter(function(evt){ return evt.start; });
-}
-function formatInputDateTimeLocal(dt){ var p=function(n){return String(n).padStart(2,'0')}; return dt.getFullYear()+'-'+p(dt.getMonth()+1)+'-'+p(dt.getDate())+'T'+p(dt.getHours())+':'+p(dt.getMinutes()); }
-function extractMeetingLink(text){ var m=String(text||'').match(/https?:\/\/[^\s]+/i); return m?m[0]:''; }
-function addOrUpdateMeetingFromCalendar(evt){
-  var dt=evt.start; if(!dt) return false;
-  var when=formatInputDateTimeLocal(dt);
-  var existing=meetings.find(function(m){ return m.sourceUid===evt.uid; });
-  var payload={
-    title: evt.title || 'Calendar Event',
-    datetime: when,
-    platform: 'other',
-    link: extractMeetingLink((evt.description||'')+' '+(evt.location||'')),
-    day: DAYS[dt.getDay()===0?6:dt.getDay()-1],
-    notes: ((evt.location||'') + ((evt.description||'') ? ('\n'+evt.description) : '')).trim(),
-    source: 'google',
-    sourceUid: evt.uid
-  };
-  if(existing){ Object.assign(existing,payload); return true; }
-  meetings.push(payload); return true;
-}
-async function manualRefreshCalendar(){
-  if(!calendarSync.feedUrl){ showToast('Connect a calendar feed first.'); return; }
-  try{
-    var res=await fetch(calendarSync.feedUrl,{cache:'no-store'});
-    if(!res.ok) throw new Error('Feed fetch failed');
-    var txt=await res.text();
-    var events=parseICS(txt);
-    var now=new Date();
-    var horizon=new Date(); horizon.setDate(now.getDate()+62);
-    var changed=0;
-    events.forEach(function(evt){ if(evt.start>=now && evt.start<=horizon){ if(addOrUpdateMeetingFromCalendar(evt)) changed++; } });
-    saveMeetings();
-    calendarSync.lastSyncAt=new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}); saveCalendarSync();
-    if(typeof renderMeetings==='function') renderMeetings();
-    if(typeof renderAll==='function') renderAll();
-    showToast(changed ? ('Pulled '+changed+' calendar event(s).') : 'Calendar checked. No matching new events.');
-  }catch(err){
-    console.error(err);
-    showToast('Could not pull Google Calendar feed. Make sure the ICS URL is public.');
-  }
-}
-setTimeout(function(){
-  var input=document.getElementById('calendar-feed-url'); if(input && calendarSync.feedUrl) input.value=calendarSync.feedUrl;
-  updateCalendarSyncStatus();
-},800);
 
 // Init task cards
 document.querySelectorAll('.task-card[data-task]').forEach(function(card){
@@ -723,6 +637,8 @@ for(var d=0;d<7;d++){
 }
 var dr=document.getElementById('date-row');
 if(dr) dr.textContent=now.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+var rr=document.getElementById('range-row');
+if(rr){ var end2=new Date(now); end2.setDate(now.getDate()+62); rr.textContent='2-month timetable: '+now.toLocaleDateString('en-IN',{day:'numeric',month:'short'})+' - '+end2.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}); }
 
 function setText(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; }
 function setW(id,v){ var e=document.getElementById(id); if(e) e.style.width=v; }
@@ -871,17 +787,20 @@ document.getElementById('add-popup').addEventListener('click', function(e){
   if(e.target===this) closeAddPopup();
 });
 
-function openSyncPopup(){ document.getElementById('sync-popup').classList.add('on'); }
+function openSyncPopup(){ document.getElementById('sync-popup').classList.add('on'); setTimeout(function(){ var i=document.getElementById('sync-url'); if(i){ i.value=syncUrl||''; } updateSyncStatus(syncUrl?'Connected · Ready to pull':'Not connected'); }, 30); }
 function closeSyncPopup(){ document.getElementById('sync-popup').classList.remove('on'); }
+function updateSyncStatus(msg){ var el=document.getElementById('sync-status'); if(el) el.textContent=msg; }
+function connectFeed(){ var i=document.getElementById('sync-url'); var v=i?String(i.value||'').trim():''; if(!v){ toast('Paste your Apps Script /exec URL first'); return; } syncUrl=v; try{ localStorage.setItem(SYNCK, syncUrl); }catch(e){} updateSyncStatus('Connected · Ready to pull'); toast('Feed connected'); }
+function sameMeeting(a,b){ return (a.dt&&b.dt&&a.dt===b.dt&&a.title===b.title) || (a.link&&b.link&&a.link===b.link); }
+function inferPlatform(link){ if(!link) return 'general'; if(link.indexOf('zoom.us')>-1) return 'zoom'; if(link.indexOf('meet.google.com')>-1) return 'meet'; if(link.indexOf('teams.microsoft.com')>-1) return 'teams'; return 'general'; }
+function parseICSDate(v){ if(!v) return null; var m=v.match(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z$/); if(m) return new Date(Date.UTC(+m[1],+m[2]-1,+m[3],+m[4],+m[5],+m[6])); var m2=v.match(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})$/); if(m2) return new Date(+m2[1],+m2[2]-1,+m2[3],+m2[4],+m2[5],+m2[6]); var m3=v.match(/^(\d{4})(\d{2})(\d{2})$/); if(m3) return new Date(+m3[1],+m3[2]-1,+m3[3]); return null; }
+function decodeICS(val){ return String(val||'').replace(/\\n/g,'\n').replace(/\,/g,',').replace(/\;/g,';').replace(/\\/g,'\'); }
+function unfoldICS(text){ return String(text||'').replace(/\r\n[ 	]/g,'').replace(/\n[ 	]/g,''); }
+function parseICS(ics){ ics=unfoldICS(ics); var parts=ics.split('BEGIN:VEVENT'); var out=[]; for(var i=1;i<parts.length;i++){ var block=parts[i].split('END:VEVENT')[0]||''; var lines=block.split(/\r?\n/); var ev={}; lines.forEach(function(line){ var idx=line.indexOf(':'); if(idx<0) return; var key=line.slice(0,idx); var val=line.slice(idx+1); if(key.indexOf('DTSTART')===0) ev.dt=parseICSDate(val); else if(key==='SUMMARY') ev.title=decodeICS(val); else if(key==='DESCRIPTION') ev.description=decodeICS(val); else if(key==='LOCATION') ev.location=decodeICS(val); else if(key==='X-GOOGLE-CONFERENCE') ev.conf=decodeICS(val); }); var link=''; var src=(ev.description||'')+' '+(ev.location||'')+' '+(ev.conf||''); var m=src.match(/https?:\/\/[^\s]+/); if(m) link=m[0].replace(/\\n/g,''); if(ev.dt){ out.push({ title: ev.title||'Meeting', dt: ev.dt.toISOString(), link: link, plat: inferPlatform(link), notes: 'Synced from Google Calendar', day: 0 }); } } return out; }
+function pullLatest(){ if(!syncUrl){ toast('Connect feed first'); return; } updateSyncStatus('Pulling latest...'); fetch(syncUrl,{cache:'no-store'}).then(function(r){ return r.text(); }).then(function(txt){ if(!txt || txt.indexOf('BEGIN:VCALENDAR')===-1){ throw new Error('Invalid calendar response'); } var items=parseICS(txt); var now=new Date(); var end=new Date(); end.setDate(end.getDate()+62); var added=0; items.forEach(function(m){ var dt=new Date(m.dt); if(dt<now || dt>end) return; var jsDay=dt.getDay(); var map=[6,0,1,2,3,4,5]; m.day=map[jsDay]; var exists=meetings.some(function(x){ return sameMeeting(x,m); }); if(!exists){ meetings.push(m); added++; } }); saveMeetings(); renderAllMeetings(); updateSyncStatus('Last pull complete · '+added+' new event(s) added'); toast(added+' event(s) synced'); }).catch(function(){ updateSyncStatus('Pull failed'); toast('Could not pull Google Calendar feed. Check Apps Script /exec URL.'); }); }
 document.getElementById('sync-popup').addEventListener('click', function(e){
   if(e.target===this) closeSyncPopup();
 });
-function bindTouchPopupTrigger(el){ if(!el) return; el.addEventListener('touchend', function(e){ e.preventDefault(); openSyncPopup(); }, {passive:false}); }
-setTimeout(function(){
-  bindTouchPopupTrigger(document.querySelector('.top-btns .hbtn:nth-child(3)'));
-  var quickBtns=document.querySelectorAll('button');
-  quickBtns.forEach(function(btn){ if((btn.textContent||'').replace(/\s+/g,' ').trim()==='↳ Sync' || (btn.textContent||'').replace(/\s+/g,' ').trim()==='Sync'){ bindTouchPopupTrigger(btn); } });
-},300);
 function openAddFromSync(){ closeSyncPopup(); openAddPopup(cur); }
 
 function saveMeeting(){
@@ -896,7 +815,7 @@ function saveMeeting(){
     day:parseInt(document.getElementById('pm-day').value)
   };
   meetings.push(m); saveMeetings(); renderAllMeetings(); closeAddPopup();
-  showToast('Saved! It is in dashboard now, and you can still push it to Google Calendar.');
+  showToast('Saved! Tap Add to Cal to add to Google Calendar.');
   setTimeout(function(){ addToGCal(meetings.length-1); }, 600);
 }
 
