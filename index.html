@@ -800,38 +800,18 @@ function saveSlots(){ try{localStorage.setItem(SLOT_KEY,JSON.stringify(slotRepla
 
 // Apply saved slot replacements on load — only if meeting still exists in current gcal data
 function restoreSavedSlots(){
-  var validKeys=[];
   // Clear existing visual replacements first
   document.querySelectorAll('.slot-replacement').forEach(function(el){ el.remove(); });
   document.querySelectorAll('.task-card[data-slot-hidden]').forEach(function(c){
     c.removeAttribute('data-slot-hidden'); c.style.display='';
   });
-
+  // Always restore ALL saved slots unconditionally
+  // User explicitly chose these - we never auto-remove them
+  // Only removed when user taps Restore button
   Object.keys(slotReplacements).forEach(function(key){
     var m=slotReplacements[key];
-    if(!m) return;
-    var stillExists=false;
-    if(!m.fromGCal){
-      // Manually added slots always persist
-      stillExists=true;
-    } else {
-      // GCal slots only persist if that event still exists after latest fetch
-      stillExists=meetings.some(function(me){
-        return me.fromGCal &&
-               me.title===m.title &&
-               me.dt===m.dt;
-      });
-    }
-    if(stillExists){
-      replaceSlotWithEvent(m);
-      validKeys.push(key);
-    }
+    if(m && m.title && m.dt) replaceSlotWithEventSilent(m);
   });
-  // Remove stale slots
-  Object.keys(slotReplacements).forEach(function(key){
-    if(validKeys.indexOf(key)===-1) delete slotReplacements[key];
-  });
-  saveSlots();
 }
 
 // Init task cards with DATE-AWARE state
@@ -1129,7 +1109,7 @@ function pullLatest(){
     showToast(added>0?added+' new event(s) from Google Calendar added!':'No new events found (dashboard tasks filtered out).');
     if(!window._gcalTimer) window._gcalTimer=setInterval(pullLatest,5*60*1000);
   // Validate and restore slot replacements
-  // Restore slots — validate against freshly fetched meetings
+  // Restore all saved slots (user choices persist regardless of GCal changes)
   slotReplacements=slotsBackup||{};
   saveSlots();
   restoreSavedSlots();
@@ -1205,8 +1185,42 @@ function joinM(idx){
 function calById(id){
   var m=findById(id);
   if(!m){ showToast('Event not found.'); return; }
-  // Replace matching dashboard timeslot
+  // For manual events with no dt, prompt for time
+  if(!m.dt||m.dt===''){
+    var timeInput=prompt('Enter time for "'+m.title+'" (e.g. 11:00 AM or 14:00):');
+    if(!timeInput) return;
+    // Parse the time input
+    var today=new Date();
+    var parsed=parseTimeInput(timeInput, today);
+    if(!parsed){ showToast('Could not parse time. Try format: 11:00 AM'); return; }
+    m.dt=parsed.toISOString();
+    // Update in meetings array
+    var idx2=meetings.findIndex(function(x){ return String(x.id)===String(id); });
+    if(idx2>=0) meetings[idx2].dt=m.dt;
+    saveMeetings();
+  }
   replaceSlotWithEvent(m);
+}
+
+function parseTimeInput(str, baseDate){
+  str=str.trim().toUpperCase();
+  // Try "HH:MM AM/PM"
+  var m12=str.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/);
+  if(m12){
+    var h=parseInt(m12[1]); var min=parseInt(m12[2]); var ap=m12[3];
+    if(ap==='PM'&&h!==12) h+=12;
+    if(ap==='AM'&&h===12) h=0;
+    var d=new Date(baseDate); d.setHours(h,min,0,0); return d;
+  }
+  // Try "HH:MM" 24hr
+  var m24=str.match(/^(\d{1,2}):(\d{2})$/);
+  if(m24){
+    var d2=new Date(baseDate); d2.setHours(parseInt(m24[1]),parseInt(m24[2]),0,0); return d2;
+  }
+  // Try just hour "11"
+  var mh=str.match(/^(\d{1,2})$/);
+  if(mh){ var d3=new Date(baseDate); d3.setHours(parseInt(mh[1]),0,0,0); return d3; }
+  return null;
 }
 
 function replaceSlotWithEvent(m){
@@ -1245,13 +1259,19 @@ function replaceSlotWithEvent(m){
     next=next.nextElementSibling;
   }
 
-  // Remove any existing slot replacement
-  var existing=bestRow.parentElement.querySelectorAll('.slot-replacement');
-  existing.forEach(function(el){ el.remove(); });
-
-  // Restore hidden task card if any
-  var hidden=bestRow.parentElement.querySelectorAll('.task-card[data-slot-hidden]');
-  hidden.forEach(function(c){ c.removeAttribute('data-slot-hidden'); c.style.display=''; });
+  // Remove ONLY the slot replacement at THIS specific time-row (not all)
+  var nextSib=bestRow.nextElementSibling;
+  while(nextSib){
+    if(nextSib.classList&&nextSib.classList.contains('slot-replacement')){
+      nextSib.remove(); break;
+    }
+    if(nextSib.classList&&nextSib.classList.contains('time-row')) break;
+    nextSib=nextSib.nextElementSibling;
+  }
+  // Restore hidden task card at THIS specific slot only
+  if(taskCard&&taskCard.getAttribute('data-slot-hidden')){
+    taskCard.removeAttribute('data-slot-hidden'); taskCard.style.display='';
+  }
 
   // Build replacement card (styled like a task card but blue)
   var plat=m.plat||'general';
@@ -1323,11 +1343,104 @@ function replaceSlotWithEvent(m){
   } else {
     bestRow.insertAdjacentElement('afterend',div);
   }
-  // Persist slot replacement
+  // Persist slot replacement with full self-contained data
   var slotKey='slot_'+evtDayIdx+'_'+evtHour;
-  slotReplacements[slotKey]=m;
+  // Store complete snapshot so it restores even if meetings array changes
+  slotReplacements[slotKey]={
+    title: m.title,
+    dt: m.dt,
+    link: m.link||'',
+    plat: m.plat||'general',
+    notes: m.notes||'',
+    day: evtDayIdx,
+    fromGCal: false, // mark as user choice - always restore
+    _slotKey: slotKey
+  };
   saveSlots();
   showToast('"'+m.title+'" placed in '+timeStr+' slot!');
+}
+
+// Silent version for restoring saved slots on page load (no toast, no re-save)
+function replaceSlotWithEventSilent(m){
+  if(!m||!m.dt) return;
+  var evtDate=new Date(m.dt);
+  var evtHour=evtDate.getHours();
+  var evtMin=evtDate.getMinutes();
+  var h12=evtHour>12?evtHour-12:(evtHour===0?12:evtHour);
+  var ampm=evtHour>=12?'PM':'AM';
+  var timeStr=h12+':'+(evtMin<10?'0':'')+evtMin+' '+ampm;
+  var dayMap=[6,0,1,2,3,4,5];
+  var evtDayIdx=m.day!==undefined?m.day:dayMap[evtDate.getDay()];
+  var panel=document.getElementById('p'+evtDayIdx);
+  if(!panel) return;
+  var timeRows=panel.querySelectorAll('.time-row');
+  var bestRow=null, bestDiff=999;
+  timeRows.forEach(function(row){
+    var span=row.querySelector('.tl[data-hour]');
+    if(!span) return;
+    var rh=parseInt(span.getAttribute('data-hour'));
+    var diff=Math.abs(rh-evtHour);
+    if(diff<bestDiff){ bestDiff=diff; bestRow=row; }
+  });
+  if(!bestRow||bestDiff>1) return;
+  // Remove existing slot at this specific row before placing new one
+  var existingSlot=bestRow.nextElementSibling;
+  while(existingSlot){
+    if(existingSlot.classList&&existingSlot.classList.contains('slot-replacement')){
+      existingSlot.remove(); break;
+    }
+    if(existingSlot.classList&&existingSlot.classList.contains('time-row')) break;
+    existingSlot=existingSlot.nextElementSibling;
+  }
+  var next=bestRow.nextElementSibling;
+  var taskCard=null;
+  while(next){
+    if(next.classList&&next.classList.contains('task-card')&&!next.classList.contains('travel')){ taskCard=next; break; }
+    if(next.classList&&next.classList.contains('time-row')) break;
+    next=next.nextElementSibling;
+  }
+  var plat=m.plat||'general';
+  var icon=plat==='zoom'?'&#128249;':plat==='meet'?'&#128250;':plat==='teams'?'&#128100;':'&#128197;';
+  var div=document.createElement('div');
+  div.className='slot-replacement';
+  var slotDoneKey=stateKey(evtDayIdx,'gcal_'+evtHour+'_'+evtMin);
+  var isSlotDone=state[slotDoneKey]||false;
+  div.setAttribute('data-slot-done-key',slotDoneKey);
+  div.setAttribute('data-slot-m',JSON.stringify(m));
+  div.style.cssText='background:'+(isSlotDone?'#111':'#fff')+';border-radius:13px;padding:12px 13px;display:flex;align-items:center;gap:10px;margin-bottom:6px;border:'+(isSlotDone?'1.5px solid #111':'1.5px solid #60A5FA')+';position:relative;cursor:pointer;transition:all 0.18s;';
+  var ckStyle='width:24px;height:24px;border-radius:50%;border:2px solid '+(isSlotDone?'#fff':'#60A5FA')+';display:flex;align-items:center;justify-content:center;font-size:11px;color:'+(isSlotDone?'#111':'transparent')+';flex-shrink:0;';
+  var titleColor=isSlotDone?'#fff':'#111';
+  var subColor=isSlotDone?'rgba(255,255,255,0.5)':'#2563EB';
+  var inner='<span style="font-size:20px;flex-shrink:0;">'+icon+'</span>';
+  inner+='<div style="flex:1;min-width:0;">';
+  inner+='<div style="font-size:14px;font-weight:900;color:'+titleColor+';line-height:1.3;margin-bottom:2px;">'+esc(m.title)+'</div>';
+  inner+='<div style="font-size:10px;font-weight:700;color:'+subColor+';">'+timeStr+' &nbsp;&#128197; GCAL</div>';
+  if(m.link) inner+='<button data-link="'+esc(m.link)+'" onclick="event.stopPropagation();joinCalEvt(this)" style="margin-top:5px;background:'+(isSlotDone?'rgba(255,255,255,0.15)':'#EFF6FF')+';color:'+(isSlotDone?'#fff':'#1a56db')+';border:none;border-radius:6px;padding:4px 10px;font-size:10px;font-weight:900;font-family:Mulish,sans-serif;cursor:pointer;">Join Now &rarr;</button>';
+  inner+='</div>';
+  inner+='<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">';
+  inner+='<div style="'+ckStyle+'">&#10003;</div>';
+  inner+='<div style="font-size:9px;font-weight:800;color:'+(isSlotDone?'rgba(255,255,255,0.35)':'#ccc')+';">20 PTS</div>';
+  inner+='<button onclick="event.stopPropagation();restoreSlot(this)" style="background:transparent;border:1px solid #ddd;border-radius:4px;padding:2px 5px;font-size:9px;font-weight:800;color:#aaa;font-family:Mulish,sans-serif;cursor:pointer;">&#8617;</button>';
+  inner+='</div>';
+  div.innerHTML=inner;
+  div.addEventListener('click',function(e){
+    if(e.target.tagName==='BUTTON') return;
+    var key=div.getAttribute('data-slot-done-key');
+    if(state[key]){ delete state[key]; }
+    else { state[key]=true; }
+    saveState(); updateAll();
+    var saved=JSON.parse(div.getAttribute('data-slot-m')||'{}');
+    div.remove();
+    if(taskCard){ taskCard.removeAttribute('data-slot-hidden'); taskCard.style.display=''; }
+    replaceSlotWithEventSilent(saved);
+  });
+  if(taskCard){
+    taskCard.setAttribute('data-slot-hidden','1');
+    taskCard.style.display='none';
+    taskCard.insertAdjacentElement('beforebegin',div);
+  } else {
+    bestRow.insertAdjacentElement('afterend',div);
+  }
 }
 
 function restoreSlot(btn){
@@ -1347,15 +1460,25 @@ function restoreSlot(btn){
       next=next.nextElementSibling;
     }
   }
-  parent.remove();
-  // Remove from slot persistence
-  var panels=document.querySelectorAll('.day-panel');
-  panels.forEach(function(p,pi){
-    Object.keys(slotReplacements).forEach(function(k){
-      if(k.indexOf('slot_'+pi+'_')===0) delete slotReplacements[k];
-    });
-  });
+  var saved=JSON.parse(parent.getAttribute('data-slot-m')||'{}');
+  if(saved._slotKey){
+    delete slotReplacements[saved._slotKey];
+  } else if(saved.dt){
+    var h2=new Date(saved.dt).getHours();
+    var d2=saved.day!==undefined?saved.day:0;
+    delete slotReplacements['slot_'+d2+'_'+h2];
+  }
   saveSlots();
+  // Restore the hidden task card right after this slot
+  var nxt=parent.nextElementSibling;
+  while(nxt){
+    if(nxt.classList&&nxt.classList.contains('task-card')&&nxt.getAttribute('data-slot-hidden')){
+      nxt.removeAttribute('data-slot-hidden'); nxt.style.display=''; break;
+    }
+    if(nxt.classList&&nxt.classList.contains('time-row')) break;
+    nxt=nxt.nextElementSibling;
+  }
+  parent.remove();
   showToast('Original task restored.');
 }
 
@@ -1387,6 +1510,8 @@ function showToast(msg){
 renderAllMeetings();
 goTo(todayIdx);
 updateAll();
+// Restore slot replacements immediately on load (before GCal fetch)
+setTimeout(function(){ restoreSavedSlots(); }, 100);
 
 // Meeting button event delegation - handles all meeting action buttons
 document.addEventListener('click', function(e){
