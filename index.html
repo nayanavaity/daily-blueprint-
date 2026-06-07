@@ -5,231 +5,221 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#111111">
-<title>Nayana · Daily Blueprint</title>
+<title>Nayana Daily Blueprint</title>
 <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{font-family:'Mulish',sans-serif;background:#F0F0F0;color:#111;-webkit-font-smoothing:antialiased;}
 
-/* ── FIXED TOP HEADER ── */
 .top-bar{position:fixed;top:0;left:0;right:0;z-index:100;background:#111;}
-.top-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 6px;}
-.top-row h1{font-size:17px;font-weight:900;color:#fff;letter-spacing:-0.3px;}
-.top-row .week-btn{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:14px;padding:5px 12px;font-size:11px;font-weight:800;color:#fff;font-family:'Mulish',sans-serif;cursor:pointer;}
-.date-row{padding:2px 16px 10px;font-size:15px;font-weight:800;color:#fff;letter-spacing:0.2px;}
-.progress-row{padding:0 16px 10px;display:flex;align-items:center;gap:10px;}
-.pr-label{font-size:12px;font-weight:800;color:#aaa;white-space:nowrap;}
-.pr-bar-wrap{flex:1;height:6px;background:#333;border-radius:3px;overflow:hidden;}
+.top-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 4px;}
+.top-row h1{font-size:16px;font-weight:900;color:#fff;}
+.top-btns{display:flex;gap:6px;}
+.hbtn{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:12px;padding:5px 10px;font-size:11px;font-weight:800;color:#fff;font-family:'Mulish',sans-serif;cursor:pointer;}
+.date-row{padding:2px 16px 6px;font-size:14px;font-weight:800;color:#ddd;}
+.progress-row{padding:0 16px 10px;display:flex;align-items:center;gap:8px;}
+.pr-lbl{font-size:11px;font-weight:800;color:#888;white-space:nowrap;}
+.pr-bar-wrap{flex:1;height:5px;background:#333;border-radius:3px;overflow:hidden;}
 .pr-bar{height:100%;background:#fff;border-radius:3px;transition:width 0.4s;}
-.pr-count{font-size:12px;font-weight:900;color:#fff;white-space:nowrap;}
+.pr-count{font-size:11px;font-weight:900;color:#fff;white-space:nowrap;}
 
-/* ── DAY TABS ── */
-.day-tabs{position:fixed;top:96px;left:0;right:0;z-index:99;background:#fff;border-bottom:2px solid #eee;display:flex;overflow-x:auto;scrollbar-width:none;}
+.day-tabs{position:fixed;top:124px;left:0;right:0;z-index:99;background:#fff;border-bottom:2px solid #eee;display:flex;overflow-x:auto;scrollbar-width:none;}
 .day-tabs::-webkit-scrollbar{display:none;}
-.day-tab{flex:1;min-width:44px;padding:8px 4px 7px;text-align:center;cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s;}
-.day-tab .dn{font-size:11px;font-weight:900;color:#bbb;letter-spacing:1px;text-transform:uppercase;}
-.day-tab .dp{font-size:11px;font-weight:700;color:#ccc;margin-top:1px;}
+.day-tab{flex:1;min-width:42px;padding:7px 3px 6px;text-align:center;cursor:pointer;border-bottom:3px solid transparent;}
+.dn{font-size:11px;font-weight:900;color:#bbb;letter-spacing:1px;text-transform:uppercase;}
+.dp{font-size:10px;font-weight:700;color:#ccc;margin-top:1px;}
 .day-tab.active .dn{color:#111;}
 .day-tab.active .dp{color:#555;}
 .day-tab.active{border-bottom-color:#111;}
 .day-tab.full .dn{color:#16a34a;}
 .day-tab.full{border-bottom-color:#16a34a;}
 
-/* ── PAGE SCROLL AREA ── */
-.page{margin-top:140px;overflow-x:hidden;}
-.swipe-track{display:flex;width:700%;transition:transform 0.38s cubic-bezier(0.25,0.46,0.45,0.94);will-change:transform;}
-.day-panel{width:calc(100%/7);padding:14px 14px 30px;}
+.page{margin-top:168px;}
+.swipe-track{display:flex;width:700%;transition:transform 0.36s cubic-bezier(0.25,0.46,0.45,0.94);will-change:transform;}
+.day-panel{width:calc(100%/7);padding:12px 12px 28px;}
 
-/* ── DAY HERO HEADER ── */
-.day-hero{background:#fff;border-radius:16px;padding:16px;margin-bottom:14px;border:1.5px solid #e8e8e8;}
-.day-hero-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
-.dh-title{font-size:26px;font-weight:900;color:#111;letter-spacing:-0.5px;}
-.dh-date{font-size:13px;font-weight:600;color:#aaa;}
-.dh-stats{display:flex;gap:8px;}
-.dh-stat{flex:1;background:#f5f5f5;border-radius:10px;padding:8px 10px;text-align:center;}
-.dh-num{font-size:20px;font-weight:900;color:#111;line-height:1;}
-.dh-lbl{font-size:9px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
-.dh-bar-wrap{height:6px;background:#eee;border-radius:3px;margin-top:10px;overflow:hidden;}
-.dh-bar{height:100%;background:#111;border-radius:3px;transition:width 0.4s;}
-.dh-pct-lbl{font-size:12px;font-weight:700;color:#888;margin-top:5px;}
+.day-hero{background:#fff;border-radius:14px;padding:14px;margin-bottom:12px;border:1.5px solid #e8e8e8;}
+.dh-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.dh-title{font-size:24px;font-weight:900;color:#111;letter-spacing:-0.5px;}
+.dh-date{font-size:12px;font-weight:600;color:#aaa;}
+.dh-stats{display:flex;gap:6px;}
+.dh-s{flex:1;background:#f5f5f5;border-radius:8px;padding:7px 8px;text-align:center;}
+.dh-n{font-size:18px;font-weight:900;color:#111;line-height:1;}
+.dh-l{font-size:9px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:0.8px;margin-top:2px;}
+.dh-bar{height:5px;background:#eee;border-radius:3px;margin-top:9px;overflow:hidden;}
+.dh-fill{height:100%;background:#111;border-radius:3px;transition:width 0.4s;}
 
-/* ── TIME LABELS ── */
-.time-row{display:flex;align-items:center;gap:8px;margin:14px 0 7px;}
-.tl{font-size:13px;font-weight:900;color:#555;letter-spacing:0.5px;white-space:nowrap;}
+.time-row{display:flex;align-items:center;gap:8px;margin:12px 0 6px;}
+.tl{font-size:13px;font-weight:900;color:#555;white-space:nowrap;}
 .time-row::after{content:'';flex:1;height:1px;background:#e8e8e8;}
 
-/* ── TASK CARDS ── */
-.task-card{background:#fff;border:1.5px solid #e8e8e8;border-radius:14px;padding:13px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.18s;margin-bottom:7px;position:relative;user-select:none;-webkit-user-select:none;}
+.task-card{background:#fff;border:1.5px solid #e8e8e8;border-radius:13px;padding:12px 13px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all 0.18s;margin-bottom:6px;position:relative;user-select:none;-webkit-user-select:none;}
 .task-card:active{transform:scale(0.97);}
-.task-card.done{background:#111;border-color:#111;box-shadow:0 4px 14px rgba(0,0,0,0.18);}
-.task-card.travel{background:#fafafa;border:1.5px dashed #ddd;cursor:default;opacity:0.55;}
+.task-card.done{background:#111;border-color:#111;}
+.task-card.travel{background:#fafafa;border:1.5px dashed #ddd;cursor:default;opacity:0.5;}
 .task-card.travel:active{transform:none;}
-.ci{font-size:22px;flex-shrink:0;width:30px;text-align:center;}
+.ci{font-size:20px;flex-shrink:0;width:28px;text-align:center;}
 .cb{flex:1;min-width:0;}
-.ct{font-size:15px;font-weight:800;color:#111;line-height:1.3;margin-bottom:2px;}
+.ct{font-size:14px;font-weight:800;color:#111;line-height:1.3;margin-bottom:1px;}
 .task-card.done .ct{color:#fff;}
-.cs{font-size:12px;font-weight:500;color:#888;line-height:1.4;}
-.task-card.done .cs{color:rgba(255,255,255,0.55);}
-.task-card.travel .ct{color:#999;}
-.cr{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
-.ck{width:26px;height:26px;border-radius:50%;border:2px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:12px;color:transparent;transition:all 0.2s;flex-shrink:0;}
+.cs{font-size:11px;font-weight:500;color:#888;}
+.task-card.done .cs{color:rgba(255,255,255,0.5);}
+.task-card.travel .ct{color:#aaa;}
+.cr{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0;}
+.ck{width:24px;height:24px;border-radius:50%;border:2px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;}
 .task-card.done .ck{background:#fff;border-color:#fff;color:#111;}
-.ub{font-size:10px;font-weight:800;color:#ccc;letter-spacing:0.5px;}
-.task-card.done .ub{color:rgba(255,255,255,0.4);}
+.ub{font-size:9px;font-weight:800;color:#ccc;}
+.task-card.done .ub{color:rgba(255,255,255,0.35);}
 
-/* ── DAY SUMMARY CARD ── */
-.day-summary{background:#fff;border:2px solid #111;border-radius:16px;padding:16px;margin-top:20px;margin-bottom:6px;}
-.ds-title{font-size:13px;font-weight:900;color:#111;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;}
-.ds-row{display:flex;gap:8px;margin-bottom:10px;}
-.ds-stat{flex:1;background:#f5f5f5;border-radius:10px;padding:10px;text-align:center;}
-.ds-num{font-size:22px;font-weight:900;color:#111;line-height:1;}
-.ds-lbl{font-size:9px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:1px;margin-top:3px;}
-.ds-bar-wrap{height:8px;background:#eee;border-radius:4px;overflow:hidden;margin-bottom:6px;}
-.ds-bar{height:100%;background:#111;border-radius:4px;transition:width 0.5s;}
-.ds-pct{font-size:13px;font-weight:800;color:#555;text-align:right;}
+/* MEETINGS */
+.meetings-box{background:#fff;border:2px solid #2563EB;border-radius:14px;padding:14px;margin-top:16px;margin-bottom:10px;}
+.mb-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.mb-title{font-size:14px;font-weight:900;color:#111;}
+.mb-btns{display:flex;gap:6px;}
+.mb-btn{padding:6px 12px;border-radius:10px;font-size:11px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;border:none;}
+.mb-btn.sync{background:#4285F4;color:#fff;}
+.mb-btn.add{background:#111;color:#fff;}
+.mb-btn:active{opacity:0.8;}
+.meet-card{background:#f8f8f8;border-radius:10px;border-left:4px solid #ddd;padding:10px 12px;margin-bottom:7px;}
+.meet-card.zoom{border-left-color:#2D8CFF;}
+.meet-card.meet{border-left-color:#34A853;}
+.meet-card.teams{border-left-color:#5B5EA6;}
+.meet-card.general{border-left-color:#888;}
+.mc-title{font-size:13px;font-weight:800;color:#111;margin-bottom:3px;}
+.mc-time{font-size:11px;font-weight:600;color:#555;margin-bottom:4px;}
+.mc-link{font-size:11px;color:#2563EB;word-break:break-all;display:block;margin-bottom:6px;}
+.mc-actions{display:flex;gap:6px;}
+.mc-action{flex:1;padding:7px 0;border-radius:8px;font-size:11px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;border:none;text-align:center;}
+.mc-join{background:#111;color:#fff;}
+.mc-cal{background:#4285F4;color:#fff;}
+.mc-del{flex:0;padding:7px 10px;background:#eee;color:#666;border-radius:8px;font-size:11px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;border:none;}
+.mc-action:active,.mc-del:active{opacity:0.8;}
+.no-meet{text-align:center;padding:16px;color:#aaa;font-size:12px;font-weight:600;}
+.today-badge{display:inline-block;background:#22c55e;color:#fff;font-size:9px;font-weight:900;padding:2px 6px;border-radius:5px;margin-left:6px;}
 
-/* ── ALL-DAYS TOTAL CARD ── */
-.total-card{background:#111;border-radius:16px;padding:16px;margin-bottom:6px;}
-.tc-title{font-size:12px;font-weight:900;color:#aaa;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;}
-.tc-row{display:flex;gap:8px;margin-bottom:12px;}
-.tc-stat{flex:1;background:rgba(255,255,255,0.08);border-radius:10px;padding:10px;text-align:center;}
-.tc-num{font-size:20px;font-weight:900;color:#fff;line-height:1;}
-.tc-lbl{font-size:9px;font-weight:800;color:#666;text-transform:uppercase;letter-spacing:1px;margin-top:3px;}
-.tc-bar-wrap{height:8px;background:#333;border-radius:4px;overflow:hidden;margin-bottom:6px;}
-.tc-bar{height:100%;background:#22c55e;border-radius:4px;transition:width 0.5s;}
-.tc-pct{font-size:13px;font-weight:800;color:#22c55e;text-align:right;}
-.tc-week-row{display:flex;gap:5px;margin-top:12px;}
-.tc-day-col{flex:1;text-align:center;}
-.tc-day-name{font-size:8px;font-weight:800;color:#555;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;}
-.tc-dot-bar{height:28px;background:#222;border-radius:3px;position:relative;overflow:hidden;}
-.tc-dot-fill{position:absolute;bottom:0;left:0;right:0;background:#22c55e;border-radius:3px;transition:height 0.4s;}
-.tc-day-pct{font-size:8px;font-weight:800;color:#555;margin-top:3px;}
+/* DAY SUMMARY */
+.day-summary{background:#fff;border:2px solid #111;border-radius:14px;padding:14px;margin-top:16px;margin-bottom:8px;}
+.ds-title{font-size:12px;font-weight:900;color:#111;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+.ds-row{display:flex;gap:6px;margin-bottom:8px;}
+.ds-s{flex:1;background:#f5f5f5;border-radius:8px;padding:8px;text-align:center;}
+.ds-n{font-size:20px;font-weight:900;color:#111;line-height:1;}
+.ds-l{font-size:9px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:0.8px;margin-top:2px;}
+.ds-bar{height:7px;background:#eee;border-radius:4px;overflow:hidden;margin-bottom:5px;}
+.ds-fill{height:100%;background:#111;border-radius:4px;transition:width 0.5s;}
+.ds-pct{font-size:12px;font-weight:800;color:#555;text-align:right;}
 
-/* ── PREV/NEXT BUTTONS ── */
-.nav-row{display:flex;gap:10px;margin-bottom:30px;}
-.nav-btn{flex:1;padding:14px;border:none;border-radius:14px;font-family:'Mulish',sans-serif;font-size:15px;font-weight:900;cursor:pointer;transition:all 0.18s;letter-spacing:0.3px;}
+/* TOTAL CARD */
+.total-card{background:#111;border-radius:14px;padding:14px;margin-bottom:8px;}
+.tc-title{font-size:11px;font-weight:900;color:#666;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;}
+.tc-row{display:flex;gap:6px;margin-bottom:10px;}
+.tc-s{flex:1;background:rgba(255,255,255,0.07);border-radius:8px;padding:8px;text-align:center;}
+.tc-n{font-size:18px;font-weight:900;color:#fff;line-height:1;}
+.tc-l{font-size:9px;font-weight:800;color:#555;text-transform:uppercase;letter-spacing:0.8px;margin-top:2px;}
+.tc-bar{height:7px;background:#333;border-radius:4px;overflow:hidden;margin-bottom:5px;}
+.tc-fill{height:100%;background:#22c55e;border-radius:4px;transition:width 0.5s;}
+.tc-pct{font-size:13px;font-weight:900;color:#22c55e;text-align:right;}
+.tc-days{display:flex;gap:4px;margin-top:12px;}
+.tc-day{flex:1;text-align:center;}
+.tc-day-n{font-size:8px;font-weight:900;color:#555;text-transform:uppercase;margin-bottom:3px;}
+.tc-day-bar{height:32px;background:#222;border-radius:3px;position:relative;overflow:hidden;margin-bottom:3px;}
+.tc-day-fill{position:absolute;bottom:0;left:0;right:0;background:#22c55e;border-radius:3px;transition:height 0.5s;}
+.tc-day-pct{font-size:8px;font-weight:700;color:#555;}
+
+/* NAV */
+.nav-row{display:flex;gap:10px;margin-top:6px;margin-bottom:30px;}
+.nav-btn{flex:1;padding:13px;border:none;border-radius:13px;font-family:'Mulish',sans-serif;font-size:14px;font-weight:900;cursor:pointer;}
 .nav-prev{background:#fff;color:#111;border:2px solid #e8e8e8;}
-.nav-prev:active{background:#f0f0f0;}
 .nav-next{background:#111;color:#fff;}
-.nav-next:active{background:#333;}
 
-/* ── WEEK PANEL ── */
-.week-panel{display:none;padding:14px;}
+/* WEEK PANEL */
+.week-panel{display:none;padding:168px 14px 14px;}
 .week-panel.on{display:block;}
-.wk-card{background:#fff;border-radius:16px;padding:16px;margin-bottom:10px;border:1.5px solid #e8e8e8;}
-.wk-title{font-size:14px;font-weight:900;color:#111;margin-bottom:14px;}
-.wk-bars{display:flex;gap:6px;align-items:flex-end;height:80px;}
-.wk-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;}
-.wk-bar-wrap{width:100%;background:#eee;border-radius:4px;height:60px;position:relative;overflow:hidden;}
-.wk-bar-fill{position:absolute;bottom:0;left:0;right:0;background:#111;border-radius:4px;transition:height 0.5s;}
-.wk-day{font-size:9px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:0.5px;}
-.wk-pts{font-size:10px;font-weight:900;color:#111;}
+.wk-card{background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;border:1.5px solid #e8e8e8;}
+.wk-title{font-size:14px;font-weight:900;color:#111;margin-bottom:12px;}
+.wk-bars{display:flex;gap:5px;align-items:flex-end;}
+.wk-col{flex:1;text-align:center;}
+.wk-pts{font-size:10px;font-weight:900;color:#111;margin-bottom:3px;}
+.wk-bar-wrap{height:55px;background:#eee;border-radius:3px;position:relative;overflow:hidden;margin-bottom:3px;}
+.wk-bar-fill{position:absolute;bottom:0;left:0;right:0;background:#111;border-radius:3px;transition:height 0.5s;}
+.wk-day{font-size:9px;font-weight:800;color:#aaa;text-transform:uppercase;}
 
-/* ── MEETINGS SECTION ── */
-.meetings-section{background:#fff;border:2px solid #e8e8e8;border-radius:16px;padding:16px;margin-bottom:12px;}
-.ms-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.ms-title{font-size:14px;font-weight:900;color:#111;letter-spacing:0.3px;}
-.ms-sync-btn{background:#111;color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:12px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;display:flex;align-items:center;gap:5px;}
-.ms-sync-btn:active{background:#333;}
-.meeting-card{background:#f8f8f8;border:1.5px solid #eee;border-radius:12px;padding:12px 13px;margin-bottom:8px;display:flex;align-items:flex-start;gap:10px;position:relative;}
-.meeting-card.zoom{border-left:4px solid #2D8CFF;}
-.meeting-card.meet{border-left:4px solid #34A853;}
-.meeting-card.teams{border-left:4px solid #5B5EA6;}
-.meeting-card.general{border-left:4px solid #888;}
-.mc-icon{font-size:20px;flex-shrink:0;margin-top:1px;}
-.mc-body{flex:1;min-width:0;}
-.mc-title{font-size:14px;font-weight:800;color:#111;margin-bottom:3px;line-height:1.3;}
-.mc-time{font-size:12px;font-weight:700;color:#555;margin-bottom:2px;}
-.mc-link{font-size:11px;font-weight:600;color:#2563EB;text-decoration:none;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.mc-actions{display:flex;gap:6px;margin-top:8px;}
-.mc-btn{flex:1;padding:7px;border:1.5px solid #eee;border-radius:8px;font-size:11px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;text-align:center;background:#fff;}
-.mc-btn.join{background:#111;color:#fff;border-color:#111;}
-.mc-btn.cal{background:#fff;color:#111;}
-.mc-btn:active{opacity:0.8;}
-.mc-delete{position:absolute;top:8px;right:8px;background:none;border:none;font-size:14px;color:#ccc;cursor:pointer;padding:2px;}
-.no-meetings{text-align:center;padding:20px;color:#aaa;font-size:13px;font-weight:600;}
-.add-meeting-btn{width:100%;padding:11px;background:#f5f5f5;border:2px dashed #ddd;border-radius:12px;font-size:13px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;color:#888;margin-top:4px;}
-.add-meeting-btn:active{background:#eee;}
+/* POPUP */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:998;justify-content:flex-end;flex-direction:column;align-items:center;}
+.overlay.on{display:flex;}
+.popup{background:#fff;border-radius:22px 22px 0 0;padding:22px 18px 32px;width:100%;max-width:500px;animation:su 0.3s ease;}
+@keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.ph{width:36px;height:4px;background:#eee;border-radius:2px;margin:0 auto 18px;}
+.pt{font-size:18px;font-weight:900;color:#111;margin-bottom:4px;}
+.ps{font-size:12px;font-weight:500;color:#888;margin-bottom:16px;}
+.pf{margin-bottom:12px;}
+.pf label{font-size:11px;font-weight:800;color:#555;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;}
+.pf input,.pf select,.pf textarea{width:100%;padding:10px 12px;border:1.5px solid #eee;border-radius:9px;font-size:14px;font-family:'Mulish',sans-serif;font-weight:600;color:#111;background:#f8f8f8;outline:none;}
+.pf input:focus,.pf select:focus,.pf textarea:focus{border-color:#111;background:#fff;}
+.pf textarea{height:60px;resize:none;}
+.p-actions{display:flex;gap:8px;margin-top:4px;}
+.p-cancel{flex:1;padding:12px;background:#f5f5f5;border:none;border-radius:11px;font-size:14px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;color:#111;}
+.p-save{flex:2;padding:12px;background:#111;border:none;border-radius:11px;font-size:14px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;color:#fff;}
 
-/* ── MEETING POPUP ── */
-.popup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:999;align-items:flex-end;justify-content:center;}
-.popup-overlay.on{display:flex;}
-.popup-box{background:#fff;border-radius:24px 24px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;animation:slideUp 0.3s ease;}
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.popup-handle{width:40px;height:4px;background:#eee;border-radius:2px;margin:0 auto 20px;}
-.popup-title{font-size:18px;font-weight:900;color:#111;margin-bottom:6px;}
-.popup-sub{font-size:13px;font-weight:500;color:#888;margin-bottom:18px;}
-.popup-field{margin-bottom:14px;}
-.popup-field label{font-size:12px;font-weight:800;color:#555;display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px;}
-.popup-field input,.popup-field select,.popup-field textarea{width:100%;padding:11px 13px;border:1.5px solid #eee;border-radius:10px;font-size:14px;font-family:'Mulish',sans-serif;font-weight:600;color:#111;background:#f8f8f8;outline:none;}
-.popup-field input:focus,.popup-field select:focus,.popup-field textarea:focus{border-color:#111;background:#fff;}
-.popup-field textarea{height:70px;resize:none;}
-.popup-actions{display:flex;gap:10px;margin-top:6px;}
-.popup-cancel{flex:1;padding:13px;background:#f5f5f5;border:none;border-radius:12px;font-size:14px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;color:#111;}
-.popup-save{flex:2;padding:13px;background:#111;border:none;border-radius:12px;font-size:14px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;color:#fff;}
-
-/* ── CAL SYNC POPUP ── */
-.cal-popup{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:998;align-items:flex-end;justify-content:center;}
-.cal-popup.on{display:flex;}
-.cal-popup-box{background:#fff;border-radius:24px 24px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;animation:slideUp 0.3s ease;}
-.cal-event-item{background:#f8f8f8;border:1.5px solid #eee;border-radius:12px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
-.cei-dot{width:10px;height:10px;border-radius:50%;background:#2563EB;flex-shrink:0;}
-.cei-body{flex:1;}
-.cei-title{font-size:13px;font-weight:800;color:#111;}
-.cei-time{font-size:11px;font-weight:600;color:#888;margin-top:1px;}
-.cei-add{background:#111;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;}
-.cei-added{background:#22c55e;color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:800;font-family:'Mulish',sans-serif;}
+/* TOAST */
+.toast{position:fixed;bottom:60px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;font-weight:700;font-family:'Mulish',sans-serif;z-index:9999;opacity:0;transition:opacity 0.3s;white-space:nowrap;max-width:90%;pointer-events:none;}
+.toast.on{opacity:1;}
 </style>
 </head>
 <body>
 
-<!-- FIXED TOP -->
 <div class="top-bar">
   <div class="top-row">
-    <h1>📋 Nayana's Blueprint</h1>
-    <button class="week-btn" id="wbtn" onclick="toggleWeek()">📊 Week</button>
+    <h1>Nayana's Blueprint</h1>
+    <div class="top-btns">
+      <button class="hbtn" onclick="toggleWeek()">Week</button>
+      <a href="https://calendar.google.com" target="_blank" class="hbtn" style="text-decoration:none;">&#128197; Cal</a>
+      <button class="hbtn" onclick="confirmReset()">Reset</button>
+    </div>
   </div>
-  <div class="date-row" id="date-row">Sunday, 7 June 2026</div>
-  <div class="progress-row">
-    <span class="pr-label">TODAY</span>
+  <div class="date-row" id="date-row">Loading...</div>
+  <div style="padding:0 16px 8px;display:flex;gap:6px;">
+  <a href="https://calendar.google.com" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#4285F4;color:#fff;border-radius:10px;padding:8px 0;font-size:12px;font-weight:800;font-family:Mulish,sans-serif;text-decoration:none;">&#128197; Google Calendar</a>
+  <a href="calshow://" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#FF3B30;color:#fff;border-radius:10px;padding:8px 0;font-size:12px;font-weight:800;font-family:Mulish,sans-serif;text-decoration:none;">&#128247; iPhone Calendar</a>
+</div>
+<div class="progress-row">
+    <span class="pr-lbl">TODAY</span>
     <div class="pr-bar-wrap"><div class="pr-bar" id="pr-bar" style="width:0%"></div></div>
-    <span class="pr-count" id="pr-count">0 / 0</span>
+    <span class="pr-count" id="pr-count">0/0</span>
   </div>
 </div>
 
-<!-- DAY TABS -->
 <div class="day-tabs">
-  <div class="day-tab active" data-d="0" onclick="goTo(0)"><div class="dn">MON</div><div class="dp" id="tp-0">0%</div></div>
-  <div class="day-tab" data-d="1" onclick="goTo(1)"><div class="dn">TUE</div><div class="dp" id="tp-1">0%</div></div>
-  <div class="day-tab" data-d="2" onclick="goTo(2)"><div class="dn">WED</div><div class="dp" id="tp-2">0%</div></div>
-  <div class="day-tab" data-d="3" onclick="goTo(3)"><div class="dn">THU</div><div class="dp" id="tp-3">0%</div></div>
-  <div class="day-tab" data-d="4" onclick="goTo(4)"><div class="dn">FRI</div><div class="dp" id="tp-4">0%</div></div>
-  <div class="day-tab" data-d="5" onclick="goTo(5)"><div class="dn">SAT</div><div class="dp" id="tp-5">0%</div></div>
-  <div class="day-tab" data-d="6" onclick="goTo(6)"><div class="dn">SUN</div><div class="dp" id="tp-6">0%</div></div>
+  <div class="day-tab active" onclick="goTo(0)"><div class="dn">MON</div><div class="dp" id="tp-0">0%</div></div>
+  <div class="day-tab" onclick="goTo(1)"><div class="dn">TUE</div><div class="dp" id="tp-1">0%</div></div>
+  <div class="day-tab" onclick="goTo(2)"><div class="dn">WED</div><div class="dp" id="tp-2">0%</div></div>
+  <div class="day-tab" onclick="goTo(3)"><div class="dn">THU</div><div class="dp" id="tp-3">0%</div></div>
+  <div class="day-tab" onclick="goTo(4)"><div class="dn">FRI</div><div class="dp" id="tp-4">0%</div></div>
+  <div class="day-tab" onclick="goTo(5)"><div class="dn">SAT</div><div class="dp" id="tp-5">0%</div></div>
+  <div class="day-tab" onclick="goTo(6)"><div class="dn">SUN</div><div class="dp" id="tp-6">0%</div></div>
 </div>
 
-<!-- WEEK PANEL (hidden by default) -->
+<!-- WEEK PANEL -->
 <div class="week-panel" id="week-panel">
   <div class="wk-card">
-    <div class="wk-title">📊 This Week — Effort Bars</div>
+    <div class="wk-title">Weekly Effort</div>
     <div class="wk-bars">
-      <div class="wk-col"><div class="wk-pts" id="ww-0">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-0" style="height:0%"></div></div><div class="wk-day">MON</div></div>
-      <div class="wk-col"><div class="wk-pts" id="ww-1">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-1" style="height:0%"></div></div><div class="wk-day">TUE</div></div>
-      <div class="wk-col"><div class="wk-pts" id="ww-2">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-2" style="height:0%"></div></div><div class="wk-day">WED</div></div>
-      <div class="wk-col"><div class="wk-pts" id="ww-3">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-3" style="height:0%"></div></div><div class="wk-day">THU</div></div>
-      <div class="wk-col"><div class="wk-pts" id="ww-4">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-4" style="height:0%"></div></div><div class="wk-day">FRI</div></div>
-      <div class="wk-col"><div class="wk-pts" id="ww-5">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-5" style="height:0%"></div></div><div class="wk-day">SAT</div></div>
-      <div class="wk-col"><div class="wk-pts" id="ww-6">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-6" style="height:0%"></div></div><div class="wk-day">SUN</div></div>
+      <div class="wk-col"><div class="wk-pts" id="ww-0">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-0" style="height:0%"></div></div><div class="wk-day">M</div></div>
+      <div class="wk-col"><div class="wk-pts" id="ww-1">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-1" style="height:0%"></div></div><div class="wk-day">T</div></div>
+      <div class="wk-col"><div class="wk-pts" id="ww-2">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-2" style="height:0%"></div></div><div class="wk-day">W</div></div>
+      <div class="wk-col"><div class="wk-pts" id="ww-3">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-3" style="height:0%"></div></div><div class="wk-day">T</div></div>
+      <div class="wk-col"><div class="wk-pts" id="ww-4">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-4" style="height:0%"></div></div><div class="wk-day">F</div></div>
+      <div class="wk-col"><div class="wk-pts" id="ww-5">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-5" style="height:0%"></div></div><div class="wk-day">S</div></div>
+      <div class="wk-col"><div class="wk-pts" id="ww-6">0</div><div class="wk-bar-wrap"><div class="wk-bar-fill" id="wb-6" style="height:0%"></div></div><div class="wk-day">S</div></div>
     </div>
   </div>
-  <div style="background:#111;border-radius:16px;padding:16px;margin-bottom:10px;">
-    <div style="font-size:12px;font-weight:900;color:#aaa;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;">🏆 2-Month Total Progress</div>
-    <div style="display:flex;gap:8px;margin-bottom:12px;">
-      <div style="flex:1;background:rgba(255,255,255,0.08);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:22px;font-weight:900;color:#fff;" id="wt-done">0</div><div style="font-size:9px;font-weight:800;color:#666;text-transform:uppercase;letter-spacing:1px;margin-top:3px;">Tasks Done</div></div>
-      <div style="flex:1;background:rgba(255,255,255,0.08);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:22px;font-weight:900;color:#fff;" id="wt-units">0</div><div style="font-size:9px;font-weight:800;color:#666;text-transform:uppercase;letter-spacing:1px;margin-top:3px;">Units Earned</div></div>
-      <div style="flex:1;background:rgba(255,255,255,0.08);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:22px;font-weight:900;color:#22c55e;" id="wt-pct">0%</div><div style="font-size:9px;font-weight:800;color:#666;text-transform:uppercase;letter-spacing:1px;margin-top:3px;">of 2-Month</div></div>
+  <div style="background:#111;border-radius:14px;padding:14px;">
+    <div style="font-size:11px;font-weight:900;color:#666;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;">2-Month Total</div>
+    <div style="display:flex;gap:6px;margin-bottom:10px;">
+      <div style="flex:1;background:rgba(255,255,255,0.07);border-radius:8px;padding:8px;text-align:center;"><div style="font-size:20px;font-weight:900;color:#fff;" id="wt-done">0</div><div style="font-size:9px;font-weight:800;color:#555;text-transform:uppercase;margin-top:2px;">Tasks</div></div>
+      <div style="flex:1;background:rgba(255,255,255,0.07);border-radius:8px;padding:8px;text-align:center;"><div style="font-size:20px;font-weight:900;color:#fff;" id="wt-units">0</div><div style="font-size:9px;font-weight:800;color:#555;text-transform:uppercase;margin-top:2px;">Units</div></div>
+      <div style="flex:1;background:rgba(255,255,255,0.07);border-radius:8px;padding:8px;text-align:center;"><div style="font-size:20px;font-weight:900;color:#22c55e;" id="wt-pct">0%</div><div style="font-size:9px;font-weight:800;color:#555;text-transform:uppercase;margin-top:2px;">of 2M</div></div>
     </div>
-    <div style="height:8px;background:#333;border-radius:4px;overflow:hidden;margin-bottom:5px;"><div id="wt-bar" style="height:100%;background:#22c55e;border-radius:4px;width:0%;transition:width 0.5s;"></div></div>
+    <div style="height:7px;background:#333;border-radius:4px;overflow:hidden;margin-bottom:5px;"><div id="wt-bar" style="height:100%;background:#22c55e;border-radius:4px;width:0%;transition:width 0.5s;"></div></div>
     <div style="font-size:11px;font-weight:700;color:#555;text-align:right;" id="wt-sub">0 / 12,800 units</div>
   </div>
 </div>
@@ -238,502 +228,442 @@ body{font-family:'Mulish',sans-serif;background:#F0F0F0;color:#111;-webkit-font-
 <div class="page" id="page">
 <div class="swipe-track" id="track">
 
-<!-- ════ MONDAY ════ -->
+<!-- ======= MONDAY ======= -->
 <div class="day-panel" id="p0">
 <div class="day-hero">
-  <div class="day-hero-top"><div class="dh-title">Monday</div><div class="dh-date" id="dh-date-0"></div></div>
+  <div class="dh-top"><div class="dh-title">Monday</div><div class="dh-date" id="dd-0"></div></div>
   <div class="dh-stats">
-    <div class="dh-stat"><div class="dh-num" id="d-done-0">0</div><div class="dh-lbl">Done</div></div>
-    <div class="dh-stat"><div class="dh-num" id="d-total-0">0</div><div class="dh-lbl">Total</div></div>
-    <div class="dh-stat"><div class="dh-num" id="d-units-0">0</div><div class="dh-lbl">Units</div></div>
-    <div class="dh-stat"><div class="dh-num" id="d-pct-0">0%</div><div class="dh-lbl">Done %</div></div>
+    <div class="dh-s"><div class="dh-n" id="dn-0">0</div><div class="dh-l">Done</div></div>
+    <div class="dh-s"><div class="dh-n" id="dt-0">0</div><div class="dh-l">Total</div></div>
+    <div class="dh-s"><div class="dh-n" id="du-0">0</div><div class="dh-l">Units</div></div>
+    <div class="dh-s"><div class="dh-n" id="dp-0">0%</div><div class="dh-l">Done%</div></div>
   </div>
-  <div class="dh-bar-wrap"><div class="dh-bar" id="dh-bar-0" style="width:0%"></div></div>
+  <div class="dh-bar"><div class="dh-fill" id="df-0" style="width:0%"></div></div>
 </div>
-
 <div class="time-row"><span class="tl">7:00 AM</span></div>
-<div class="task-card" data-task="mon-treadmill"><span class="ci">🏃‍♀️</span><div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins · build the habit</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="mon-treadmill"><span class="ci">&#127939;&#8205;&#9792;</span><div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">7:30 AM</span></div>
-<div class="task-card" data-task="mon-meditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual · 30 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="mon-meditation"><span class="ci">&#129488;</span><div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">8:00 AM</span></div>
-<div class="task-card" data-task="mon-pmp"><span class="ci">🏆</span><div class="cb"><div class="ct">PMP — MCQ Practice</div><div class="cs">30 questions daily</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="mon-pmp"><span class="ci">&#127942;</span><div class="cb"><div class="ct">PMP — MCQ Practice</div><div class="cs">30 questions daily</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">8:30 AM</span></div>
-<div class="task-card travel"><span class="ci">🚗</span><div class="cb"><div class="ct">Travelling</div><div class="cs">Free · podcast · relax</div></div></div>
+<div class="task-card travel"><span class="ci">&#128663;</span><div class="cb"><div class="ct">Travelling</div><div class="cs">Free time</div></div></div>
 <div class="time-row"><span class="tl">11:00 AM</span></div>
-<div class="task-card" data-task="mon-speaking"><span class="ci">🎤</span><div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12–15 mins on phone</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="mon-speaking"><span class="ci">&#127908;</span><div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12-15 mins</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">12:30 PM</span></div>
-<div class="task-card" data-task="mon-job"><span class="ci">💼</span><div class="cb"><div class="ct">Job Applications</div><div class="cs">LinkedIn · portals · 30 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="mon-job"><span class="ci">&#128188;</span><div class="cb"><div class="ct">Job Applications</div><div class="cs">LinkedIn · portals</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">2:00 PM</span></div>
-<div class="task-card" data-task="mon-coursera"><span class="ci">💻</span><div class="cb"><div class="ct">Coursera — IT Automation</div><div class="cs">Google module · self-paced</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="mon-coursera"><span class="ci">&#128187;</span><div class="cb"><div class="ct">Coursera — IT Automation</div><div class="cs">Google module</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">5:00 PM</span></div>
-<div class="task-card" data-task="mon-pabbly"><span class="ci">⚙️</span><div class="cb"><div class="ct">Pabbly / Saleshandy</div><div class="cs">Automation · outreach flows</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="mon-pabbly"><span class="ci">&#9881;</span><div class="cb"><div class="ct">Pabbly / Saleshandy</div><div class="cs">Automation · outreach</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">6:00 PM</span></div>
-<div class="task-card" data-task="mon-pmp2"><span class="ci">📖</span><div class="cb"><div class="ct">PMP Content Review</div><div class="cs">Chapter deep dive</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="mon-pmp2"><span class="ci">&#128214;</span><div class="cb"><div class="ct">PMP Content Review</div><div class="cs">Chapter deep dive</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">7:00 PM</span></div>
-<div class="task-card" data-task="mon-evemeditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe · peace</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="mon-evemeditation"><span class="ci">&#129488;</span><div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">8:00 PM</span></div>
-<div class="task-card" data-task="mon-call"><span class="ci">📞</span><div class="cb"><div class="ct">Call Near & Dear Ones</div><div class="cs">Stay connected daily</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="mon-call"><span class="ci">&#128222;</span><div class="cb"><div class="ct">Call Near &amp; Dear Ones</div><div class="cs">Stay connected</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">9:00 PM</span></div>
-<div class="task-card" data-task="mon-review"><span class="ci">📋</span><div class="cb"><div class="ct">Day Review & Plan Tomorrow</div><div class="cs">Count units · wind down</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
-
-<!-- DAY SUMMARY -->
-
-<!-- MEETINGS & EVENTS SECTION -->
-<div class="meetings-section" id="meetings-section">
-  <div class="ms-header">
-    <div class="ms-title">📅 Today's Meetings & Events</div>
-    <button class="ms-sync-btn" onclick="openCalSync()">🔄 Sync Cal</button>
-  </div>
-  <div id="meetings-list">
-    <div class="no-meetings" id="no-meetings-msg">No meetings yet. Tap + to add or sync from calendar.</div>
-  </div>
-  <button class="add-meeting-btn" onclick="openAddMeeting()">+ Add Meeting / Event</button>
-</div>
-
-<!-- ADD MEETING POPUP -->
-<div class="popup-overlay" id="meeting-popup" onclick="closePopupOut(event)">
-  <div class="popup-box">
-    <div class="popup-handle"></div>
-    <div class="popup-title">Add Meeting / Event</div>
-    <div class="popup-sub">Paste your invite link — Zoom, Meet, Teams or any event</div>
-    <div class="popup-field">
-      <label>Meeting Title</label>
-      <input type="text" id="pm-title" placeholder="e.g. Risers Club Call, Interview, Sprint Review">
-    </div>
-    <div class="popup-field">
-      <label>Date & Time</label>
-      <input type="datetime-local" id="pm-datetime">
-    </div>
-    <div class="popup-field">
-      <label>Platform</label>
-      <select id="pm-platform">
-        <option value="zoom">📹 Zoom</option>
-        <option value="meet">🟢 Google Meet</option>
-        <option value="teams">💜 Microsoft Teams</option>
-        <option value="general">📅 General / Other</option>
-      </select>
-    </div>
-    <div class="popup-field">
-      <label>Join Link</label>
-      <input type="url" id="pm-link" placeholder="https://zoom.us/j/... or meet.google.com/...">
-    </div>
-    <div class="popup-field">
-      <label>Notes (optional)</label>
-      <textarea id="pm-notes" placeholder="Agenda, password, or any notes..."></textarea>
-    </div>
-    <div class="popup-actions">
-      <button class="popup-cancel" onclick="closeAddMeeting()">Cancel</button>
-      <button class="popup-save" onclick="saveMeeting()">✅ Save & Add to Calendar</button>
-    </div>
-  </div>
-</div>
-
-<!-- CAL SYNC POPUP -->
-<div class="cal-popup" id="cal-popup" onclick="closeCalOut(event)">
-  <div class="cal-popup-box">
-    <div class="popup-handle"></div>
-    <div class="popup-title">📅 Sync from Google Calendar</div>
-    <div class="popup-sub">Your upcoming events — tap Add to show on dashboard</div>
-    <div id="cal-events-list">
-      <div style="text-align:center;padding:20px;color:#aaa;font-size:13px;">
-        <div style="font-size:24px;margin-bottom:8px;">🔄</div>
-        <div style="font-weight:700;">Opening Google Calendar...</div>
-        <div style="margin-top:6px;font-size:12px;">Copy meeting links from your calendar and paste them here using the + Add button</div>
-      </div>
-    </div>
-    <div style="margin-top:14px;">
-      <button onclick="window.open('https://calendar.google.com','_blank')" style="width:100%;padding:13px;background:#4285F4;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;margin-bottom:8px;">📅 Open Google Calendar</button>
-      <button onclick="openAddMeeting();closeCalPopup();" style="width:100%;padding:13px;background:#111;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;margin-bottom:8px;">+ Paste Meeting Link Here</button>
-      <button onclick="closeCalPopup()" style="width:100%;padding:13px;background:#f5f5f5;color:#111;border:none;border-radius:12px;font-size:14px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">Close</button>
-    </div>
-  </div>
-</div>
-
+<div class="task-card" data-task="mon-review"><span class="ci">&#128203;</span><div class="cb"><div class="ct">Day Review &amp; Plan Tomorrow</div><div class="cs">Count units · wind down</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
+<!-- Meetings injected here for Mon -->
+<div class="meetings-box" id="meetings-box-0"></div>
+<!-- Day summary -->
 <div class="day-summary">
-  <div class="ds-title">📊 Monday Summary</div>
+  <div class="ds-title">Monday Summary</div>
   <div class="ds-row">
-    <div class="ds-stat"><div class="ds-num" id="ds-done-0">0</div><div class="ds-lbl">Tasks Done</div></div>
-    <div class="ds-stat"><div class="ds-num" id="ds-units-0">0</div><div class="ds-lbl">Units Earned</div></div>
-    <div class="ds-stat"><div class="ds-num" id="ds-max-0">0</div><div class="ds-lbl">Max Units</div></div>
+    <div class="ds-s"><div class="ds-n" id="ss-dn-0">0</div><div class="ds-l">Done</div></div>
+    <div class="ds-s"><div class="ds-n" id="ss-un-0">0</div><div class="ds-l">Units</div></div>
+    <div class="ds-s"><div class="ds-n" id="ss-mx-0">0</div><div class="ds-l">Max</div></div>
   </div>
-  <div class="ds-bar-wrap"><div class="ds-bar" id="ds-bar-0" style="width:0%"></div></div>
-  <div class="ds-pct" id="ds-pct-0">0% complete</div>
+  <div class="ds-bar"><div class="ds-fill" id="ss-fill-0" style="width:0%"></div></div>
+  <div class="ds-pct" id="ss-pct-0">0% complete</div>
 </div>
-
-<!-- ALL-DAYS TOTAL -->
+<!-- Total card -->
 <div class="total-card">
-  <div class="tc-title">🏆 All Days Total — 2 Months</div>
+  <div class="tc-title">All Days Total — 2 Months</div>
   <div class="tc-row">
-    <div class="tc-stat"><div class="tc-num" id="tc-done">0</div><div class="tc-lbl">Tasks Done</div></div>
-    <div class="tc-stat"><div class="tc-num" id="tc-units">0</div><div class="tc-lbl">Units</div></div>
-    <div class="tc-stat"><div class="tc-num" id="tc-pct">0%</div><div class="tc-lbl">2-Month %</div></div>
+    <div class="tc-s"><div class="tc-n" id="tc-dn-0">0</div><div class="tc-l">Tasks</div></div>
+    <div class="tc-s"><div class="tc-n" id="tc-un-0">0</div><div class="tc-l">Units</div></div>
+    <div class="tc-s"><div class="tc-n" id="tc-pc-0" style="color:#22c55e;">0%</div><div class="tc-l">2-Month</div></div>
   </div>
-  <div class="tc-bar-wrap"><div class="tc-bar" id="tc-bar" style="width:0%"></div></div>
-  <div class="tc-pct" id="tc-sub">0 / 12,800 units</div>
-  <div class="tc-week-row" style="margin-top:14px;">
-    <div class="tc-day-col"><div class="tc-day-name">M</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-0" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p0">0%</div></div>
-    <div class="tc-day-col"><div class="tc-day-name">T</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-1" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p1">0%</div></div>
-    <div class="tc-day-col"><div class="tc-day-name">W</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-2" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p2">0%</div></div>
-    <div class="tc-day-col"><div class="tc-day-name">T</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-3" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p3">0%</div></div>
-    <div class="tc-day-col"><div class="tc-day-name">F</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-4" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p4">0%</div></div>
-    <div class="tc-day-col"><div class="tc-day-name">S</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-5" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p5">0%</div></div>
-    <div class="tc-day-col"><div class="tc-day-name">S</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-6" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p6">0%</div></div>
+  <div class="tc-bar"><div class="tc-fill" id="tc-fill-0" style="width:0%"></div></div>
+  <div class="tc-pct" id="tc-sub-0">0 / 12,800 units</div>
+  <div class="tc-days">
+    <div class="tc-day"><div class="tc-day-n">M</div><div class="tc-day-bar"><div class="tc-day-fill" id="tdf-0" style="height:0%"></div></div><div class="tc-day-pct" id="tdp-0">0%</div></div>
+    <div class="tc-day"><div class="tc-day-n">T</div><div class="tc-day-bar"><div class="tc-day-fill" id="tdf-1" style="height:0%"></div></div><div class="tc-day-pct" id="tdp-1">0%</div></div>
+    <div class="tc-day"><div class="tc-day-n">W</div><div class="tc-day-bar"><div class="tc-day-fill" id="tdf-2" style="height:0%"></div></div><div class="tc-day-pct" id="tdp-2">0%</div></div>
+    <div class="tc-day"><div class="tc-day-n">T</div><div class="tc-day-bar"><div class="tc-day-fill" id="tdf-3" style="height:0%"></div></div><div class="tc-day-pct" id="tdp-3">0%</div></div>
+    <div class="tc-day"><div class="tc-day-n">F</div><div class="tc-day-bar"><div class="tc-day-fill" id="tdf-4" style="height:0%"></div></div><div class="tc-day-pct" id="tdp-4">0%</div></div>
+    <div class="tc-day"><div class="tc-day-n">S</div><div class="tc-day-bar"><div class="tc-day-fill" id="tdf-5" style="height:0%"></div></div><div class="tc-day-pct" id="tdp-5">0%</div></div>
+    <div class="tc-day"><div class="tc-day-n">S</div><div class="tc-day-bar"><div class="tc-day-fill" id="tdf-6" style="height:0%"></div></div><div class="tc-day-pct" id="tdp-6">0%</div></div>
   </div>
 </div>
+<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next</button></div>
+</div><!-- end p0 -->
 
-<!-- PREV / NEXT -->
-<div class="nav-row">
-  <button class="nav-btn nav-prev" onclick="prevDay()">← Prev</button>
-  <button class="nav-btn nav-next" onclick="nextDay()">Next →</button>
-</div>
-</div><!-- end panel 0 -->
-
-<!-- ════ TUESDAY ════ -->
+<!-- ======= TUESDAY ======= -->
 <div class="day-panel" id="p1">
 <div class="day-hero">
-  <div class="day-hero-top"><div class="dh-title">Tuesday</div><div class="dh-date" id="dh-date-1"></div></div>
-  <div class="dh-stats">
-    <div class="dh-stat"><div class="dh-num" id="d-done-1">0</div><div class="dh-lbl">Done</div></div>
-    <div class="dh-stat"><div class="dh-num" id="d-total-1">0</div><div class="dh-lbl">Total</div></div>
-    <div class="dh-stat"><div class="dh-num" id="d-units-1">0</div><div class="dh-lbl">Units</div></div>
-    <div class="dh-stat"><div class="dh-num" id="d-pct-1">0%</div><div class="dh-lbl">Done %</div></div>
-  </div>
-  <div class="dh-bar-wrap"><div class="dh-bar" id="dh-bar-1" style="width:0%"></div></div>
+  <div class="dh-top"><div class="dh-title">Tuesday</div><div class="dh-date" id="dd-1"></div></div>
+  <div class="dh-stats"><div class="dh-s"><div class="dh-n" id="dn-1">0</div><div class="dh-l">Done</div></div><div class="dh-s"><div class="dh-n" id="dt-1">0</div><div class="dh-l">Total</div></div><div class="dh-s"><div class="dh-n" id="du-1">0</div><div class="dh-l">Units</div></div><div class="dh-s"><div class="dh-n" id="dp-1">0%</div><div class="dh-l">Done%</div></div></div>
+  <div class="dh-bar"><div class="dh-fill" id="df-1" style="width:0%"></div></div>
 </div>
 <div class="time-row"><span class="tl">7:00 AM</span></div>
-<div class="task-card" data-task="tue-treadmill"><span class="ci">🏃‍♀️</span><div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="tue-treadmill"><span class="ci">&#127939;&#8205;&#9792;</span><div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">7:30 AM</span></div>
-<div class="task-card" data-task="tue-meditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="tue-meditation"><span class="ci">&#129488;</span><div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">8:00 AM</span></div>
-<div class="task-card" data-task="tue-pmp"><span class="ci">🏆</span><div class="cb"><div class="ct">PMP — Content Review</div><div class="cs">Chapter study</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="tue-pmp"><span class="ci">&#127942;</span><div class="cb"><div class="ct">PMP Content Review</div><div class="cs">Chapter study</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">8:30 AM</span></div>
-<div class="task-card travel"><span class="ci">🚗</span><div class="cb"><div class="ct">Travelling</div><div class="cs">Free · podcast</div></div></div>
+<div class="task-card travel"><span class="ci">&#128663;</span><div class="cb"><div class="ct">Travelling</div><div class="cs">Free time</div></div></div>
 <div class="time-row"><span class="tl">11:00 AM</span></div>
-<div class="task-card" data-task="tue-speaking"><span class="ci">🎤</span><div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12–15 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="tue-speaking"><span class="ci">&#127908;</span><div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12-15 mins</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">12:30 PM</span></div>
-<div class="task-card" data-task="tue-job"><span class="ci">💼</span><div class="cb"><div class="ct">Job Applications</div><div class="cs">LinkedIn · portals</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="tue-job"><span class="ci">&#128188;</span><div class="cb"><div class="ct">Job Applications</div><div class="cs">LinkedIn · portals</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">2:00 PM</span></div>
-<div class="task-card" data-task="tue-employer"><span class="ci">🤝</span><div class="cb"><div class="ct">Employer Discussion</div><div class="cs">Recruiter calls · follow-up</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="tue-employer"><span class="ci">&#129309;</span><div class="cb"><div class="ct">Employer Discussion</div><div class="cs">Recruiter calls</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">5:00 PM</span></div>
-<div class="task-card" data-task="tue-pabbly"><span class="ci">⚙️</span><div class="cb"><div class="ct">Pabbly / Saleshandy</div><div class="cs">Sequences · follow-ups</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="tue-pabbly"><span class="ci">&#9881;</span><div class="cb"><div class="ct">Pabbly / Saleshandy</div><div class="cs">Sequences</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">6:00 PM</span></div>
-<div class="task-card" data-task="tue-coursera"><span class="ci">💻</span><div class="cb"><div class="ct">Coursera — IT Automation</div><div class="cs">Google module</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="tue-coursera"><span class="ci">&#128187;</span><div class="cb"><div class="ct">Coursera — IT Automation</div><div class="cs">Google module</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">7:00 PM</span></div>
-<div class="task-card" data-task="tue-evemeditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="tue-evemeditation"><span class="ci">&#129488;</span><div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">8:00 PM</span></div>
-<div class="task-card" data-task="tue-call"><span class="ci">📞</span><div class="cb"><div class="ct">Call Near & Dear Ones</div><div class="cs">Stay connected</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="tue-call"><span class="ci">&#128222;</span><div class="cb"><div class="ct">Call Near &amp; Dear Ones</div><div class="cs">Stay connected</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">9:00 PM</span></div>
-<div class="task-card" data-task="tue-review"><span class="ci">📋</span><div class="cb"><div class="ct">Day Review & Plan</div><div class="cs">Count units · wind down</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
-<div class="day-summary"><div class="ds-title">📊 Tuesday Summary</div><div class="ds-row"><div class="ds-stat"><div class="ds-num" id="ds-done-1">0</div><div class="ds-lbl">Tasks Done</div></div><div class="ds-stat"><div class="ds-num" id="ds-units-1">0</div><div class="ds-lbl">Units Earned</div></div><div class="ds-stat"><div class="ds-num" id="ds-max-1">0</div><div class="ds-lbl">Max Units</div></div></div><div class="ds-bar-wrap"><div class="ds-bar" id="ds-bar-1" style="width:0%"></div></div><div class="ds-pct" id="ds-pct-1">0% complete</div></div>
-<div class="total-card"><div class="tc-title">🏆 All Days Total — 2 Months</div><div class="tc-row"><div class="tc-stat"><div class="tc-num" id="tc-done-1">0</div><div class="tc-lbl">Tasks Done</div></div><div class="tc-stat"><div class="tc-num" id="tc-units-1">0</div><div class="tc-lbl">Units</div></div><div class="tc-stat"><div class="tc-num" id="tc-pct-1">0%</div><div class="tc-lbl">2-Month %</div></div></div><div class="tc-bar-wrap"><div class="tc-bar" id="tc-bar-1" style="width:0%"></div></div><div class="tc-pct" id="tc-sub-1">0 / 12,800 units</div></div>
-<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">← Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next →</button></div>
+<div class="task-card" data-task="tue-review"><span class="ci">&#128203;</span><div class="cb"><div class="ct">Day Review &amp; Plan</div><div class="cs">Count units</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
+<div class="meetings-box" id="meetings-box-1"></div>
+<div class="day-summary"><div class="ds-title">Tuesday Summary</div><div class="ds-row"><div class="ds-s"><div class="ds-n" id="ss-dn-1">0</div><div class="ds-l">Done</div></div><div class="ds-s"><div class="ds-n" id="ss-un-1">0</div><div class="ds-l">Units</div></div><div class="ds-s"><div class="ds-n" id="ss-mx-1">0</div><div class="ds-l">Max</div></div></div><div class="ds-bar"><div class="ds-fill" id="ss-fill-1" style="width:0%"></div></div><div class="ds-pct" id="ss-pct-1">0% complete</div></div>
+<div class="total-card"><div class="tc-title">All Days Total — 2 Months</div><div class="tc-row"><div class="tc-s"><div class="tc-n" id="tc-dn-1">0</div><div class="tc-l">Tasks</div></div><div class="tc-s"><div class="tc-n" id="tc-un-1">0</div><div class="tc-l">Units</div></div><div class="tc-s"><div class="tc-n" id="tc-pc-1" style="color:#22c55e;">0%</div><div class="tc-l">2-Month</div></div></div><div class="tc-bar"><div class="tc-fill" id="tc-fill-1" style="width:0%"></div></div><div class="tc-pct" id="tc-sub-1">0 / 12,800 units</div></div>
+<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next</button></div>
 </div>
 
-<!-- ════ WEDNESDAY ════ -->
+<!-- ======= WEDNESDAY ======= -->
 <div class="day-panel" id="p2">
 <div class="day-hero">
-  <div class="day-hero-top"><div class="dh-title">Wednesday</div><div class="dh-date" id="dh-date-2"></div></div>
-  <div class="dh-stats"><div class="dh-stat"><div class="dh-num" id="d-done-2">0</div><div class="dh-lbl">Done</div></div><div class="dh-stat"><div class="dh-num" id="d-total-2">0</div><div class="dh-lbl">Total</div></div><div class="dh-stat"><div class="dh-num" id="d-units-2">0</div><div class="dh-lbl">Units</div></div><div class="dh-stat"><div class="dh-num" id="d-pct-2">0%</div><div class="dh-lbl">Done %</div></div></div>
-  <div class="dh-bar-wrap"><div class="dh-bar" id="dh-bar-2" style="width:0%"></div></div>
+  <div class="dh-top"><div class="dh-title">Wednesday</div><div class="dh-date" id="dd-2"></div></div>
+  <div class="dh-stats"><div class="dh-s"><div class="dh-n" id="dn-2">0</div><div class="dh-l">Done</div></div><div class="dh-s"><div class="dh-n" id="dt-2">0</div><div class="dh-l">Total</div></div><div class="dh-s"><div class="dh-n" id="du-2">0</div><div class="dh-l">Units</div></div><div class="dh-s"><div class="dh-n" id="dp-2">0%</div><div class="dh-l">Done%</div></div></div>
+  <div class="dh-bar"><div class="dh-fill" id="df-2" style="width:0%"></div></div>
 </div>
 <div class="time-row"><span class="tl">7:00 AM</span></div>
-<div class="task-card" data-task="wed-treadmill"><span class="ci">🏃‍♀️</span><div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="wed-treadmill"><span class="ci">&#127939;&#8205;&#9792;</span><div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">7:30 AM</span></div>
-<div class="task-card" data-task="wed-meditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="wed-meditation"><span class="ci">&#129488;</span><div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">8:00 AM</span></div>
-<div class="task-card" data-task="wed-pmp"><span class="ci">🏆</span><div class="cb"><div class="ct">PMP — MCQ Practice</div><div class="cs">30 questions</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="wed-pmp"><span class="ci">&#127942;</span><div class="cb"><div class="ct">PMP — MCQ Practice</div><div class="cs">30 questions</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">8:30 AM</span></div>
-<div class="task-card travel"><span class="ci">🚗</span><div class="cb"><div class="ct">Travelling</div><div class="cs">Free · podcast</div></div></div>
+<div class="task-card travel"><span class="ci">&#128663;</span><div class="cb"><div class="ct">Travelling</div><div class="cs">Free time</div></div></div>
 <div class="time-row"><span class="tl">11:00 AM</span></div>
-<div class="task-card" data-task="wed-speaking"><span class="ci">🎤</span><div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12–15 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="wed-speaking"><span class="ci">&#127908;</span><div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12-15 mins</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">12:30 PM</span></div>
-<div class="task-card" data-task="wed-job"><span class="ci">💼</span><div class="cb"><div class="ct">Job Applications</div><div class="cs">LinkedIn · portals</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="wed-job"><span class="ci">&#128188;</span><div class="cb"><div class="ct">Job Applications</div><div class="cs">LinkedIn · portals</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">3:00 PM</span></div>
-<div class="task-card" data-task="wed-shoot"><span class="ci">🎬</span><div class="cb"><div class="ct">Content Shoot</div><div class="cs">YouTube · Instagram · 2 hrs</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="wed-shoot"><span class="ci">&#127909;</span><div class="cb"><div class="ct">Content Shoot</div><div class="cs">YouTube · Instagram · 2 hrs</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">5:00 PM</span></div>
-<div class="task-card" data-task="wed-edit"><span class="ci">✂️</span><div class="cb"><div class="ct">Edit & Schedule Content</div><div class="cs">Vizard.ai · Pabbly</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="wed-edit"><span class="ci">&#9986;</span><div class="cb"><div class="ct">Edit &amp; Schedule Content</div><div class="cs">Vizard.ai · Pabbly</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">7:00 PM</span></div>
-<div class="task-card" data-task="wed-evemeditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="wed-evemeditation"><span class="ci">&#129488;</span><div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">8:00 PM</span></div>
-<div class="task-card" data-task="wed-call"><span class="ci">📞</span><div class="cb"><div class="ct">Call Near & Dear Ones</div><div class="cs">Stay connected</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="wed-call"><span class="ci">&#128222;</span><div class="cb"><div class="ct">Call Near &amp; Dear Ones</div><div class="cs">Stay connected</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">9:00 PM</span></div>
-<div class="task-card" data-task="wed-review"><span class="ci">📋</span><div class="cb"><div class="ct">Day Review & Plan</div><div class="cs">Count units · wind down</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
-<div class="day-summary"><div class="ds-title">📊 Wednesday Summary</div><div class="ds-row"><div class="ds-stat"><div class="ds-num" id="ds-done-2">0</div><div class="ds-lbl">Tasks Done</div></div><div class="ds-stat"><div class="ds-num" id="ds-units-2">0</div><div class="ds-lbl">Units Earned</div></div><div class="ds-stat"><div class="ds-num" id="ds-max-2">0</div><div class="ds-lbl">Max Units</div></div></div><div class="ds-bar-wrap"><div class="ds-bar" id="ds-bar-2" style="width:0%"></div></div><div class="ds-pct" id="ds-pct-2">0% complete</div></div>
-<div class="total-card"><div class="tc-title">🏆 All Days Total — 2 Months</div><div class="tc-row"><div class="tc-stat"><div class="tc-num" id="tc-done-2">0</div><div class="tc-lbl">Tasks Done</div></div><div class="tc-stat"><div class="tc-num" id="tc-units-2">0</div><div class="tc-lbl">Units</div></div><div class="tc-stat"><div class="tc-num" id="tc-pct-2">0%</div><div class="tc-lbl">2-Month %</div></div></div><div class="tc-bar-wrap"><div class="tc-bar" id="tc-bar-2" style="width:0%"></div></div><div class="tc-pct" id="tc-sub-2">0 / 12,800 units</div></div>
-<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">← Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next →</button></div>
+<div class="task-card" data-task="wed-review"><span class="ci">&#128203;</span><div class="cb"><div class="ct">Day Review &amp; Plan</div><div class="cs">Count units</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
+<div class="meetings-box" id="meetings-box-2"></div>
+<div class="day-summary"><div class="ds-title">Wednesday Summary</div><div class="ds-row"><div class="ds-s"><div class="ds-n" id="ss-dn-2">0</div><div class="ds-l">Done</div></div><div class="ds-s"><div class="ds-n" id="ss-un-2">0</div><div class="ds-l">Units</div></div><div class="ds-s"><div class="ds-n" id="ss-mx-2">0</div><div class="ds-l">Max</div></div></div><div class="ds-bar"><div class="ds-fill" id="ss-fill-2" style="width:0%"></div></div><div class="ds-pct" id="ss-pct-2">0% complete</div></div>
+<div class="total-card"><div class="tc-title">All Days Total — 2 Months</div><div class="tc-row"><div class="tc-s"><div class="tc-n" id="tc-dn-2">0</div><div class="tc-l">Tasks</div></div><div class="tc-s"><div class="tc-n" id="tc-un-2">0</div><div class="tc-l">Units</div></div><div class="tc-s"><div class="tc-n" id="tc-pc-2" style="color:#22c55e;">0%</div><div class="tc-l">2-Month</div></div></div><div class="tc-bar"><div class="tc-fill" id="tc-fill-2" style="width:0%"></div></div><div class="tc-pct" id="tc-sub-2">0 / 12,800 units</div></div>
+<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next</button></div>
 </div>
 
-<!-- ════ THURSDAY ════ -->
+<!-- ======= THURSDAY ======= -->
 <div class="day-panel" id="p3">
 <div class="day-hero">
-  <div class="day-hero-top"><div class="dh-title">Thursday</div><div class="dh-date" id="dh-date-3"></div></div>
-  <div class="dh-stats"><div class="dh-stat"><div class="dh-num" id="d-done-3">0</div><div class="dh-lbl">Done</div></div><div class="dh-stat"><div class="dh-num" id="d-total-3">0</div><div class="dh-lbl">Total</div></div><div class="dh-stat"><div class="dh-num" id="d-units-3">0</div><div class="dh-lbl">Units</div></div><div class="dh-stat"><div class="dh-num" id="d-pct-3">0%</div><div class="dh-lbl">Done %</div></div></div>
-  <div class="dh-bar-wrap"><div class="dh-bar" id="dh-bar-3" style="width:0%"></div></div>
+  <div class="dh-top"><div class="dh-title">Thursday</div><div class="dh-date" id="dd-3"></div></div>
+  <div class="dh-stats"><div class="dh-s"><div class="dh-n" id="dn-3">0</div><div class="dh-l">Done</div></div><div class="dh-s"><div class="dh-n" id="dt-3">0</div><div class="dh-l">Total</div></div><div class="dh-s"><div class="dh-n" id="du-3">0</div><div class="dh-l">Units</div></div><div class="dh-s"><div class="dh-n" id="dp-3">0%</div><div class="dh-l">Done%</div></div></div>
+  <div class="dh-bar"><div class="dh-fill" id="df-3" style="width:0%"></div></div>
 </div>
 <div class="time-row"><span class="tl">7:00 AM</span></div>
-<div class="task-card" data-task="thu-treadmill"><span class="ci">🏃‍♀️</span><div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="thu-treadmill"><span class="ci">&#127939;&#8205;&#9792;</span><div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">7:30 AM</span></div>
-<div class="task-card" data-task="thu-meditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="thu-meditation"><span class="ci">&#129488;</span><div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">8:00 AM</span></div>
-<div class="task-card" data-task="thu-pmp"><span class="ci">🏆</span><div class="cb"><div class="ct">PMP — Content Review</div><div class="cs">Chapter study</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="thu-pmp"><span class="ci">&#127942;</span><div class="cb"><div class="ct">PMP Content Review</div><div class="cs">Chapter study</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">8:30 AM</span></div>
-<div class="task-card travel"><span class="ci">🚗</span><div class="cb"><div class="ct">Travelling</div><div class="cs">Free · podcast</div></div></div>
+<div class="task-card travel"><span class="ci">&#128663;</span><div class="cb"><div class="ct">Travelling</div><div class="cs">Free time</div></div></div>
 <div class="time-row"><span class="tl">11:00 AM</span></div>
-<div class="task-card" data-task="thu-speaking"><span class="ci">🎤</span><div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12–15 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="thu-speaking"><span class="ci">&#127908;</span><div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12-15 mins</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">12:30 PM</span></div>
-<div class="task-card" data-task="thu-job"><span class="ci">💼</span><div class="cb"><div class="ct">Job Applications</div><div class="cs">LinkedIn · portals</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="thu-job"><span class="ci">&#128188;</span><div class="cb"><div class="ct">Job Applications</div><div class="cs">LinkedIn · portals</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">2:00 PM</span></div>
-<div class="task-card" data-task="thu-coursera"><span class="ci">💻</span><div class="cb"><div class="ct">Coursera — IT Automation</div><div class="cs">Google module</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="thu-coursera"><span class="ci">&#128187;</span><div class="cb"><div class="ct">Coursera — IT Automation</div><div class="cs">Google module</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">5:00 PM</span></div>
-<div class="task-card" data-task="thu-pabbly"><span class="ci">⚙️</span><div class="cb"><div class="ct">Pabbly / Saleshandy</div><div class="cs">Workflows · campaigns</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="thu-pabbly"><span class="ci">&#9881;</span><div class="cb"><div class="ct">Pabbly / Saleshandy</div><div class="cs">Workflows</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">7:00 PM</span></div>
-<div class="task-card" data-task="thu-evemeditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="thu-evemeditation"><span class="ci">&#129488;</span><div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">8:00 PM</span></div>
-<div class="task-card" data-task="thu-call"><span class="ci">📞</span><div class="cb"><div class="ct">Call Near & Dear Ones</div><div class="cs">Stay connected</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="thu-call"><span class="ci">&#128222;</span><div class="cb"><div class="ct">Call Near &amp; Dear Ones</div><div class="cs">Stay connected</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">9:00 PM</span></div>
-<div class="task-card" data-task="thu-review"><span class="ci">📋</span><div class="cb"><div class="ct">Day Review & Plan</div><div class="cs">Count units · wind down</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
-<div class="day-summary"><div class="ds-title">📊 Thursday Summary</div><div class="ds-row"><div class="ds-stat"><div class="ds-num" id="ds-done-3">0</div><div class="ds-lbl">Tasks Done</div></div><div class="ds-stat"><div class="ds-num" id="ds-units-3">0</div><div class="ds-lbl">Units Earned</div></div><div class="ds-stat"><div class="ds-num" id="ds-max-3">0</div><div class="ds-lbl">Max Units</div></div></div><div class="ds-bar-wrap"><div class="ds-bar" id="ds-bar-3" style="width:0%"></div></div><div class="ds-pct" id="ds-pct-3">0% complete</div></div>
-<div class="total-card"><div class="tc-title">🏆 All Days Total — 2 Months</div><div class="tc-row"><div class="tc-stat"><div class="tc-num" id="tc-done-3">0</div><div class="tc-lbl">Tasks Done</div></div><div class="tc-stat"><div class="tc-num" id="tc-units-3">0</div><div class="tc-lbl">Units</div></div><div class="tc-stat"><div class="tc-num" id="tc-pct-3">0%</div><div class="tc-lbl">2-Month %</div></div></div><div class="tc-bar-wrap"><div class="tc-bar" id="tc-bar-3" style="width:0%"></div></div><div class="tc-pct" id="tc-sub-3">0 / 12,800 units</div></div>
-<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">← Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next →</button></div>
+<div class="task-card" data-task="thu-review"><span class="ci">&#128203;</span><div class="cb"><div class="ct">Day Review &amp; Plan</div><div class="cs">Count units</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
+<div class="meetings-box" id="meetings-box-3"></div>
+<div class="day-summary"><div class="ds-title">Thursday Summary</div><div class="ds-row"><div class="ds-s"><div class="ds-n" id="ss-dn-3">0</div><div class="ds-l">Done</div></div><div class="ds-s"><div class="ds-n" id="ss-un-3">0</div><div class="ds-l">Units</div></div><div class="ds-s"><div class="ds-n" id="ss-mx-3">0</div><div class="ds-l">Max</div></div></div><div class="ds-bar"><div class="ds-fill" id="ss-fill-3" style="width:0%"></div></div><div class="ds-pct" id="ss-pct-3">0% complete</div></div>
+<div class="total-card"><div class="tc-title">All Days Total — 2 Months</div><div class="tc-row"><div class="tc-s"><div class="tc-n" id="tc-dn-3">0</div><div class="tc-l">Tasks</div></div><div class="tc-s"><div class="tc-n" id="tc-un-3">0</div><div class="tc-l">Units</div></div><div class="tc-s"><div class="tc-n" id="tc-pc-3" style="color:#22c55e;">0%</div><div class="tc-l">2-Month</div></div></div><div class="tc-bar"><div class="tc-fill" id="tc-fill-3" style="width:0%"></div></div><div class="tc-pct" id="tc-sub-3">0 / 12,800 units</div></div>
+<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next</button></div>
 </div>
 
-<!-- ════ FRIDAY ════ -->
+<!-- ======= FRIDAY ======= -->
 <div class="day-panel" id="p4">
 <div class="day-hero">
-  <div class="day-hero-top"><div class="dh-title">Friday</div><div class="dh-date" id="dh-date-4"></div></div>
-  <div class="dh-stats"><div class="dh-stat"><div class="dh-num" id="d-done-4">0</div><div class="dh-lbl">Done</div></div><div class="dh-stat"><div class="dh-num" id="d-total-4">0</div><div class="dh-lbl">Total</div></div><div class="dh-stat"><div class="dh-num" id="d-units-4">0</div><div class="dh-lbl">Units</div></div><div class="dh-stat"><div class="dh-num" id="d-pct-4">0%</div><div class="dh-lbl">Done %</div></div></div>
-  <div class="dh-bar-wrap"><div class="dh-bar" id="dh-bar-4" style="width:0%"></div></div>
+  <div class="dh-top"><div class="dh-title">Friday</div><div class="dh-date" id="dd-4"></div></div>
+  <div class="dh-stats"><div class="dh-s"><div class="dh-n" id="dn-4">0</div><div class="dh-l">Done</div></div><div class="dh-s"><div class="dh-n" id="dt-4">0</div><div class="dh-l">Total</div></div><div class="dh-s"><div class="dh-n" id="du-4">0</div><div class="dh-l">Units</div></div><div class="dh-s"><div class="dh-n" id="dp-4">0%</div><div class="dh-l">Done%</div></div></div>
+  <div class="dh-bar"><div class="dh-fill" id="df-4" style="width:0%"></div></div>
 </div>
 <div class="time-row"><span class="tl">7:00 AM</span></div>
-<div class="task-card" data-task="fri-treadmill"><span class="ci">🏃‍♀️</span><div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="fri-treadmill"><span class="ci">&#127939;&#8205;&#9792;</span><div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">7:30 AM</span></div>
-<div class="task-card" data-task="fri-meditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="fri-meditation"><span class="ci">&#129488;</span><div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">8:00 AM</span></div>
-<div class="task-card" data-task="fri-pmp"><span class="ci">🏆</span><div class="cb"><div class="ct">PMP — Mock Test</div><div class="cs">50Q full exam</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="fri-pmp"><span class="ci">&#127942;</span><div class="cb"><div class="ct">PMP — Mock Test</div><div class="cs">50Q full exam</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">8:30 AM</span></div>
-<div class="task-card travel"><span class="ci">🚗</span><div class="cb"><div class="ct">Travelling</div><div class="cs">Free · podcast</div></div></div>
+<div class="task-card travel"><span class="ci">&#128663;</span><div class="cb"><div class="ct">Travelling</div><div class="cs">Free time</div></div></div>
 <div class="time-row"><span class="tl">11:00 AM</span></div>
-<div class="task-card" data-task="fri-speaking"><span class="ci">🎤</span><div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12–15 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="fri-speaking"><span class="ci">&#127908;</span><div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12-15 mins</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">12:30 PM</span></div>
-<div class="task-card" data-task="fri-job"><span class="ci">💼</span><div class="cb"><div class="ct">Job Applications</div><div class="cs">LinkedIn · portals</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="fri-job"><span class="ci">&#128188;</span><div class="cb"><div class="ct">Job Applications</div><div class="cs">LinkedIn · portals</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">3:00 PM</span></div>
-<div class="task-card" data-task="fri-shoot"><span class="ci">🎬</span><div class="cb"><div class="ct">Content Shoot</div><div class="cs">YouTube · Instagram · 2 hrs</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="fri-shoot"><span class="ci">&#127909;</span><div class="cb"><div class="ct">Content Shoot</div><div class="cs">YouTube · Instagram</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">5:00 PM</span></div>
-<div class="task-card" data-task="fri-edit"><span class="ci">✂️</span><div class="cb"><div class="ct">Edit & Schedule Content</div><div class="cs">Vizard.ai · Pabbly</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="fri-edit"><span class="ci">&#9986;</span><div class="cb"><div class="ct">Edit &amp; Schedule Content</div><div class="cs">Vizard.ai · Pabbly</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">7:00 PM</span></div>
-<div class="task-card" data-task="fri-evemeditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="fri-evemeditation"><span class="ci">&#129488;</span><div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">8:00 PM</span></div>
-<div class="task-card" data-task="fri-call"><span class="ci">📞</span><div class="cb"><div class="ct">Call Near & Dear Ones</div><div class="cs">Stay connected</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="fri-call"><span class="ci">&#128222;</span><div class="cb"><div class="ct">Call Near &amp; Dear Ones</div><div class="cs">Stay connected</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">9:00 PM</span></div>
-<div class="task-card" data-task="fri-review"><span class="ci">📋</span><div class="cb"><div class="ct">Day Review & Plan</div><div class="cs">Count units · wind down</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
-<div class="day-summary"><div class="ds-title">📊 Friday Summary</div><div class="ds-row"><div class="ds-stat"><div class="ds-num" id="ds-done-4">0</div><div class="ds-lbl">Tasks Done</div></div><div class="ds-stat"><div class="ds-num" id="ds-units-4">0</div><div class="ds-lbl">Units Earned</div></div><div class="ds-stat"><div class="ds-num" id="ds-max-4">0</div><div class="ds-lbl">Max Units</div></div></div><div class="ds-bar-wrap"><div class="ds-bar" id="ds-bar-4" style="width:0%"></div></div><div class="ds-pct" id="ds-pct-4">0% complete</div></div>
-<div class="total-card"><div class="tc-title">🏆 All Days Total — 2 Months</div><div class="tc-row"><div class="tc-stat"><div class="tc-num" id="tc-done-4">0</div><div class="tc-lbl">Tasks Done</div></div><div class="tc-stat"><div class="tc-num" id="tc-units-4">0</div><div class="tc-lbl">Units</div></div><div class="tc-stat"><div class="tc-num" id="tc-pct-4">0%</div><div class="tc-lbl">2-Month %</div></div></div><div class="tc-bar-wrap"><div class="tc-bar" id="tc-bar-4" style="width:0%"></div></div><div class="tc-pct" id="tc-sub-4">0 / 12,800 units</div></div>
-<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">← Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next →</button></div>
+<div class="task-card" data-task="fri-review"><span class="ci">&#128203;</span><div class="cb"><div class="ct">Day Review &amp; Plan</div><div class="cs">Count units</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
+<div class="meetings-box" id="meetings-box-4"></div>
+<div class="day-summary"><div class="ds-title">Friday Summary</div><div class="ds-row"><div class="ds-s"><div class="ds-n" id="ss-dn-4">0</div><div class="ds-l">Done</div></div><div class="ds-s"><div class="ds-n" id="ss-un-4">0</div><div class="ds-l">Units</div></div><div class="ds-s"><div class="ds-n" id="ss-mx-4">0</div><div class="ds-l">Max</div></div></div><div class="ds-bar"><div class="ds-fill" id="ss-fill-4" style="width:0%"></div></div><div class="ds-pct" id="ss-pct-4">0% complete</div></div>
+<div class="total-card"><div class="tc-title">All Days Total — 2 Months</div><div class="tc-row"><div class="tc-s"><div class="tc-n" id="tc-dn-4">0</div><div class="tc-l">Tasks</div></div><div class="tc-s"><div class="tc-n" id="tc-un-4">0</div><div class="tc-l">Units</div></div><div class="tc-s"><div class="tc-n" id="tc-pc-4" style="color:#22c55e;">0%</div><div class="tc-l">2-Month</div></div></div><div class="tc-bar"><div class="tc-fill" id="tc-fill-4" style="width:0%"></div></div><div class="tc-pct" id="tc-sub-4">0 / 12,800 units</div></div>
+<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next</button></div>
 </div>
 
-<!-- ════ SATURDAY ════ -->
+<!-- ======= SATURDAY ======= -->
 <div class="day-panel" id="p5">
 <div class="day-hero">
-  <div class="day-hero-top"><div class="dh-title">Saturday</div><div class="dh-date" id="dh-date-5"></div></div>
-  <div class="dh-stats"><div class="dh-stat"><div class="dh-num" id="d-done-5">0</div><div class="dh-lbl">Done</div></div><div class="dh-stat"><div class="dh-num" id="d-total-5">0</div><div class="dh-lbl">Total</div></div><div class="dh-stat"><div class="dh-num" id="d-units-5">0</div><div class="dh-lbl">Units</div></div><div class="dh-stat"><div class="dh-num" id="d-pct-5">0%</div><div class="dh-lbl">Done %</div></div></div>
-  <div class="dh-bar-wrap"><div class="dh-bar" id="dh-bar-5" style="width:0%"></div></div>
+  <div class="dh-top"><div class="dh-title">Saturday</div><div class="dh-date" id="dd-5"></div></div>
+  <div class="dh-stats"><div class="dh-s"><div class="dh-n" id="dn-5">0</div><div class="dh-l">Done</div></div><div class="dh-s"><div class="dh-n" id="dt-5">0</div><div class="dh-l">Total</div></div><div class="dh-s"><div class="dh-n" id="du-5">0</div><div class="dh-l">Units</div></div><div class="dh-s"><div class="dh-n" id="dp-5">0%</div><div class="dh-l">Done%</div></div></div>
+  <div class="dh-bar"><div class="dh-fill" id="df-5" style="width:0%"></div></div>
 </div>
 <div class="time-row"><span class="tl">7:00 AM</span></div>
-<div class="task-card" data-task="sat-treadmill"><span class="ci">🏃‍♀️</span><div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="sat-treadmill"><span class="ci">&#127939;&#8205;&#9792;</span><div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">7:30 AM</span></div>
-<div class="task-card" data-task="sat-meditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="sat-meditation"><span class="ci">&#129488;</span><div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">8:00 AM</span></div>
-<div class="task-card" data-task="sat-pmp"><span class="ci">🏆</span><div class="cb"><div class="ct">PMP — MCQ Practice</div><div class="cs">30 questions</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="sat-pmp"><span class="ci">&#127942;</span><div class="cb"><div class="ct">PMP — MCQ Practice</div><div class="cs">30 questions</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">11:00 AM</span></div>
-<div class="task-card" data-task="sat-speaking"><span class="ci">🎤</span><div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12–15 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="sat-speaking"><span class="ci">&#127908;</span><div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12-15 mins</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">12:00 PM</span></div>
-<div class="task-card" data-task="sat-job"><span class="ci">💼</span><div class="cb"><div class="ct">Job Apply — Deep Session</div><div class="cs">Weekend deep apply</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="sat-job"><span class="ci">&#128188;</span><div class="cb"><div class="ct">Job Apply — Deep Session</div><div class="cs">Weekend apply</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">2:00 PM</span></div>
-<div class="task-card" data-task="sat-agentic"><span class="ci">🤖</span><div class="cb"><div class="ct">Agentic AI — LIVE CLASS</div><div class="cs">Simplilearn · Microsoft · 3 hrs</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="sat-agentic"><span class="ci">&#129302;</span><div class="cb"><div class="ct">Agentic AI — LIVE CLASS</div><div class="cs">Simplilearn · Microsoft</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">5:00 PM</span></div>
-<div class="task-card" data-task="sat-pabbly"><span class="ci">⚙️</span><div class="cb"><div class="ct">Pabbly / Saleshandy</div><div class="cs">Deep workflow setup</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="sat-pabbly"><span class="ci">&#9881;</span><div class="cb"><div class="ct">Pabbly / Saleshandy</div><div class="cs">Deep workflow setup</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">6:00 PM</span></div>
-<div class="task-card" data-task="sat-coursera"><span class="ci">💻</span><div class="cb"><div class="ct">Coursera — IT Automation</div><div class="cs">Weekend module</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="sat-coursera"><span class="ci">&#128187;</span><div class="cb"><div class="ct">Coursera — IT Automation</div><div class="cs">Weekend module</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">7:00 PM</span></div>
-<div class="task-card" data-task="sat-evemeditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="sat-evemeditation"><span class="ci">&#129488;</span><div class="cb"><div class="ct">Evening Meditation</div><div class="cs">Reflect · breathe</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">8:00 PM</span></div>
-<div class="task-card" data-task="sat-call"><span class="ci">📞</span><div class="cb"><div class="ct">Call Near & Dear Ones</div><div class="cs">Stay connected</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="sat-call"><span class="ci">&#128222;</span><div class="cb"><div class="ct">Call Near &amp; Dear Ones</div><div class="cs">Stay connected</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">9:00 PM</span></div>
-<div class="task-card" data-task="sat-review"><span class="ci">📋</span><div class="cb"><div class="ct">Week Review & Plan Monday</div><div class="cs">Set goals · wind down</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
-<div class="day-summary"><div class="ds-title">📊 Saturday Summary</div><div class="ds-row"><div class="ds-stat"><div class="ds-num" id="ds-done-5">0</div><div class="ds-lbl">Tasks Done</div></div><div class="ds-stat"><div class="ds-num" id="ds-units-5">0</div><div class="ds-lbl">Units Earned</div></div><div class="ds-stat"><div class="ds-num" id="ds-max-5">0</div><div class="ds-lbl">Max Units</div></div></div><div class="ds-bar-wrap"><div class="ds-bar" id="ds-bar-5" style="width:0%"></div></div><div class="ds-pct" id="ds-pct-5">0% complete</div></div>
-<div class="total-card"><div class="tc-title">🏆 All Days Total — 2 Months</div><div class="tc-row"><div class="tc-stat"><div class="tc-num" id="tc-done-5">0</div><div class="tc-lbl">Tasks Done</div></div><div class="tc-stat"><div class="tc-num" id="tc-units-5">0</div><div class="tc-lbl">Units</div></div><div class="tc-stat"><div class="tc-num" id="tc-pct-5">0%</div><div class="tc-lbl">2-Month %</div></div></div><div class="tc-bar-wrap"><div class="tc-bar" id="tc-bar-5" style="width:0%"></div></div><div class="tc-pct" id="tc-sub-5">0 / 12,800 units</div></div>
-<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">← Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next →</button></div>
+<div class="task-card" data-task="sat-review"><span class="ci">&#128203;</span><div class="cb"><div class="ct">Week Review &amp; Plan Monday</div><div class="cs">Set goals · wind down</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
+<div class="meetings-box" id="meetings-box-5"></div>
+<div class="day-summary"><div class="ds-title">Saturday Summary</div><div class="ds-row"><div class="ds-s"><div class="ds-n" id="ss-dn-5">0</div><div class="ds-l">Done</div></div><div class="ds-s"><div class="ds-n" id="ss-un-5">0</div><div class="ds-l">Units</div></div><div class="ds-s"><div class="ds-n" id="ss-mx-5">0</div><div class="ds-l">Max</div></div></div><div class="ds-bar"><div class="ds-fill" id="ss-fill-5" style="width:0%"></div></div><div class="ds-pct" id="ss-pct-5">0% complete</div></div>
+<div class="total-card"><div class="tc-title">All Days Total — 2 Months</div><div class="tc-row"><div class="tc-s"><div class="tc-n" id="tc-dn-5">0</div><div class="tc-l">Tasks</div></div><div class="tc-s"><div class="tc-n" id="tc-un-5">0</div><div class="tc-l">Units</div></div><div class="tc-s"><div class="tc-n" id="tc-pc-5" style="color:#22c55e;">0%</div><div class="tc-l">2-Month</div></div></div><div class="tc-bar"><div class="tc-fill" id="tc-fill-5" style="width:0%"></div></div><div class="tc-pct" id="tc-sub-5">0 / 12,800 units</div></div>
+<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next</button></div>
 </div>
 
-<!-- ════ SUNDAY ════ -->
+<!-- ======= SUNDAY ======= -->
 <div class="day-panel" id="p6">
 <div class="day-hero">
-  <div class="day-hero-top"><div class="dh-title">Sunday</div><div class="dh-date" id="dh-date-6"></div></div>
-  <div class="dh-stats"><div class="dh-stat"><div class="dh-num" id="d-done-6">0</div><div class="dh-lbl">Done</div></div><div class="dh-stat"><div class="dh-num" id="d-total-6">0</div><div class="dh-lbl">Total</div></div><div class="dh-stat"><div class="dh-num" id="d-units-6">0</div><div class="dh-lbl">Units</div></div><div class="dh-stat"><div class="dh-num" id="d-pct-6">0%</div><div class="dh-lbl">Done %</div></div></div>
-  <div class="dh-bar-wrap"><div class="dh-bar" id="dh-bar-6" style="width:0%"></div></div>
+  <div class="dh-top"><div class="dh-title">Sunday</div><div class="dh-date" id="dd-6"></div></div>
+  <div class="dh-stats"><div class="dh-s"><div class="dh-n" id="dn-6">0</div><div class="dh-l">Done</div></div><div class="dh-s"><div class="dh-n" id="dt-6">0</div><div class="dh-l">Total</div></div><div class="dh-s"><div class="dh-n" id="du-6">0</div><div class="dh-l">Units</div></div><div class="dh-s"><div class="dh-n" id="dp-6">0%</div><div class="dh-l">Done%</div></div></div>
+  <div class="dh-bar"><div class="dh-fill" id="df-6" style="width:0%"></div></div>
 </div>
 <div class="time-row"><span class="tl">7:00 AM</span></div>
-<div class="task-card" data-task="sun-treadmill"><span class="ci">🏃‍♀️</span><div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="sun-treadmill"><span class="ci">&#127939;&#8205;&#9792;</span><div class="cb"><div class="ct">Treadmill Workout</div><div class="cs">30 mins</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">7:30 AM</span></div>
-<div class="task-card" data-task="sun-meditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="sun-meditation"><span class="ci">&#129488;</span><div class="cb"><div class="ct">Meditation / Book Reading</div><div class="cs">Morning ritual</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">8:00 AM</span></div>
-<div class="task-card" data-task="sun-pmp"><span class="ci">🏆</span><div class="cb"><div class="ct">PMP — Content Review</div><div class="cs">Weekly chapter</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="sun-pmp"><span class="ci">&#127942;</span><div class="cb"><div class="ct">PMP Content Review</div><div class="cs">Weekly chapter</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">11:00 AM</span></div>
-<div class="task-card" data-task="sun-speaking"><span class="ci">🎤</span><div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12–15 mins</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="sun-speaking"><span class="ci">&#127908;</span><div class="cb"><div class="ct">Speaking Mastery</div><div class="cs">Record 12-15 mins</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">12:00 PM</span></div>
-<div class="task-card" data-task="sun-coursera"><span class="ci">💻</span><div class="cb"><div class="ct">Coursera — IT Automation</div><div class="cs">Self-paced module</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="sun-coursera"><span class="ci">&#128187;</span><div class="cb"><div class="ct">Coursera — IT Automation</div><div class="cs">Self-paced module</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">2:00 PM</span></div>
-<div class="task-card" data-task="sun-agentic"><span class="ci">🤖</span><div class="cb"><div class="ct">Agentic AI — LIVE CLASS</div><div class="cs">Simplilearn · Microsoft · 3 hrs</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="sun-agentic"><span class="ci">&#129302;</span><div class="cb"><div class="ct">Agentic AI — LIVE CLASS</div><div class="cs">Simplilearn · Microsoft</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">5:00 PM</span></div>
-<div class="task-card" data-task="sun-social"><span class="ci">😊</span><div class="cb"><div class="ct">Social & Joy Time</div><div class="cs">Friends · movie · outing</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="sun-social"><span class="ci">&#128522;</span><div class="cb"><div class="ct">Social &amp; Joy Time</div><div class="cs">Friends · movie · outing</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">7:00 PM</span></div>
-<div class="task-card" data-task="sun-evemeditation"><span class="ci">🧘</span><div class="cb"><div class="ct">Evening Meditation & Gratitude</div><div class="cs">Reflect on the week</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="sun-evemeditation"><span class="ci">&#129488;</span><div class="cb"><div class="ct">Evening Meditation &amp; Gratitude</div><div class="cs">Reflect on the week</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">8:00 PM</span></div>
-<div class="task-card" data-task="sun-call"><span class="ci">📞</span><div class="cb"><div class="ct">Call Near & Dear Ones</div><div class="cs">Stay connected</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
+<div class="task-card" data-task="sun-call"><span class="ci">&#128222;</span><div class="cb"><div class="ct">Call Near &amp; Dear Ones</div><div class="cs">Stay connected</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
 <div class="time-row"><span class="tl">9:00 PM</span></div>
-<div class="task-card" data-task="sun-review"><span class="ci">📋</span><div class="cb"><div class="ct">Week Review & Plan Monday</div><div class="cs">Set goals · sleep well</div></div><div class="cr"><div class="ck">✓</div><div class="ub">20 PTS</div></div></div>
-<div class="day-summary"><div class="ds-title">📊 Sunday Summary</div><div class="ds-row"><div class="ds-stat"><div class="ds-num" id="ds-done-6">0</div><div class="ds-lbl">Tasks Done</div></div><div class="ds-stat"><div class="ds-num" id="ds-units-6">0</div><div class="ds-lbl">Units Earned</div></div><div class="ds-stat"><div class="ds-num" id="ds-max-6">0</div><div class="ds-lbl">Max Units</div></div></div><div class="ds-bar-wrap"><div class="ds-bar" id="ds-bar-6" style="width:0%"></div></div><div class="ds-pct" id="ds-pct-6">0% complete</div></div>
+<div class="task-card" data-task="sun-review"><span class="ci">&#128203;</span><div class="cb"><div class="ct">Week Review &amp; Plan Monday</div><div class="cs">Set goals · sleep well</div></div><div class="cr"><div class="ck">&#10003;</div><div class="ub">20 PTS</div></div></div>
+<div class="meetings-box" id="meetings-box-6"></div>
+<div class="day-summary"><div class="ds-title">Sunday Summary</div><div class="ds-row"><div class="ds-s"><div class="ds-n" id="ss-dn-6">0</div><div class="ds-l">Done</div></div><div class="ds-s"><div class="ds-n" id="ss-un-6">0</div><div class="ds-l">Units</div></div><div class="ds-s"><div class="ds-n" id="ss-mx-6">0</div><div class="ds-l">Max</div></div></div><div class="ds-bar"><div class="ds-fill" id="ss-fill-6" style="width:0%"></div></div><div class="ds-pct" id="ss-pct-6">0% complete</div></div>
 <div class="total-card">
-  <div class="tc-title">🏆 All Days Total — 2 Months</div>
-  <div class="tc-row">
-    <div class="tc-stat"><div class="tc-num" id="tc-done-6">0</div><div class="tc-lbl">Tasks Done</div></div>
-    <div class="tc-stat"><div class="tc-num" id="tc-units-6">0</div><div class="tc-lbl">Units</div></div>
-    <div class="tc-stat"><div class="tc-num" id="tc-pct-6">0%</div><div class="tc-lbl">2-Month %</div></div>
-  </div>
-  <div class="tc-bar-wrap"><div class="tc-bar" id="tc-bar-6" style="width:0%"></div></div>
+  <div class="tc-title">All Days Total — 2 Months</div>
+  <div class="tc-row"><div class="tc-s"><div class="tc-n" id="tc-dn-6">0</div><div class="tc-l">Tasks</div></div><div class="tc-s"><div class="tc-n" id="tc-un-6">0</div><div class="tc-l">Units</div></div><div class="tc-s"><div class="tc-n" id="tc-pc-6" style="color:#22c55e;">0%</div><div class="tc-l">2-Month</div></div></div>
+  <div class="tc-bar"><div class="tc-fill" id="tc-fill-6" style="width:0%"></div></div>
   <div class="tc-pct" id="tc-sub-6">0 / 12,800 units</div>
-  <div class="tc-week-row" style="margin-top:14px;">
-    <div class="tc-day-col"><div class="tc-day-name">M</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-0" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p0">0%</div></div>
-    <div class="tc-day-col"><div class="tc-day-name">T</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-1" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p1">0%</div></div>
-    <div class="tc-day-col"><div class="tc-day-name">W</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-2" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p2">0%</div></div>
-    <div class="tc-day-col"><div class="tc-day-name">T</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-3" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p3">0%</div></div>
-    <div class="tc-day-col"><div class="tc-day-name">F</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-4" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p4">0%</div></div>
-    <div class="tc-day-col"><div class="tc-day-name">S</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-5" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p5">0%</div></div>
-    <div class="tc-day-col"><div class="tc-day-name">S</div><div class="tc-dot-bar"><div class="tc-dot-fill" id="tw-6" style="height:0%"></div></div><div class="tc-day-pct" id="tw-p6">0%</div></div>
+  <div class="tc-days">
+    <div class="tc-day"><div class="tc-day-n">M</div><div class="tc-day-bar"><div class="tc-day-fill" id="tdf-0" style="height:0%"></div></div><div class="tc-day-pct" id="tdp-0">0%</div></div>
+    <div class="tc-day"><div class="tc-day-n">T</div><div class="tc-day-bar"><div class="tc-day-fill" id="tdf-1" style="height:0%"></div></div><div class="tc-day-pct" id="tdp-1">0%</div></div>
+    <div class="tc-day"><div class="tc-day-n">W</div><div class="tc-day-bar"><div class="tc-day-fill" id="tdf-2" style="height:0%"></div></div><div class="tc-day-pct" id="tdp-2">0%</div></div>
+    <div class="tc-day"><div class="tc-day-n">T</div><div class="tc-day-bar"><div class="tc-day-fill" id="tdf-3" style="height:0%"></div></div><div class="tc-day-pct" id="tdp-3">0%</div></div>
+    <div class="tc-day"><div class="tc-day-n">F</div><div class="tc-day-bar"><div class="tc-day-fill" id="tdf-4" style="height:0%"></div></div><div class="tc-day-pct" id="tdp-4">0%</div></div>
+    <div class="tc-day"><div class="tc-day-n">S</div><div class="tc-day-bar"><div class="tc-day-fill" id="tdf-5" style="height:0%"></div></div><div class="tc-day-pct" id="tdp-5">0%</div></div>
+    <div class="tc-day"><div class="tc-day-n">S</div><div class="tc-day-bar"><div class="tc-day-fill" id="tdf-6" style="height:0%"></div></div><div class="tc-day-pct" id="tdp-6">0%</div></div>
   </div>
 </div>
-<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">← Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next →</button></div>
+<div class="nav-row"><button class="nav-btn nav-prev" onclick="prevDay()">Prev</button><button class="nav-btn nav-next" onclick="nextDay()">Next</button></div>
 </div>
 
-</div><!-- end track -->
-</div><!-- end page -->
+</div></div><!-- end track/page -->
+
+<!-- ADD MEETING POPUP -->
+<div class="overlay" id="add-popup">
+  <div class="popup">
+    <div class="ph"></div>
+    <div class="pt">Add Meeting / Event</div>
+    <div class="ps">Paste your Zoom, Meet or Teams link here</div>
+    <div class="pf"><label>Title *</label><input type="text" id="pm-title" placeholder="e.g. Interview with Google, Risers Club Call"></div>
+    <div class="pf"><label>Date &amp; Time</label><input type="datetime-local" id="pm-dt"></div>
+    <div class="pf"><label>Platform</label>
+      <select id="pm-plat">
+        <option value="zoom">Zoom</option>
+        <option value="meet">Google Meet</option>
+        <option value="teams">Microsoft Teams</option>
+        <option value="general">Other / General</option>
+      </select>
+    </div>
+    <div class="pf"><label>Join Link</label><input type="url" id="pm-link" placeholder="https://zoom.us/j/... or meet.google.com/..."></div>
+    <div class="pf"><label>Day of week</label>
+      <select id="pm-day">
+        <option value="0">Monday</option>
+        <option value="1">Tuesday</option>
+        <option value="2">Wednesday</option>
+        <option value="3">Thursday</option>
+        <option value="4">Friday</option>
+        <option value="5">Saturday</option>
+        <option value="6">Sunday</option>
+      </select>
+    </div>
+    <div class="pf"><label>Notes (optional)</label><textarea id="pm-notes" placeholder="Agenda, password, any notes..."></textarea></div>
+    <div class="p-actions">
+      <button class="p-cancel" onclick="closeAddPopup()">Cancel</button>
+      <button class="p-save" onclick="saveMeeting()">Save &amp; Add to Calendar</button>
+    </div>
+  </div>
+</div>
+
+<!-- SYNC CALENDAR POPUP -->
+<div class="overlay" id="sync-popup">
+  <div class="popup">
+    <div class="ph"></div>
+    <div class="pt">Sync from Google Calendar</div>
+    <div class="ps">Open your calendar, copy a meeting link, then paste it here</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+      <button onclick="window.open('https://calendar.google.com','_blank')" style="padding:14px;background:#4285F4;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">Open Google Calendar</button>
+      <button onclick="openAddFromSync()" style="padding:14px;background:#111;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">Paste Meeting Link Here</button>
+      <button onclick="window.open('https://mail.google.com','_blank')" style="padding:14px;background:#EA4335;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">Open Gmail for Invites</button>
+      <div style="background:#EFF6FF;border-radius:10px;padding:12px;font-size:12px;font-weight:600;color:#1D4ED8;line-height:1.6;">
+        Tip: Set up Pabbly Connect to auto-detect Zoom/Meet links in Gmail and send them here automatically.
+      </div>
+      <button onclick="closeSyncPopup()" style="padding:12px;background:#f5f5f5;color:#111;border:none;border-radius:12px;font-size:14px;font-weight:800;font-family:'Mulish',sans-serif;cursor:pointer;">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
 <script>
-const UNITS=20, MAX_2M=12800, SK='nayana_v3';
-let cur=0, showWeek=false;
-const dayDone=[0,0,0,0,0,0,0], dayTotal=[0,0,0,0,0,0,0];
+var UNITS=20, MAX2M=12800, SK='nv3', MK='nm2';
+var cur=0, showWeek=false;
+var dayDone=[0,0,0,0,0,0,0], dayTotal=[0,0,0,0,0,0,0];
+var state={}, meetings=[];
 
-// load localStorage
-let state={};
-try{ const s=localStorage.getItem(SK); if(s) state=JSON.parse(s); }catch(e){}
-function save(){ try{localStorage.setItem(SK,JSON.stringify(state));}catch(e){} }
+// Load state
+try{ var s=localStorage.getItem(SK); if(s) state=JSON.parse(s); }catch(e){}
+try{ var m=localStorage.getItem(MK); if(m) meetings=JSON.parse(m); }catch(e){}
+function saveState(){ try{localStorage.setItem(SK,JSON.stringify(state));}catch(e){} }
+function saveMeetings(){ try{localStorage.setItem(MK,JSON.stringify(meetings));}catch(e){} }
 
-// init cards
-document.querySelectorAll('.task-card[data-task]').forEach(card=>{
-  const key=card.dataset.task;
-  const d=parseInt(card.closest('.day-panel').id.replace('p',''));
+// Init task cards
+document.querySelectorAll('.task-card[data-task]').forEach(function(card){
+  var key=card.dataset.task;
+  var panelId=card.closest('.day-panel').id;
+  var d=parseInt(panelId.replace('p',''));
   dayTotal[d]++;
   if(state[key]){ card.classList.add('done'); dayDone[d]++; }
-  card.addEventListener('click',()=>{
+  card.addEventListener('click', function(){
     if(card.classList.contains('travel')) return;
-    const was=card.classList.contains('done');
-    if(was){ card.classList.remove('done'); dayDone[d]--; delete state[key]; }
-    else { card.classList.add('done'); dayDone[d]++; state[key]=true; }
-    save(); updateAll();
+    if(card.classList.contains('done')){
+      card.classList.remove('done'); dayDone[d]--; delete state[key];
+    } else {
+      card.classList.add('done'); dayDone[d]++; state[key]=true;
+    }
+    saveState(); updateAll();
   });
 });
 
-// set dates
-const DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-const dayNames=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-const now=new Date();
-const todayJSDay=now.getDay(); // 0=Sun
-const dayMap=[6,0,1,2,3,4,5];
-const todayIdx=dayMap[todayJSDay];
-
-// compute date for each day panel relative to today
-for(let d=0;d<7;d++){
-  const diff=d-todayIdx;
-  const dt=new Date(now); dt.setDate(now.getDate()+diff);
-  const el=document.getElementById('dh-date-'+d);
+// Set dates
+var now=new Date();
+var todayJSDay=now.getDay();
+var dayMap=[6,0,1,2,3,4,5];
+var todayIdx=dayMap[todayJSDay];
+for(var d=0;d<7;d++){
+  var diff=d-todayIdx;
+  var dt=new Date(now); dt.setDate(now.getDate()+diff);
+  var el=document.getElementById('dd-'+d);
   if(el) el.textContent=dt.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
 }
-
-// set top date
-const dr=document.getElementById('date-row');
+var dr=document.getElementById('date-row');
 if(dr) dr.textContent=now.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 
+function setText(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; }
+function setW(id,v){ var e=document.getElementById(id); if(e) e.style.width=v; }
+function setH(id,v){ var e=document.getElementById(id); if(e) e.style.height=v; }
+
 function updateAll(){
-  const totalDone=Object.keys(state).length;
-  const totalUnits=totalDone*UNITS;
-  const totalPct=Math.round(totalUnits/MAX_2M*100);
-
-  for(let d=0;d<7;d++){
-    const done=dayDone[d], tot=dayTotal[d];
-    const units=done*UNITS, maxU=tot*UNITS;
-    const pct=tot>0?Math.round(done/tot*100):0;
-
-    // day hero
-    setTxt('d-done-'+d,done);
-    setTxt('d-total-'+d,tot);
-    setTxt('d-units-'+d,units);
-    setTxt('d-pct-'+d,pct+'%');
-    setStyle('dh-bar-'+d,'width',pct+'%');
-
-    // tab
-    setTxt('tp-'+d,pct+'%');
-    const tab=document.querySelector('.day-tab[data-d="'+d+'"]');
+  var totalDone=Object.keys(state).length;
+  var totalUnits=totalDone*UNITS;
+  var totalPct=Math.round(totalUnits/MAX2M*100);
+  for(var d=0;d<7;d++){
+    var done=dayDone[d], tot=dayTotal[d];
+    var units=done*UNITS, maxU=tot*UNITS;
+    var pct=tot>0?Math.round(done/tot*100):0;
+    setText('dn-'+d,done); setText('dt-'+d,tot); setText('du-'+d,units); setText('dp-'+d,pct+'%');
+    setW('df-'+d,pct+'%');
+    setText('tp-'+d,pct+'%');
+    var tab=document.querySelectorAll('.day-tab')[d];
     if(tab){ tab.classList.toggle('full',pct===100); tab.classList.toggle('active',d===cur); }
-
-    // day summary (on each panel)
-    setTxt('ds-done-'+d,done);
-    setTxt('ds-units-'+d,units);
-    setTxt('ds-max-'+d,maxU);
-    setStyle('ds-bar-'+d,'width',pct+'%');
-    setTxt('ds-pct-'+d,pct+'% complete');
-
-    // total card (on each panel)
-    ['tc-done-','tc-units-','tc-pct-','tc-bar-','tc-sub-'].forEach(p=>{
-      const el=document.getElementById(p+d);
-      if(!el) return;
-      if(p==='tc-done-') el.textContent=totalDone;
-      else if(p==='tc-units-') el.textContent=totalUnits;
-      else if(p==='tc-pct-') el.textContent=totalPct+'%';
-      else if(p==='tc-bar-') el.style.width=totalPct+'%';
-      else if(p==='tc-sub-') el.textContent=totalUnits.toLocaleString()+' / 12,800 units';
-    });
-
-    // week view bars
-    setTxt('ww-'+d,units);
-    setStyle('wb-'+d,'height',pct+'%');
-
-    // mini bars in sunday total card
-    setStyle('tw-'+d,'height',pct+'%');
-    setTxt('tw-p'+d,pct+'%');
+    setText('ss-dn-'+d,done); setText('ss-un-'+d,units); setText('ss-mx-'+d,maxU);
+    setW('ss-fill-'+d,pct+'%'); setText('ss-pct-'+d,pct+'% complete');
+    setText('tc-dn-'+d,totalDone); setText('tc-un-'+d,totalUnits);
+    setText('tc-pc-'+d,totalPct+'%'); setW('tc-fill-'+d,totalPct+'%');
+    setText('tc-sub-'+d,totalUnits.toLocaleString()+' / 12,800 units');
+    setH('tdf-'+d,pct+'%'); setText('tdp-'+d,pct+'%');
+    setText('ww-'+d,units); setH('wb-'+d,pct+'%');
   }
-
-  // week panel totals
-  setTxt('wt-done',totalDone);
-  setTxt('wt-units',totalUnits);
-  setTxt('wt-pct',totalPct+'%');
-  setStyle('wt-bar','width',totalPct+'%');
-  setTxt('wt-sub',totalUnits.toLocaleString()+' / 12,800 units');
-
-  // top progress bar (today)
-  const tUnits=dayDone[cur]*UNITS, tMax=dayTotal[cur]*UNITS;
-  const tPct=tMax>0?Math.round(tUnits/tMax*100):0;
-  setStyle('pr-bar','width',tPct+'%');
-  setTxt('pr-count',tUnits+' / '+tMax+' units');
+  setText('wt-done',totalDone); setText('wt-units',totalUnits); setText('wt-pct',totalPct+'%');
+  setW('wt-bar',totalPct+'%'); setText('wt-sub',totalUnits.toLocaleString()+' / 12,800 units');
+  var tU=dayDone[cur]*UNITS, tM=dayTotal[cur]*UNITS;
+  var tP=tM>0?Math.round(tU/tM*100):0;
+  setW('pr-bar',tP+'%'); setText('pr-count',tU+'/'+tM);
 }
-
-function setTxt(id,v){ const el=document.getElementById(id); if(el) el.textContent=v; }
-function setStyle(id,prop,v){ const el=document.getElementById(id); if(el) el.style[prop]=v; }
 
 function goTo(d){
   cur=d;
   document.getElementById('track').style.transform='translateX(-'+(d*(100/7))+'%)';
-  document.querySelectorAll('.day-tab').forEach((t,i)=>t.classList.toggle('active',i===d));
-  const tab=document.querySelector('.day-tab[data-d="'+d+'"]');
+  document.querySelectorAll('.day-tab').forEach(function(t,i){ t.classList.toggle('active',i===d); });
+  var tab=document.querySelectorAll('.day-tab')[d];
   if(tab) tab.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
   updateAll();
   window.scrollTo({top:0,behavior:'smooth'});
@@ -745,191 +675,173 @@ function toggleWeek(){
   showWeek=!showWeek;
   document.getElementById('week-panel').classList.toggle('on',showWeek);
   document.getElementById('page').style.display=showWeek?'none':'block';
-  document.getElementById('wbtn').textContent=showWeek?'← Day':'📊 Week';
+  var btn=document.querySelector('.hbtn');
+  if(btn) btn.textContent=showWeek?'Day':'Week';
   updateAll();
 }
 
-// touch swipe
-let sx=0,sy=0;
-document.getElementById('track').addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
-document.getElementById('track').addEventListener('touchend',e=>{
-  const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+function confirmReset(){
+  if(confirm('Reset ALL task progress? Cannot be undone.')){
+    localStorage.removeItem(SK); state={};
+    document.querySelectorAll('.task-card.done').forEach(function(c){ c.classList.remove('done'); });
+    for(var d=0;d<7;d++) dayDone[d]=0;
+    updateAll();
+  }
+}
+
+// ==================
+// MEETINGS
+// ==================
+function renderMeetingsForDay(d){
+  var box=document.getElementById('meetings-box-'+d);
+  i
+  var now2=new Date();
+  var diff=d-todayIdx;
+  var targetDate=new Date(now2); targetDate.setDate(now2.getDate()+diff);
+  var targetStr=targetDate.toDateString();
+  var dayMeetings=meetings.filter(function(m){
+    if(!m.dt) return (m.day===d);
+    return new Date(m.dt).toDateString()===targetStr || m.day===d;
+  });
+  var header='<div class="mb-header">';
+  header+='<div class="mb-title">Meetings &amp; Events</div>';
+  header+='<div class="mb-btns">';
+  header+='<button class="mb-btn sync" onclick="openSyncPopup()">Sync Cal</button>';
+  header+='<button class="mb-btn add" onclick="openAddPopup('+d+')">+ Add</button>';
+  header+='</div></div>';
+  if(dayMeetings.length===0){
+    box.innerHTML=header+'<div class="no-meet">No meetings. Tap + Add or Sync Cal.</div>';
+  } else {
+    var cards=dayMeetings.map(function(m,i){
+      var idx=meetings.indexOf(m);
+      var dt2=m.dt?new Date(m.dt):null;
+      var isToday=dt2?dt2.toDateString()===now2.toDateString():false;
+      var timeStr=dt2?dt2.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true}):'';
+      var badge=isToday?'<span class="today-badge">TODAY</span>':'';
+      var h='<div class="meet-card '+(m.plat||'general')+'">';
+      h+='<div class="mc-title">'+esc(m.title)+badge+'</div>';
+      if(timeStr) h+='<div class="mc-time">'+timeStr+'</div>';
+      if(m.link) h+='<a class="mc-link" href="'+esc(m.link)+'" target="_blank">'+esc(m.link)+'</a>';
+      if(m.notes) h+='<div style="font-size:11px;color:#888;margin-top:3px;">'+esc(m.notes)+'</div>';
+      h+='<div class="mc-actions">';
+      if(m.link) h+='<button class="mc-action mc-join" onclick="joinM('+idx+')">Join Now</button>';
+      h+='<button class="mc-action mc-cal" onclick="addToGCal('+idx+')">Add to Cal</button>';
+      h+='<button class="mc-del" onclick="delMeeting('+idx+')">Delete</button>';
+      h+='</div></div>';
+      return h;
+    }).join('');
+    box.innerHTML=header+cards;
+  }
+}
+
+function renderAllMeetings(){
+  for(var d=0;d<7;d++) renderMeetingsForDay(d);
+}
+
+function esc(s){
+  if(!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+var addForDay=0;
+function openAddPopup(d){
+  addForDay=d;
+  document.getElementById('pm-day').value=String(d);
+  var now3=new Date(); now3.setHours(now3.getHours()+1,0,0,0);
+  var pad=function(n){ return String(n).padStart(2,'0'); };
+  var dtStr=now3.getFullYear()+'-'+pad(now3.getMonth()+1)+'-'+pad(now3.getDate())+'T'+pad(now3.getHours())+':00';
+  document.getElementById('pm-dt').value=dtStr;
+  document.getElementById('add-popup').classList.add('on');
+  if(navigator.clipboard && navigator.clipboard.readText){
+    navigator.clipboard.readText().then(function(txt){
+      if(txt && (txt.indexOf('zoom.us')>-1 || txt.indexOf('meet.google.com')>-1 || txt.indexOf('teams.microsoft.com')>-1)){
+        document.getElementById('pm-link').value=txt;
+        if(txt.indexOf('zoom.us')>-1) document.getElementById('pm-plat').value='zoom';
+        else if(txt.indexOf('meet.google.com')>-1) document.getElementById('pm-plat').value='meet';
+        else document.getElementById('pm-plat').value='teams';
+        showToast('Meeting link detected from clipboard!');
+      }
+    }).catch(function(){});
+  }
+}
+function closeAddPopup(){
+  document.getElementById('add-popup').classList.remove('on');
+  document.getElementById('pm-title').value='';
+  document.getElementById('pm-link').value='';
+  document.getElementById('pm-notes').value='';
+}
+document.getElementById('add-popup').addEventListener('click', function(e){
+  if(e.target===this) closeAddPopup();
+});
+
+function openSyncPopup(){ document.getElementById('sync-popup').classList.add('on'); }
+function closeSyncPopup(){ document.getElementById('sync-popup').classList.remove('on'); }
+document.getElementById('sync-popup').addEventListener('click', function(e){
+  if(e.target===this) closeSyncPopup();
+});
+function openAddFromSync(){ closeSyncPopup(); openAddPopup(cur); }
+
+function saveMeeting(){
+  var title=document.getElementById('pm-title').value.trim();
+  if(!title){ alert('Please enter a meeting title.'); return; }
+  var m={
+    id:Date.now(), title:title,
+    dt:document.getElementById('pm-dt').value,
+    plat:document.getElementById('pm-plat').value,
+    link:document.getElementById('pm-link').value.trim(),
+    notes:document.getElementById('pm-notes').value.trim(),
+    day:parseInt(document.getElementById('pm-day').value)
+  };
+  meetings.push(m); saveMeetings(); renderAllMeetings(); closeAddPopup();
+  showToast('Saved! Tap Add to Cal to add to Google Calendar.');
+  setTimeout(function(){ addToGCal(meetings.length-1); }, 600);
+}
+
+function delMeeting(idx){
+  var m=meetings[idx];
+  if(m && confirm('Delete "'+m.title+'"?')){
+    meetings.splice(idx,1); saveMeetings(); renderAllMeetings();
+  }
+}
+
+function joinM(idx){
+  var m=meetings[idx];
+  if(m && m.link) window.open(m.link,'_blank');
+}
+
+function addToGCal(idx){
+  var m=meetings[idx];
+  if(!m){ showToast('Meeting not found.'); return; }
+  var dt=m.dt?new Date(m.dt):new Date();
+  var end=new Date(dt.getTime()+60*60*1000);
+  var fmt=function(d){ return d.toISOString().replace(/[-:.]/g,'').slice(0,15)+'Z'; };
+  var labs={zoom:'Zoom',meet:'Google Meet',teams:'Teams',general:''};
+  var suffix=labs[m.plat]?' ('+labs[m.plat]+')':'';
+  var title=encodeURIComponent(m.title+suffix);
+  var details=encodeURIComponent((m.link?'Join: '+m.link+'\n\n':'')+(m.notes||''));
+  var url='https://calendar.google.com/calendar/render?action=TEMPLATE&text='+title+'&dates='+fmt(dt)+'/'+fmt(end)+'&details='+details+'&sf=true&output=xml';
+  window.open(url,'_blank');
+  showToast('Opening Google Calendar...');
+}
+
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('on');
+  setTimeout(function(){ t.classList.remove('on'); }, 3000);
+}
+
+renderAllMeetings();
+goTo(todayIdx);
+updateAll();
+
+document.getElementById('track').addEventListener('touchstart',function(e){ sx=e.touches[0].clientX; sy=e.touches[0].clientY; },{passive:true});
+document.getElementById('track').addEventListener('touchend',function(e){
+  var dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
   if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>40){
     if(dx<0&&cur<6) goTo(cur+1);
     if(dx>0&&cur>0) goTo(cur-1);
   }
 },{passive:true});
-
-// reset
-function confirmReset(){
-  if(confirm('Reset ALL progress? Cannot be undone.')){
-    localStorage.removeItem(SK); state={};
-    document.querySelectorAll('.task-card.done').forEach(c=>c.classList.remove('done'));
-    for(let d=0;d<7;d++) dayDone[d]=0;
-    updateAll();
-  }
-}
-
-
-// ══════════════════════════════
-// MEETINGS SYSTEM
-// ══════════════════════════════
-const MEET_KEY='nayana_meetings_v1';
-let meetings=[];
-try{ const m=localStorage.getItem(MEET_KEY); if(m) meetings=JSON.parse(m); }catch(e){}
-function saveMeetings(){ try{localStorage.setItem(MEET_KEY,JSON.stringify(meetings));}catch(e){} }
-
-const PLATFORM_ICONS={zoom:'📹',meet:'🟢',teams:'💜',general:'📅'};
-const PLATFORM_LABELS={zoom:'Zoom',meet:'Google Meet',teams:'Teams',general:'Event'};
-
-function renderMeetings(){
-  const list=document.getElementById('meetings-list');
-  const noMsg=document.getElementById('no-meetings-msg');
-  if(!list) return;
-  
-  // Sort by datetime
-  const sorted=[...meetings].sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
-  
-  if(sorted.length===0){
-    list.innerHTML='<div class="no-meetings" id="no-meetings-msg">No meetings yet. Tap + to add or sync from calendar.</div>';
-    return;
-  }
-  
-  list.innerHTML=sorted.map((m,i)=>{
-    const dt=m.datetime?new Date(m.datetime):null;
-    const timeStr=dt?dt.toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'})+' · '+dt.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true}):'Time not set';
-    const isToday=dt?dt.toDateString()===new Date().toDateString():false;
-    const isPast=dt?dt<new Date():false;
-    return \`<div class="meeting-card \${m.platform}" style="\${isPast?'opacity:0.6':''}">
-      <div class="mc-icon">\${PLATFORM_ICONS[m.platform]||'📅'}</div>
-      <div class="mc-body">
-        <div class="mc-title">\${m.title}\${isToday?'<span style="background:#22c55e;color:#fff;font-size:9px;font-weight:900;padding:2px 6px;border-radius:6px;margin-left:6px;">TODAY</span>':''}</div>
-        <div class="mc-time">⏰ \${timeStr}</div>
-        \${m.link?'<a class="mc-link" href="'+m.link+'" target="_blank">🔗 '+m.link+'</a>':''}
-        \${m.notes?'<div style="font-size:11px;color:#888;margin-top:4px;">📝 '+m.notes+'</div>':''}
-        <div class="mc-actions">
-          \${m.link?'<button class="mc-btn join" onclick="joinMeeting(\''+m.link+'\')">▶ Join Now</button>':''}
-          <button class="mc-btn cal" onclick="addToGCal(\${i})">📅 Add to Cal</button>
-          <button class="mc-btn cal" style="flex:0;padding:7px 10px;" onclick="deleteMeeting(\${i})">🗑</button>
-        </div>
-      </div>
-    </div>\`;
-  }).join('');
-}
-
-function openAddMeeting(){
-  document.getElementById('meeting-popup').classList.add('on');
-  // Set default datetime to next hour
-  const d=new Date(); d.setHours(d.getHours()+1,0,0,0);
-  const dtStr=d.toISOString().slice(0,16);
-  document.getElementById('pm-datetime').value=dtStr;
-}
-function closeAddMeeting(){ document.getElementById('meeting-popup').classList.remove('on'); }
-function closePopupOut(e){ if(e.target.id==='meeting-popup') closeAddMeeting(); }
-
-function saveMeeting(){
-  const title=document.getElementById('pm-title').value.trim();
-  if(!title){ alert('Please enter a meeting title'); return; }
-  const meeting={
-    id:Date.now(),
-    title,
-    datetime:document.getElementById('pm-datetime').value,
-    platform:document.getElementById('pm-platform').value,
-    link:document.getElementById('pm-link').value.trim(),
-    notes:document.getElementById('pm-notes').value.trim()
-  };
-  meetings.push(meeting);
-  saveMeetings();
-  renderMeetings();
-  closeAddMeeting();
-  // Clear fields
-  ['pm-title','pm-datetime','pm-link','pm-notes'].forEach(id=>document.getElementById(id).value='');
-  // Show success toast
-  showToast('✅ Meeting saved! Tap "Add to Cal" to add to Google Calendar.');
-  // Auto-prompt calendar add
-  setTimeout(()=>addToGCal(meetings.length-1),800);
-}
-
-function deleteMeeting(idx){
-  const sorted=[...meetings].sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
-  const meeting=sorted[idx];
-  if(confirm('Delete "'+meeting.title+'"?')){
-    meetings=meetings.filter(m=>m.id!==meeting.id);
-    saveMeetings(); renderMeetings();
-  }
-}
-
-function joinMeeting(link){
-  if(link) window.open(link,'_blank');
-}
-
-function addToGCal(idx){
-  const sorted=[...meetings].sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
-  const m=sorted[idx];
-  if(!m) return;
-  const dt=m.datetime?new Date(m.datetime):new Date();
-  const end=new Date(dt.getTime()+60*60*1000); // +1hr default
-  const fmt=d=>d.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
-  const title=encodeURIComponent(m.title+(m.platform!=='general'?' ('+PLATFORM_LABELS[m.platform]+')':''));
-  const details=encodeURIComponent((m.link?'Join: '+m.link+'\n\n':'')+(m.notes||''));
-  const url='https://calendar.google.com/calendar/render?action=TEMPLATE&text='+title+'&dates='+fmt(dt)+'/'+fmt(end)+'&details='+details+'&sf=true&output=xml';
-  window.open(url,'_blank');
-  showToast('📅 Opening Google Calendar to add event...');
-}
-
-function openCalSync(){ document.getElementById('cal-popup').classList.add('on'); }
-function closeCalPopup(){ document.getElementById('cal-popup').classList.remove('on'); }
-function closeCalOut(e){ if(e.target.id==='cal-popup') closeCalPopup(); }
-
-// TOAST NOTIFICATION
-function showToast(msg){
-  let t=document.getElementById('toast');
-  if(!t){ t=document.createElement('div'); t.id='toast'; t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;font-weight:700;font-family:Mulish,sans-serif;z-index:9999;opacity:0;transition:opacity 0.3s;white-space:nowrap;max-width:90%;'; document.body.appendChild(t); }
-  t.textContent=msg; t.style.opacity='1';
-  setTimeout(()=>t.style.opacity='0',3000);
-}
-
-// CHECK GMAIL NOTE - show info banner
-function checkGmailNote(){
-  const banner=document.createElement('div');
-  banner.style.cssText='background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:12px;padding:12px 14px;margin-bottom:10px;font-size:12px;font-weight:600;color:#1D4ED8;line-height:1.6;';
-  banner.innerHTML='💡 <strong>Auto-sync tip:</strong> Set up Pabbly Connect to watch your Gmail for Zoom/Meet invites → auto-creates events here. <span style="text-decoration:underline;cursor:pointer;" onclick="this.parentElement.remove()">Got it ✕</span>';
-  const ms=document.getElementById('meetings-section');
-  if(ms && !localStorage.getItem('nayana_gmail_note_dismissed')){
-    ms.insertBefore(banner,ms.firstChild);
-    banner.querySelector('span').addEventListener('click',()=>{ localStorage.setItem('nayana_gmail_note_dismissed','1'); });
-  }
-}
-
-// DETECT ZOOM/MEET LINKS FROM CLIPBOARD (when user taps add)
-async function checkClipboard(){
-  try{
-    const text=await navigator.clipboard.readText();
-    if(text && (text.includes('zoom.us') || text.includes('meet.google.com') || text.includes('teams.microsoft.com'))){
-      document.getElementById('pm-link').value=text;
-      // Auto-detect platform
-      if(text.includes('zoom.us')) document.getElementById('pm-platform').value='zoom';
-      else if(text.includes('meet.google.com')) document.getElementById('pm-platform').value='meet';
-      else if(text.includes('teams.microsoft.com')) document.getElementById('pm-platform').value='teams';
-      showToast('✅ Meeting link detected from clipboard!');
-    }
-  }catch(e){} // clipboard access may be denied
-}
-
-// Override openAddMeeting to also check clipboard
-const _origOpen=openAddMeeting;
-window.openAddMeeting=function(){
-  _origOpen();
-  setTimeout(checkClipboard,300);
-};
-
-// Init
-renderMeetings();
-checkGmailNote();
-
-// start on today
-goTo(todayIdx);
-updateAll();
 </script>
 </body>
 </html>
