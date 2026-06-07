@@ -795,12 +795,28 @@ var slotReplacements={};
 try{ var sr=localStorage.getItem(SLOT_KEY); if(sr) slotReplacements=JSON.parse(sr); }catch(e){}
 function saveSlots(){ try{localStorage.setItem(SLOT_KEY,JSON.stringify(slotReplacements));}catch(e){} }
 
-// Apply saved slot replacements on load
+// Apply saved slot replacements on load — only if meeting still exists in current gcal data
 function restoreSavedSlots(){
+  var validKeys=[];
   Object.keys(slotReplacements).forEach(function(key){
     var m=slotReplacements[key];
-    if(m) replaceSlotWithEvent(m);
+    if(!m) return;
+    // Check if this gcal event still exists in meetings
+    var stillExists=meetings.some(function(me){
+      return me.fromGCal && me.title===m.title && me.dt===m.dt;
+    });
+    // Also allow manually added (non-gcal) slot replacements
+    if(!m.fromGCal) stillExists=true;
+    if(stillExists){
+      replaceSlotWithEvent(m);
+      validKeys.push(key);
+    }
   });
+  // Prune stale slot replacements
+  Object.keys(slotReplacements).forEach(function(key){
+    if(validKeys.indexOf(key)===-1) delete slotReplacements[key];
+  });
+  saveSlots();
 }
 
 // Init task cards with DATE-AWARE state
@@ -1058,6 +1074,19 @@ function pullLatest(){
   var P2='https://corsproxy.io/?';
   updateSyncStatus('Syncing from Google Calendar...');
   showToast('Fetching Google Calendar...');
+  // ALWAYS wipe all previous gcal events before fresh fetch
+  // This ensures events deleted from Google Calendar disappear from dashboard too
+  meetings=meetings.filter(function(m){ return !m.fromGCal; });
+  saveMeetings();
+  // Also clear any slot replacements so stale ones don't show
+  slotReplacements={};
+  saveSlots();
+  // Remove visual slot replacements
+  document.querySelectorAll('.slot-replacement').forEach(function(el){ el.remove(); });
+  // Restore any hidden task cards
+  document.querySelectorAll('.task-card[data-slot-hidden]').forEach(function(c){
+    c.removeAttribute('data-slot-hidden'); c.style.display='';
+  });
   function tryFetch(url){
     return fetch(url,{cache:'no-store'}).then(function(r){
       if(!r.ok) throw new Error('fail');
@@ -1089,6 +1118,8 @@ function pullLatest(){
     updateSyncStatus('Synced at '+ts+' · '+added+' event(s) from Google Calendar');
     showToast(added>0?added+' new event(s) from Google Calendar added!':'No new events found (dashboard tasks filtered out).');
     if(!window._gcalTimer) window._gcalTimer=setInterval(pullLatest,5*60*1000);
+  // Restore slot replacements only for events that still exist
+  setTimeout(function(){ restoreSavedSlots(); }, 300);
   }
   tryFetch(P1+encodeURIComponent(ICAL+'?nocache='+Date.now()))
     .then(processICS)
@@ -1214,16 +1245,62 @@ function replaceSlotWithEvent(m){
   var icon=plat==='zoom'?'&#128249;':plat==='meet'?'&#128250;':plat==='teams'?'&#128100;':'&#128197;';
   var div=document.createElement('div');
   div.className='slot-replacement';
-  div.style.cssText='background:linear-gradient(135deg,#1a56db,#2563EB);border-radius:13px;padding:12px 13px;display:flex;align-items:center;gap:10px;margin-bottom:6px;border:2px solid #60A5FA;position:relative;cursor:pointer;';
-  var inner='<span style="position:absolute;top:4px;right:7px;background:#22c55e;color:#fff;font-size:8px;font-weight:900;padding:1px 5px;border-radius:3px;">GCAL</span>';
-  inner+='<span style="font-size:20px;flex-shrink:0;">'+icon+'</span>';
+  // Style like normal task card (white, turns black when done)
+  var slotDoneKey = stateKey(evtDayIdx, 'gcal_'+evtHour+'_'+evtMin);
+  var isSlotDone = state[slotDoneKey] || false;
+  div.setAttribute('data-slot-done-key', slotDoneKey);
+  div.style.cssText='background:'+(isSlotDone?'#111':'#fff')+';border-radius:13px;padding:12px 13px;display:flex;align-items:center;gap:10px;margin-bottom:6px;border:'+(isSlotDone?'1.5px solid #111':'1.5px solid #60A5FA')+';position:relative;cursor:pointer;transition:all 0.18s;';
+  var ckStyle='width:24px;height:24px;border-radius:50%;border:2px solid '+(isSlotDone?'#fff':'#60A5FA')+';display:flex;align-items:center;justify-content:center;font-size:11px;color:'+(isSlotDone?'#111':'transparent')+';flex-shrink:0;';
+  var titleColor=isSlotDone?'#fff':'#111';
+  var subColor=isSlotDone?'rgba(255,255,255,0.5)':'#2563EB';
+  var inner='<span style="font-size:20px;flex-shrink:0;">'+icon+'</span>';
   inner+='<div style="flex:1;min-width:0;">';
-  inner+='<div style="font-size:14px;font-weight:900;color:#fff;line-height:1.3;margin-bottom:2px;">'+esc(m.title)+'</div>';
-  inner+='<div style="font-size:10px;font-weight:700;color:#93C5FD;">'+timeStr+'</div>';
-  if(m.link) inner+='<button data-link="'+esc(m.link)+'" onclick="joinCalEvt(this)" style="margin-top:5px;background:#fff;color:#1a56db;border:none;border-radius:6px;padding:4px 10px;font-size:10px;font-weight:900;font-family:Mulish,sans-serif;cursor:pointer;">Join Now &rarr;</button>';
+  inner+='<div style="font-size:14px;font-weight:900;color:'+titleColor+';line-height:1.3;margin-bottom:2px;">'+esc(m.title)+'</div>';
+  inner+='<div style="font-size:10px;font-weight:700;color:'+subColor+';">'+timeStr+' &nbsp;&#128197; GCAL</div>';
+  if(m.link) inner+='<button data-link="'+esc(m.link)+'" onclick="event.stopPropagation();joinCalEvt(this)" style="margin-top:5px;background:'+(isSlotDone?'rgba(255,255,255,0.15)':'#EFF6FF')+';color:'+(isSlotDone?'#fff':'#1a56db')+';border:none;border-radius:6px;padding:4px 10px;font-size:10px;font-weight:900;font-family:Mulish,sans-serif;cursor:pointer;">Join Now &rarr;</button>';
   inner+='</div>';
-  inner+='<button onclick="restoreSlot(this)" style="position:absolute;bottom:4px;right:7px;background:rgba(255,255,255,0.15);border:none;border-radius:4px;padding:2px 6px;font-size:9px;font-weight:800;color:#fff;font-family:Mulish,sans-serif;cursor:pointer;">&#8617; Restore</button>';
+  inner+='<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">';
+  inner+='<div style="'+ckStyle+'">&#10003;</div>';
+  inner+='<div style="font-size:9px;font-weight:800;color:'+(isSlotDone?'rgba(255,255,255,0.35)':'#ccc')+';">20 PTS</div>';
+  inner+='<button onclick="event.stopPropagation();restoreSlot(this)" style="background:transparent;border:1px solid #ddd;border-radius:4px;padding:2px 5px;font-size:9px;font-weight:800;color:#aaa;font-family:Mulish,sans-serif;cursor:pointer;">&#8617;</button>';
+  inner+='</div>';
   div.innerHTML=inner;
+
+  // Click to toggle done (like normal task card)
+  div.addEventListener('click', function(e){
+    if(e.target.tagName==='BUTTON') return;
+    var key=div.getAttribute('data-slot-done-key');
+    var done=state[key];
+    if(done){
+      delete state[key];
+      div.style.background='#fff';
+      div.style.border='1.5px solid #60A5FA';
+    } else {
+      state[key]=true;
+      div.style.background='#111';
+      div.style.border='1.5px solid #111';
+    }
+    saveState(); updateAll();
+    // Update inner colors
+    var titleEl=div.querySelector('div[style*="font-weight:900"]');
+    var nowDone=!!state[key];
+    div.querySelectorAll('div,span,button').forEach(function(el){
+      // re-render to update colors properly
+    });
+    // Simplest: just re-call replaceSlotWithEvent (will re-render in place)
+    var existing=div.nextSibling;
+    div.remove();
+    // Restore hidden card temporarily then replace again
+    var panel2=document.getElementById('p'+evtDayIdx);
+    if(panel2){
+      var hiddenCard=panel2.querySelector('.task-card[data-slot-hidden]');
+      if(hiddenCard){
+        hiddenCard.removeAttribute('data-slot-hidden');
+        hiddenCard.style.display='';
+      }
+    }
+    replaceSlotWithEvent(m);
+  });
 
   // Hide original task card and insert replacement before it
   if(taskCard){
