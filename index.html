@@ -1089,10 +1089,7 @@ function pullLatest(){
   var P2='https://corsproxy.io/?';
   updateSyncStatus('Syncing from Google Calendar...');
   showToast('Fetching Google Calendar...');
-  // Wipe old gcal meetings - will re-fetch fresh ones
-  meetings=meetings.filter(function(m){ return !m.fromGCal; });
-  saveMeetings();
-  // Keep slot replacements backup - we'll validate after fetch
+  // Keep backup of slots before fetch for validation
   var slotsBackup=JSON.parse(JSON.stringify(slotReplacements));
   function tryFetch(url){
     return fetch(url,{cache:'no-store'}).then(function(r){
@@ -1105,7 +1102,13 @@ function pullLatest(){
     var items=parseICS(txt);
     var now2=new Date(); now2.setHours(0,0,0,0);
     var end=new Date(now2); end.setDate(end.getDate()+62);
+    // Clear ALL old gcal meetings - replace with fresh data only
     meetings=meetings.filter(function(m){return !m.fromGCal;});
+    // Clear visual slot replacements - will re-apply valid ones after
+    document.querySelectorAll('.slot-replacement').forEach(function(el){ el.remove(); });
+    document.querySelectorAll('.task-card[data-slot-hidden]').forEach(function(c){
+      c.removeAttribute('data-slot-hidden'); c.style.display='';
+    });
     var added=0;
     items.forEach(function(m){
       var dt=new Date(m.dt);
@@ -1126,9 +1129,10 @@ function pullLatest(){
     showToast(added>0?added+' new event(s) from Google Calendar added!':'No new events found (dashboard tasks filtered out).');
     if(!window._gcalTimer) window._gcalTimer=setInterval(pullLatest,5*60*1000);
   // Validate and restore slot replacements
+  // Restore slots — validate against freshly fetched meetings
   slotReplacements=slotsBackup||{};
   saveSlots();
-  setTimeout(function(){ restoreSavedSlots(); }, 200);
+  restoreSavedSlots();
   }
   tryFetch(P1+encodeURIComponent(ICAL+'?nocache='+Date.now()))
     .then(processICS)
@@ -1394,10 +1398,8 @@ document.addEventListener('click', function(e){
   else if(t.classList.contains('mbtn-del')){ delById(mid); }
 });
 
-// Auto-pull Google Calendar on load
-setTimeout(function(){ pullLatest(); }, 2000);
-// Restore saved slot replacements
-setTimeout(function(){ restoreSavedSlots(); }, 500);
+// Auto-pull Google Calendar on load — slots restored inside pullLatest after fetch
+setTimeout(function(){ pullLatest(); }, 1500);
 
 document.getElementById('track').addEventListener('touchstart',function(e){ sx=e.touches[0].clientX; sy=e.touches[0].clientY; },{passive:true});
 document.getElementById('track').addEventListener('touchend',function(e){
