@@ -4286,4 +4286,141 @@ function renderHistory(){
   if(lbl) lbl.textContent='Total earned: '+grandTotal*UNITS+' units across 2 months · '+grandTotal+' tasks completed';
 }
 
+
+
+    function formatLocalDateTimeValue(date) {
+      const pad = (n) => String(n).padStart(2, '0');
+      return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    }
+
+    function parseTimeToDate(dayName, timeText) {
+      const now = new Date();
+      const dayMap = { sunday:0, monday:1, tuesday:2, wednesday:3, thursday:4, friday:5, saturday:6 };
+      const targetDay = dayMap[String(dayName || '').toLowerCase()] ?? now.getDay();
+      const base = new Date(now);
+      const diff = (targetDay - base.getDay() + 7) % 7;
+      base.setDate(base.getDate() + diff);
+      const m = String(timeText || '').trim().match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+      let hours = 9, mins = 0;
+      if (m) {
+        hours = parseInt(m[1], 10) % 12;
+        mins = parseInt(m[2], 10);
+        if (m[3].toUpperCase() === 'PM') hours += 12;
+      }
+      base.setHours(hours, mins, 0, 0);
+      return base;
+    }
+
+    function toGoogleDate(dateLike) {
+      const d = new Date(dateLike);
+      const pad = (n) => String(n).padStart(2, '0');
+      return `${d.getUTCFullYear()}${pad(d.getUTCMonth()+1)}${pad(d.getUTCDate())}T${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}${pad(d.getUTCSeconds())}Z`;
+    }
+
+    const slotEditorState = { card: null, day: '', time: '' };
+
+    function ensureSlotButtons(card) {
+      if (!card || card.querySelector('.slot-actions')) return;
+      const actions = document.createElement('div');
+      actions.className = 'slot-actions';
+      actions.innerHTML = '<button type="button" class="slot-edit-btn">✏️ Edit Slot</button>';
+      card.appendChild(actions);
+      actions.querySelector('.slot-edit-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        openSlotEditor(card);
+      });
+    }
+
+    function getSlotData(card) {
+      const day = card.closest('.day-panel, .day-column, .day-section, [data-day]')?.dataset?.day ||
+        card.closest('.day-panel, .day-column, .day-section')?.querySelector('h2,h3,.day-title')?.textContent?.trim() ||
+        document.querySelector('.day-panel.active h2, .day-panel.active h3, .day-title')?.textContent?.trim() || 'Monday';
+      const time = card.querySelector('.time, .event-time, .slot-time')?.textContent?.trim() ||
+        Array.from(card.childNodes).map(n => n.textContent?.trim()).find(t => /AM|PM/.test(t || '')) || '9:00 AM';
+      const titleEl = card.querySelector('.title, .event-title, strong, h4');
+      const descEl = card.querySelector('.desc, .event-desc, .subtitle, p');
+      const ptsEl = card.querySelector('.points, .pts, .score, .units');
+      return {
+        day,
+        time,
+        title: titleEl ? titleEl.textContent.trim() : '',
+        desc: descEl ? descEl.textContent.trim() : '',
+        units: ptsEl ? (ptsEl.textContent.match(/\d+/)?.[0] || '') : ''
+      };
+    }
+
+    function fillSlotEditor(card) {
+      const data = getSlotData(card);
+      slotEditorState.card = card;
+      slotEditorState.day = data.day;
+      slotEditorState.time = data.time;
+      const start = parseTimeToDate(data.day, data.time);
+      const end = new Date(start.getTime() + 30 * 60000);
+      document.getElementById('slotTitle').value = data.title;
+      document.getElementById('slotDesc').value = data.desc;
+      document.getElementById('slotUnits').value = data.units;
+      document.getElementById('slotStart').value = formatLocalDateTimeValue(start);
+      document.getElementById('slotEnd').value = formatLocalDateTimeValue(end);
+    }
+
+    function openSlotEditor(card, openCalendarDirectly = false) {
+      fillSlotEditor(card);
+      const overlay = document.getElementById('slotEditorOverlay');
+      overlay.classList.add('open');
+      overlay.setAttribute('aria-hidden', 'false');
+      if (openCalendarDirectly) setTimeout(() => openGoogleCalendarFromEditor(), 50);
+    }
+
+    function closeSlotEditor() {
+      const overlay = document.getElementById('slotEditorOverlay');
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden', 'true');
+    }
+
+    function saveSlotEdits() {
+      const card = slotEditorState.card;
+      if (!card) return;
+      const title = document.getElementById('slotTitle').value.trim() || 'Untitled Event';
+      const desc = document.getElementById('slotDesc').value.trim() || 'No details added';
+      const units = document.getElementById('slotUnits').value.trim();
+      let titleEl = card.querySelector('.title, .event-title, strong, h4');
+      let descEl = card.querySelector('.desc, .event-desc, .subtitle, p');
+      let ptsEl = card.querySelector('.points, .pts, .score, .units');
+      if (titleEl) titleEl.textContent = title;
+      if (descEl) descEl.textContent = desc;
+      if (ptsEl && units) ptsEl.textContent = `${units} PTS`;
+      card.dataset.editedTitle = title;
+      card.dataset.editedDesc = desc;
+      card.dataset.editedUnits = units;
+      card.dataset.editedStart = document.getElementById('slotStart').value;
+      card.dataset.editedEnd = document.getElementById('slotEnd').value;
+      closeSlotEditor();
+    }
+
+    function openGoogleCalendarFromEditor() {
+      const title = encodeURIComponent(document.getElementById('slotTitle').value.trim() || 'Untitled Event');
+      const details = encodeURIComponent(document.getElementById('slotDesc').value.trim() || '');
+      const start = document.getElementById('slotStart').value;
+      const end = document.getElementById('slotEnd').value;
+      const startValue = start ? toGoogleDate(start) : toGoogleDate(new Date());
+      const endValue = end ? toGoogleDate(end) : toGoogleDate(new Date(Date.now() + 30 * 60000));
+      const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&dates=${startValue}/${endValue}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.event-card').forEach(ensureSlotButtons);
+      const mo = new MutationObserver(() => {
+        document.querySelectorAll('.event-card').forEach(ensureSlotButtons);
+      });
+      mo.observe(document.body, { childList: true, subtree: true });
+      document.getElementById('slotEditorClose')?.addEventListener('click', closeSlotEditor);
+      document.getElementById('slotEditorCancel')?.addEventListener('click', closeSlotEditor);
+      document.getElementById('slotEditorSave')?.addEventListener('click', saveSlotEdits);
+      document.getElementById('slotEditorCalendar')?.addEventListener('click', openGoogleCalendarFromEditor);
+      document.getElementById('slotEditorOverlay')?.addEventListener('click', (e) => {
+        if (e.target.id === 'slotEditorOverlay') closeSlotEditor();
+      });
+    });
+
 </script>
